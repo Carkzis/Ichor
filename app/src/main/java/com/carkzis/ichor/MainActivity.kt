@@ -1,18 +1,17 @@
 package com.carkzis.ichor
 
-import android.app.Activity
 import android.os.Bundle
-import com.carkzis.ichor.databinding.ActivityMainBinding
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 
-class MainActivity : Activity() {
-
-    private lateinit var binding: ActivityMainBinding
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContent {
+
+        }
 
     }
 }
