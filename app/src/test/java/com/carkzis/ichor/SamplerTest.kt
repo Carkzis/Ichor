@@ -3,11 +3,18 @@ package com.carkzis.ichor
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.currentTime
+import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.util.Collections.min
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.system.measureTimeMillis
 import kotlin.time.ExperimentalTime
@@ -43,34 +50,13 @@ internal class SamplerTest {
     }
 
     @Test
-    fun `samples emits 10 values in 10 intervals`() = runBlocking {
-        val counter = AtomicInteger(0)
-        val intervalInMs = 100L
-        val initialIntervalInMs = 0L
-        val intervals = 10
-
-        val elapsedTimeInMs = measureTimeMillis {
-            sut?.let {
-                it.sampleAtIntervals(intervalInMs, initialIntervalInMs)
-                    .take(intervals)
-                    .collect {
-                        counter.incrementAndGet()
-                    }
-            }
-        }
-
-        assertCorrectAmountOfEmissions(intervals, counter.get())
-        assertCorrectAmountOfTimeElapsed(elapsedTimeInMs, intervals, intervalInMs, initialIntervalInMs)
-    }
-
-    @Test
-    fun `samples emit 1 value after initial interval of 1 seconds`() = runBlocking {
+    fun `samples emit 1 value after initial interval of 1 seconds`() = runTest {
         val counter = AtomicInteger(0)
         val intervalInMs = 150L
         val initialIntervalInMs = 1000L
         val intervals = 1
 
-        val elapsedTimeInMs = measureTimeMillis {
+        launch {
             sut?.let {
                 it.sampleAtIntervals(intervalInMs, initialIntervalInMs)
                     .take(intervals)
@@ -80,42 +66,40 @@ internal class SamplerTest {
             }
         }
 
-        assertCorrectAmountOfEmissions(intervals, counter.get())
-        assertCorrectAmountOfTimeElapsed(elapsedTimeInMs, intervals, intervalInMs, initialIntervalInMs)
+        assertEquals(0, counter.get())
+        runCurrent()
+        advanceTimeBy(initialIntervalInMs + 1)
+        assertEquals(1, counter.get())
+        assertEquals(intervals, counter.get())
+    }
+
+    @Test
+    fun `samples emits 10 values in 10 intervals`() = runTest {
+        val counter = AtomicInteger(0)
+        val intervalInMs = 100L
+        val initialIntervalInMs = 0L
+        val intervals = 10
+
+        launch {
+            sut?.let {
+                it.sampleAtIntervals(intervalInMs, initialIntervalInMs)
+                    .take(intervals)
+                    .collect {
+                        counter.incrementAndGet()
+                    }
+            }
+        }
+
+        assertEquals(0, counter.get())
+        runCurrent()
+        advanceTimeBy(initialIntervalInMs + 1)
+        assertEquals(1, counter.get())
+        advanceTimeBy(intervalInMs)
+        assertEquals(2, counter.get())
+        advanceTimeBy((intervalInMs * (intervals - 2)))
+        assertEquals(intervals, counter.get())
     }
 
     // TODO: Negative intervals.
-
-    private fun assertCorrectAmountOfTimeElapsed(
-        elapsedTimeInMs: Long,
-        intervals: Int,
-        intervalInMs: Long,
-        initialIntervalInMs: Long
-    ) {
-
-        val expectedLowerBoundInMs =
-            getExpectedLowerBoundsInMs(intervals, intervalInMs, initialIntervalInMs)
-        val expectedUpperBoundInMs = getExpectedUpperBoundsInMs(expectedLowerBoundInMs)
-
-        assertTrue(
-            "Elapsed time was $elapsedTimeInMs, lower bound was $expectedLowerBoundInMs, " +
-                    "upper bound was $expectedUpperBoundInMs",
-            elapsedTimeInMs in expectedLowerBoundInMs..expectedUpperBoundInMs
-        )
-    }
-
-    private fun getExpectedLowerBoundsInMs(
-        intervals: Int,
-        intervalInMs: Long,
-        initialIntervalInMs: Long
-    ) =
-        ((intervals - 1) * intervalInMs) + initialIntervalInMs
-
-    private fun getExpectedUpperBoundsInMs(expectedLowerBounds: Long, multiplier: Double = 1.2) =
-        (expectedLowerBounds * multiplier).toInt()
-
-    private fun assertCorrectAmountOfEmissions(expectedEmissions: Int, actualEmissions: Int) {
-        assertTrue("Value was $actualEmissions", expectedEmissions == actualEmissions)
-    }
 
 }
