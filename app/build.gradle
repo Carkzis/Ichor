@@ -49,13 +49,13 @@ android {
 
 dependencies {
 
-    // General Compose dependencies
+    // General Compose dependencies.
     implementation "androidx.activity:activity-compose:$activity_compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.compose.foundation:foundation:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
-    // Compose for Wear OS Dependencies
+    // Compose for Wear OS Dependencies.
     implementation "androidx.wear.compose:compose-material:$wear_compose_version"
     implementation "androidx.wear.compose:compose-navigation:$wear_compose_version"
 
@@ -63,28 +63,33 @@ dependencies {
     implementation "androidx.wear.compose:compose-foundation:$wear_compose_version"
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
 
-    // Logging
+    // Health services.
+    implementation "androidx.health:health-services-client:$health_services_version"
+    implementation "com.google.guava:guava:$guava_version"
+    implementation "androidx.concurrent:concurrent-futures-ktx:$futures_version"
+
+    // Logging.
     implementation "com.jakewharton.timber:timber:$timber_version"
 
-    // Room
+    // Database.
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
-    // Hilt
+    // Dependency injection.
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
 
-    // Testing
+    // Testing.
     testImplementation "junit:junit:$junit_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     androidTestImplementation "androidx.test.ext:junit:$androidx_test_ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.2"
 
 }
