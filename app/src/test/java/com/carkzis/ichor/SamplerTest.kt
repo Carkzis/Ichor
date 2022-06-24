@@ -34,8 +34,8 @@ internal class SamplerTest {
 
     @Test
     fun `sampler emits a value when sampleAtIntervals is called`() = runBlocking {
-        sut?.let {
-            it.sampleAtIntervals(100)
+        sut?.run {
+            sampleAtIntervals(100)
                 .first()
                 .run {
                     assertTrue("A value was emitted.", true)
@@ -54,8 +54,8 @@ internal class SamplerTest {
         val intervals = 1
 
         launch {
-            sut?.let {
-                it.sampleAtIntervals(intervalInMs, initialIntervalInMs)
+            sut?.run {
+                sampleAtIntervals(intervalInMs, initialIntervalInMs)
                     .take(intervals)
                     .collect {
                         counter.incrementAndGet()
@@ -78,8 +78,8 @@ internal class SamplerTest {
         val intervals = 10
 
         launch {
-            sut?.let {
-                it.sampleAtIntervals(intervalInMs, initialIntervalInMs)
+            sut?.run {
+                sampleAtIntervals(intervalInMs, initialIntervalInMs)
                     .take(intervals)
                     .collect {
                         counter.incrementAndGet()
@@ -104,8 +104,8 @@ internal class SamplerTest {
         val initialIntervalInMs = 0L
         val intervals = 10
 
-        sut?.let {
-            it.sampleAtIntervals(intervalInMs, initialIntervalInMs)
+        sut?.run {
+            sampleAtIntervals(intervalInMs, initialIntervalInMs)
                 .take(intervals)
                 .collect {
                     counter.incrementAndGet()
@@ -121,8 +121,8 @@ internal class SamplerTest {
         val initialIntervalInMs = -100L
         val intervals = 10
 
-        sut?.let {
-            it.sampleAtIntervals(intervalInMs, initialIntervalInMs)
+        sut?.run {
+            sampleAtIntervals(intervalInMs, initialIntervalInMs)
                 .take(intervals)
                 .collect {
                     counter.incrementAndGet()
