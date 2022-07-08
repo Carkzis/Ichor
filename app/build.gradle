@@ -86,6 +86,7 @@ dependencies {
     // Testing.
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    testImplementation "org.hamcrest:hamcrest:$hamcrest_version"
     androidTestImplementation "androidx.test.ext:junit:$androidx_test_ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"

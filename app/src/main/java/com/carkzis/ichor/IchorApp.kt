@@ -2,7 +2,6 @@ package com.carkzis.ichor
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.coroutineScope
 import timber.log.Timber
 
 @HiltAndroidApp

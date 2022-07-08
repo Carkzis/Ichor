@@ -8,9 +8,10 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import org.hamcrest.Matchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import java.util.concurrent.atomic.AtomicInteger
@@ -38,12 +39,11 @@ internal class SamplerTest {
             sampleAtIntervals(100)
                 .first()
                 .run {
-                    assertTrue("A value was emitted.", true)
                     return@runBlocking
                 }
         }
 
-        assertTrue("A value was not emitted.", false)
+        fail("A value was not emitted.")
     }
 
     @Test
@@ -63,11 +63,12 @@ internal class SamplerTest {
             }
         }
 
-        assertEquals(0, counter.get())
+        assertThat(counter.get(), `is`(0))
         runCurrent()
         advanceTimeBy(initialIntervalInMs + 1)
-        assertEquals(1, counter.get())
-        assertEquals(intervals, counter.get())
+        assertThat(counter.get(), `is`(1))
+        assertThat(counter.get(), `is`(intervals))
+
     }
 
     @Test
@@ -87,14 +88,15 @@ internal class SamplerTest {
             }
         }
 
-        assertEquals(0, counter.get())
+        assertThat(counter.get(), `is`(0))
         runCurrent()
         advanceTimeBy(initialIntervalInMs + 1)
-        assertEquals(1, counter.get())
+        assertThat(counter.get(), `is`(1))
         advanceTimeBy(intervalInMs)
-        assertEquals(2, counter.get())
+        assertThat(counter.get(), `is`(2))
         advanceTimeBy((intervalInMs * (intervals - 2)))
-        assertEquals(intervals, counter.get())
+        assertThat(counter.get(), `is`(intervals))
+
     }
 
     @Test(expected = IllegalArgumentException::class)

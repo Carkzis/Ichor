@@ -6,9 +6,10 @@ import androidx.health.services.client.data.DataTypeAvailability
 import androidx.health.services.client.data.Value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.`is`
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.Duration
 import java.util.concurrent.atomic.AtomicInteger
@@ -58,8 +59,9 @@ class HeartRateServiceTest {
             }
         }
 
-        assertTrue("A heart rate was not emitted.", heartRateEmissionCounter.get() == expectedHeartRateDataPoints.size)
-        assertTrue("An availability was not emitted.", availabilityCounter.get() == 0)
+        assertThat(heartRateEmissionCounter.get(), `is`(expectedHeartRateDataPoints.size))
+        assertThat(availabilityCounter.get(), `is`(0))
+
     }
 
     @Test
@@ -93,7 +95,9 @@ class HeartRateServiceTest {
                 }
             }
         }
-        assertTrue("A heart rate was not emitted.", heartRateEmissionCounter.get() == 0)
-        assertTrue("An availability was not emitted.", availabilityCounter.get() == expectedAvailabilities.size)
+
+        assertThat(heartRateEmissionCounter.get(), `is`(0))
+        assertThat(availabilityCounter.get(), `is`(expectedAvailabilities.size))
+
     }
 }

@@ -2,7 +2,6 @@ package com.carkzis.ichor
 
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
-import androidx.health.services.client.data.DataTypeAvailability
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
