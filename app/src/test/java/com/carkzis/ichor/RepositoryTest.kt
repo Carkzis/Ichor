@@ -24,42 +24,23 @@ class RepositoryTest {
 
     @Test
     fun `repository emits heart rate data points when received`() = runBlocking {
-        val expectedHeartRate1 = 50.0
-        val expectedHeartRate2 = 55.0
-        val expectedHeartRate3 = 45.0
-        val expectedHeartRateDataPoints = listOf(
-            DataPoint.createSample(
-                DataType.HEART_RATE_BPM,
-                Value.ofDouble(expectedHeartRate1),
-                Duration.ofSeconds(0)
-            ),
-            DataPoint.createSample(
-                DataType.HEART_RATE_BPM,
-                Value.ofDouble(expectedHeartRate2),
-                Duration.ofSeconds(0)
-            ),
-            DataPoint.createSample(
-                DataType.HEART_RATE_BPM,
-                Value.ofDouble(expectedHeartRate3),
-                Duration.ofSeconds(0)
-            ),
-        )
+        val expectedHeartRateDataPoints = listOfHeartRateMeasureData()
 
         sut = FakeRepository().apply {
-            mockHeartRateSample = expectedHeartRateDataPoints.map {
-                MeasureClientData.HeartRateDataPoints(listOf(it))
-            }
+            mockHeartRateSample = expectedHeartRateDataPoints
         }
 
         val heartRateEmissionCounter = AtomicInteger(0)
 
         sut?.run {
             collectHeartRateFromHeartRateService().collect {
-                when (heartRateEmissionCounter.incrementAndGet()) {
-                    1 -> assertThat(it.first().value.asDouble(), `is`(expectedHeartRate1))
-                    2 -> assertThat(it.first().value.asDouble(), `is`(expectedHeartRate2))
-                    3 -> assertThat(it.first().value.asDouble(), `is`(expectedHeartRate3))
-                }
+                val actualValue = it.first().value.asDouble()
+                val expectedDataPoints =
+                    expectedHeartRateDataPoints[heartRateEmissionCounter.get()]
+                            as MeasureClientData.HeartRateDataPoints
+                val expectedValue = expectedDataPoints.dataPoints.first().value.asDouble()
+                assertThat(actualValue, `is`(expectedValue))
+                heartRateEmissionCounter.incrementAndGet()
             }
         }
 

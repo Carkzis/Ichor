@@ -29,6 +29,12 @@ fun listOfHeartRateDataInDoubles() : List<List<Double>> {
     return listOf(expectedHeartRatesOne, expectedHeartRatesTwo, expectedHeartRatesThree)
 }
 
+fun listOfHeartRateMeasureData() : List<MeasureClientData> {
+    return listOfHeartRateDataPoints().map {
+        MeasureClientData.HeartRateDataPoints(it)
+    }
+}
+
 fun listOfAvailabilities() : List<Availability> {
     val expectedAvailability1 = DataTypeAvailability.UNKNOWN
     val expectedAvailability2 = DataTypeAvailability.ACQUIRING

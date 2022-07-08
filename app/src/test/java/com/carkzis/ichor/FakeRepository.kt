@@ -19,8 +19,8 @@ class FakeRepository : Repository {
 
     override suspend fun collectHeartRateFromHeartRateService(): Flow<List<HeartRateDataPoint>> = flow {
         for (measureClientData in mockHeartRateSample) {
-            val heartRateDataPoints = (measureClientData as MeasureClientData.HeartRateDataPoints).dataPoints
-            emit(heartRateDataPoints)
+            val listOfDataPoints = (measureClientData as MeasureClientData.HeartRateDataPoints).dataPoints
+            emit(listOfDataPoints)
         }
     }
 
