@@ -26,14 +26,7 @@ class HeartRateServiceTest {
 
     @Test
     fun `heart rate service emits heart rate data points in given order`() = runBlocking {
-        val expectedHeartRate1 = 50.0
-        val expectedHeartRate2 = 55.0
-        val expectedHeartRate3 = 45.0
-        val expectedHeartRateDataPoints = listOf(
-            DataPoint.createSample(DataType.HEART_RATE_BPM, Value.ofDouble(expectedHeartRate1), Duration.ofSeconds(0)),
-            DataPoint.createSample(DataType.HEART_RATE_BPM, Value.ofDouble(expectedHeartRate2), Duration.ofSeconds(0)),
-            DataPoint.createSample(DataType.HEART_RATE_BPM, Value.ofDouble(expectedHeartRate3), Duration.ofSeconds(0)),
-        )
+        val expectedHeartRateDataPoints = listOfHeartRateDataPoints()
 
         sut = DummyHeartRateService().apply {
             mockHeartRateSample = expectedHeartRateDataPoints
@@ -47,9 +40,9 @@ class HeartRateServiceTest {
                 when (it) {
                     is MeasureClientData.HeartRateDataPoints -> {
                         val currentIndex = heartRateEmissionCounter.getAndIncrement()
-                        val expectedHeartRate = expectedHeartRateDataPoints[currentIndex].value.asDouble()
-                        val actualHeartRate = it.dataPoints.last().value.asDouble()
-                        assertThat(actualHeartRate, `is`(expectedHeartRate))
+                        val expectedHeartRateSample = expectedHeartRateDataPoints[currentIndex]
+                        val actualHeartRateSample = it.dataPoints
+                        assertThat(actualHeartRateSample, `is`(expectedHeartRateSample))
                     }
                     is MeasureClientData.HeartRateAvailability -> {
                         availabilityCounter.incrementAndGet()
@@ -65,12 +58,7 @@ class HeartRateServiceTest {
 
     @Test
     fun `heart rate service emits availability in given order`() = runBlocking {
-        val expectedAvailability1 = DataTypeAvailability.UNKNOWN
-        val expectedAvailability2 = DataTypeAvailability.ACQUIRING
-        val expectedAvailability3 = DataTypeAvailability.AVAILABLE
-        val expectedAvailabilities = listOf(
-            expectedAvailability1, expectedAvailability2, expectedAvailability3
-        )
+        val expectedAvailabilities = listOfAvailabilities()
 
         sut = DummyHeartRateService().apply {
             mockAvailabilities = expectedAvailabilities

@@ -14,6 +14,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.time.Duration
+import kotlin.math.exp
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -33,30 +34,12 @@ class MainViewModelTest {
 
     @Test
     fun `viewmodel retrieves last heart rate data point emitted from repository`() = runTest {
-        val expectedHeartRate1 = 50.0
-        val expectedHeartRate2 = 55.0
-        val expectedHeartRate3 = 45.0
-        val expectedHeartRateDataPoints = listOf(
-            DataPoint.createSample(
-                DataType.HEART_RATE_BPM,
-                Value.ofDouble(expectedHeartRate1),
-                Duration.ofSeconds(0)
-            ),
-            DataPoint.createSample(
-                DataType.HEART_RATE_BPM,
-                Value.ofDouble(expectedHeartRate2),
-                Duration.ofSeconds(0)
-            ),
-            DataPoint.createSample(
-                DataType.HEART_RATE_BPM,
-                Value.ofDouble(expectedHeartRate3),
-                Duration.ofSeconds(0)
-            ),
-        )
+        val listOfDummyHeartRateDataPoints = listOfHeartRateDataPoints()
+        val expectedHeartRate = listOfDummyHeartRateDataPoints.last().last()
 
         repository = FakeRepository().apply {
-            mockHeartRateSample = expectedHeartRateDataPoints.map {
-                MeasureClientData.HeartRateDataPoints(listOf(it))
+            mockHeartRateSample = listOfDummyHeartRateDataPoints.map {
+                MeasureClientData.HeartRateDataPoints(it)
             }
         }
 
@@ -64,6 +47,7 @@ class MainViewModelTest {
 
         sut?.assignLatestHeartRateToUI()
 
-        assertThat(sut?.latestHeartRate?.value, `is`(45.0))
+        assertThat(sut?.latestHeartRate?.value, `is`(expectedHeartRate.value.asDouble()))
     }
+
 }
