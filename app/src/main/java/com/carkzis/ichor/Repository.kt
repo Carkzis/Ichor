@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 typealias HeartRateDataPoint = DataPoint
 
 interface Repository {
-    fun collectAvailabilityFromHeartRateService(): Flow<Availability>
-    fun collectHeartRateFromDatabase() : Flow<HeartRateDataPoint>
-    fun collectHeartRateFromHeartRateService() : Flow<List<HeartRateDataPoint>>
+    suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability>
+    suspend fun collectHeartRateFromDatabase() : Flow<HeartRateDataPoint>
+    suspend fun collectHeartRateFromHeartRateService() : Flow<List<HeartRateDataPoint>>
 }

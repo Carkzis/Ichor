@@ -14,7 +14,6 @@ import org.junit.Test
 import java.time.Duration
 import java.util.concurrent.atomic.AtomicInteger
 
-
 @ExperimentalCoroutinesApi
 class HeartRateServiceTest {
 
@@ -50,7 +49,7 @@ class HeartRateServiceTest {
                         val currentIndex = heartRateEmissionCounter.getAndIncrement()
                         val expectedHeartRate = expectedHeartRateDataPoints[currentIndex].value.asDouble()
                         val actualHeartRate = it.dataPoints.last().value.asDouble()
-                        assertEquals(expectedHeartRate, actualHeartRate, 0.01)
+                        assertThat(actualHeartRate, `is`(expectedHeartRate))
                     }
                     is MeasureClientData.HeartRateAvailability -> {
                         availabilityCounter.incrementAndGet()
@@ -90,7 +89,7 @@ class HeartRateServiceTest {
                         val currentIndex = availabilityCounter.getAndIncrement()
                         val expectedAvailability = expectedAvailabilities[currentIndex]
                         val actualAvailability = it.availability
-                        assertEquals(expectedAvailability, actualAvailability)
+                        assertThat(actualAvailability, `is`(expectedAvailability))
                     }
                 }
             }
