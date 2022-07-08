@@ -4,12 +4,10 @@ import androidx.health.services.client.data.DataPoint
 import androidx.health.services.client.data.DataType
 import androidx.health.services.client.data.Value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.After
-import org.junit.Before
 import org.junit.Test
 import java.time.Duration
 import java.util.concurrent.atomic.AtomicInteger
@@ -25,7 +23,7 @@ class RepositoryTest {
     }
 
     @Test
-    fun `repository emits heart rate data when received`() = runBlocking {
+    fun `repository emits heart rate data points when received`() = runBlocking {
         val expectedHeartRate1 = 50.0
         val expectedHeartRate2 = 55.0
         val expectedHeartRate3 = 45.0
