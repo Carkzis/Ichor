@@ -24,9 +24,6 @@ class MainViewModelTest {
     var sut: MainViewModel? = null
     var repository: Repository? = null
 
-    @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
-
     @After
     fun tearDown() {
         sut = null
