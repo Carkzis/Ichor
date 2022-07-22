@@ -54,14 +54,12 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel = viewModel(
         modifier = Modifier.fillMaxWidth(),
         autoCentering = AutoCenteringParams(itemIndex = 0)
     ) {
-        item { IchorText(stringResourceId = R.string.hello_world) }
+        item { IchorText(stringResourceId = R.string.app_name) }
         if (heartRatePermission.hasPermission) {
             viewModel.initiateDataCollection()
-            item { IchorStatefulText() }
+            item { IchorStatefulText(state = viewModel.latestHeartRate) }
         } else {
-            item { Button(onClick = { heartRatePermission.launchPermissionRequest() }) {
-                Text("Request permission")
-            }}
+            item { IchorButton(onClick = { heartRatePermission.launchPermissionRequest() }) }
         }
     }
 }
