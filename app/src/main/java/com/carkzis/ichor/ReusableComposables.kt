@@ -130,9 +130,11 @@ fun IchorButtonPreview(
 ) {
     IchorTheme {
         IchorButton(
-            modifier = Modifier
+            modifier = modifier
                 .wrapContentSize()
-                .padding(all = 8.dp)
+                .padding(all = 8.dp),
+            iconModifier = iconModifier,
+            onClick = onClick
         )
     }
 }

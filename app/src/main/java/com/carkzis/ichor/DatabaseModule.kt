@@ -3,6 +3,7 @@ package com.carkzis.ichor
 import android.content.Context
 import androidx.health.services.client.HealthServices
 import androidx.health.services.client.HealthServicesClient
+import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,6 +14,21 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object DatabaseModule {
+
+    @Provides
+    fun provideHeartRateDao(database: IchorDatabase): HeartRateDao {
+        return database.heartRateDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideDatabase(@ApplicationContext context: Context): IchorDatabase {
+        return Room.databaseBuilder(
+            context,
+            IchorDatabase::class.java,
+            "ichor"
+        ).fallbackToDestructiveMigration().build()
+    }
 
     @Singleton
     @Provides
@@ -28,7 +44,7 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideRepository(heartRateService: HeartRateService): Repository {
-        return DefaultRepositoryImpl(heartRateService)
+    fun provideRepository(database: IchorDatabase, heartRateService: HeartRateService): Repository {
+        return DefaultRepositoryImpl(database, heartRateService)
     }
 }

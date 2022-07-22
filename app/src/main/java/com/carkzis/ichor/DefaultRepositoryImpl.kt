@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import javax.inject.Inject
 
-class DefaultRepositoryImpl @Inject constructor(private val heartRateService: HeartRateService) : Repository {
+class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatabase, private val heartRateService: HeartRateService) : Repository {
 
     override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> {
         TODO("Not yet implemented")

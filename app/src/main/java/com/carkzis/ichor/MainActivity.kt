@@ -41,7 +41,7 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel = viewModel(
 
     ScalingLazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         autoCentering = AutoCenteringParams(itemIndex = 0)
     ) {
         item {
