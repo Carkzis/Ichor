@@ -32,7 +32,7 @@ fun IchorStatefulText(modifier: Modifier = Modifier, viewModel: MainViewModel = 
         modifier = modifier,
         textAlign = TextAlign.Center,
         color = MaterialTheme.colors.primary,
-        text = heartState.toString()
+        text = String.format("%.2f", heartState)
     )
 }
 
