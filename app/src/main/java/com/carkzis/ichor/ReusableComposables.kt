@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.carkzis.ichor.theme.IchorTheme
 
 @Composable
@@ -23,12 +26,13 @@ fun IchorText(modifier: Modifier = Modifier, stringResourceId: Int = R.string.he
 }
 
 @Composable
-fun IchorStatefulText(modifier: Modifier = Modifier, text: String = "0.0") {
+fun IchorStatefulText(modifier: Modifier = Modifier, viewModel: MainViewModel = viewModel()) {
+    val heartState by viewModel.latestHeartRate.collectAsState()
     Text(
         modifier = modifier,
         textAlign = TextAlign.Center,
         color = MaterialTheme.colors.primary,
-        text = text
+        text = heartState.toString()
     )
 }
 

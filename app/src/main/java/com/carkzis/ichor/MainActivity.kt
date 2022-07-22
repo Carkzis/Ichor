@@ -50,33 +50,20 @@ class MainActivity : ComponentActivity() {
 fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel = viewModel()) {
     val heartRatePermission = rememberPermissionState(android.Manifest.permission.BODY_SENSORS)
     // Note: Reset permissions on an emulator using the command "adb shell pm reset-permissions".
-    when (heartRatePermission.hasPermission) {
-        true -> {
+
+    ScalingLazyColumn(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth(),
+        autoCentering = AutoCenteringParams(itemIndex = 0)
+    ) {
+        item { IchorText(stringResourceId = R.string.hello_world) }
+        if (heartRatePermission.hasPermission) {
             viewModel.initiateDataCollection()
-            val heartState by viewModel.latestHeartRate.collectAsState()
-            ScalingLazyColumn(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth(),
-                autoCentering = AutoCenteringParams(itemIndex = 0)
-            ) {
-                item { IchorText(stringResourceId = R.string.hello_world) }
-                item { IchorStatefulText(text = heartState.toString()) }
-                item { Button(onClick = { heartRatePermission.launchPermissionRequest() }) {
-                    Text("Request permission")
-                }}
-            }
-        }
-        false -> {
-            ScalingLazyColumn(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth(),
-                autoCentering = AutoCenteringParams(itemIndex = 0)
-            ) {
-                item { IchorText(stringResourceId = R.string.hello_world) }
-                item { Button(onClick = { heartRatePermission.launchPermissionRequest() }) {
-                    Text("Request permission")
-                }}
-            }
+            item { IchorStatefulText() }
+        } else {
+            item { Button(onClick = { heartRatePermission.launchPermissionRequest() }) {
+                Text("Request permission")
+            }}
         }
     }
 }
