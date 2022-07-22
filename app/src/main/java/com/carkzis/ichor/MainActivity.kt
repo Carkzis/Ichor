@@ -44,7 +44,13 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel = viewModel(
         modifier = Modifier.fillMaxWidth(),
         autoCentering = AutoCenteringParams(itemIndex = 0)
     ) {
-        item { IchorText(modifier = Modifier, style = IchorTypography.title1, stringResourceId = R.string.app_name) }
+        item {
+            IchorText(
+                modifier = Modifier,
+                style = IchorTypography.title1,
+                stringResourceId = R.string.app_name
+            )
+        }
         if (heartRatePermission.hasPermission) {
             viewModel.initiateDataCollection()
             item { IchorStatefulText(state = viewModel.latestHeartRate) }

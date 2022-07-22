@@ -25,7 +25,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun IchorText(modifier: Modifier = Modifier, style: TextStyle = IchorTypography.body1, stringResourceId: Int = R.string.app_name) {
+fun IchorText(
+    modifier: Modifier = Modifier,
+    style: TextStyle = IchorTypography.body1,
+    stringResourceId: Int = R.string.app_name
+) {
     Text(
         modifier = modifier,
         textAlign = TextAlign.Center,
@@ -52,10 +56,15 @@ fun <T> IchorStatefulText(modifier: Modifier = Modifier, state: StateFlow<T>) {
 }
 
 @Composable
-fun IchorButton(modifier: Modifier = Modifier, iconModifier: Modifier = Modifier, iconImage: ImageVector = Icons.Rounded.LockPerson, onClick: () -> Unit = {}) {
+fun IchorButton(
+    modifier: Modifier = Modifier,
+    iconModifier: Modifier = Modifier,
+    iconImage: ImageVector = Icons.Rounded.LockPerson,
+    onClick: () -> Unit = {}
+) {
     Button(modifier = modifier.padding(4.dp), onClick = { onClick() }) {
         Icon(
-           imageVector = iconImage,
+            imageVector = iconImage,
             contentDescription = "Requests permission to access heartrate.",
             modifier = iconModifier
         )
@@ -96,8 +105,9 @@ fun IchorStatefulTextPreview() {
     IchorTheme {
         val stateFlow = MutableStateFlow(123.456)
         IchorStatefulText(
-            modifier = Modifier.fillMaxWidth()
-            .padding(all = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = 8.dp),
             state = stateFlow
         )
     }
@@ -113,7 +123,11 @@ fun IchorStatefulTextPreview() {
     showBackground = WEAR_PREVIEW_SHOW_BACKGROUND
 )
 @Composable
-fun IchorButtonPreview(modifier: Modifier = Modifier, iconModifier: Modifier = Modifier, onClick: () -> Unit = {}) {
+fun IchorButtonPreview(
+    modifier: Modifier = Modifier,
+    iconModifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
     IchorTheme {
         IchorButton(
             modifier = Modifier
