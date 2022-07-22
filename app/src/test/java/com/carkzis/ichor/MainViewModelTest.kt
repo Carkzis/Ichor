@@ -24,6 +24,10 @@ class MainViewModelTest {
     var sut: MainViewModel? = null
     var repository: Repository? = null
 
+    @ExperimentalCoroutinesApi
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @After
     fun tearDown() {
         sut = null
@@ -42,7 +46,7 @@ class MainViewModelTest {
 
         sut = MainViewModel(repository as FakeRepository)
 
-        sut?.assignLatestHeartRateToUI()
+        sut?.initiateDataCollection()
 
         assertThat(sut?.latestHeartRate?.value, `is`(expectedHeartRate.value.asDouble()))
     }

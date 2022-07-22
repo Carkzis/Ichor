@@ -3,6 +3,7 @@ package com.carkzis.ichor
 import androidx.health.services.client.data.Availability
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import timber.log.Timber
 import javax.inject.Inject
 
 class DefaultRepositoryImpl @Inject constructor(private val heartRateService: HeartRateService) : Repository {
@@ -16,6 +17,7 @@ class DefaultRepositoryImpl @Inject constructor(private val heartRateService: He
     }
 
     override suspend fun collectHeartRateFromHeartRateService(): Flow<List<HeartRateDataPoint>> = flow {
+        Timber.e("Entered collectHeartRateFromHeartRateService.")
         heartRateService.retrieveHeartRate().collect {
             when (it) {
                 is MeasureClientData.HeartRateDataPoints -> {

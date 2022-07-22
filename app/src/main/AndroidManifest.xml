@@ -6,7 +6,19 @@
 
     <uses-feature android:name="android.hardware.type.watch" />
 
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+
+    <!-- When an app targets Android 11 (API level 30) or higher and queries for information about
+         the other apps that are installed on a device, the system filters this information by
+         default. Adding the query field allows Health Services to recognize the app.
+         See https://developer.android.com/training/package-visibility.
+    -->
+    <queries>
+        <package android:name="com.google.android.wearable.healthservices" />
+    </queries>
+
     <application
+        android:name="com.carkzis.ichor.IchorApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

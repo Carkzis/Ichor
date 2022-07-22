@@ -1,15 +1,11 @@
 package com.carkzis.ichor
 
-import androidx.health.services.client.data.DataPoint
-import androidx.health.services.client.data.DataType
-import androidx.health.services.client.data.Value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.After
 import org.junit.Test
-import java.time.Duration
 import java.util.concurrent.atomic.AtomicInteger
 
 @ExperimentalCoroutinesApi
