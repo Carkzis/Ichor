@@ -5,6 +5,7 @@ import androidx.health.services.client.data.DataPoint
 import androidx.health.services.client.data.DataType
 import androidx.health.services.client.data.Value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -47,6 +48,9 @@ class MainViewModelTest {
         sut = MainViewModel(repository as FakeRepository)
 
         sut?.initiateDataCollection()
+
+        // Fake delay of 1ms.
+        delay(1)
 
         assertThat(sut?.latestHeartRate?.value, `is`(expectedHeartRate.value.asDouble()))
     }
