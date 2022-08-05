@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface HeartRateDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(heartRates: LocalHeartRate)
+    fun insertHeartRate(heartRate: LocalHeartRate)
 
     @Query("SELECT * FROM LocalHeartRate")
     fun getAllLocalHeartRates() : Flow<List<LocalHeartRate>>

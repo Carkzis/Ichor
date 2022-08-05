@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger
 @ExperimentalCoroutinesApi
 class HeartRateServiceTest {
 
-    var sut: HeartRateService? = null
+    private var sut: HeartRateService? = null
 
     @After
     fun tearDown() {
