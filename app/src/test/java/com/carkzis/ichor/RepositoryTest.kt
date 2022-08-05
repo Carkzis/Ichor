@@ -1,6 +1,8 @@
 package com.carkzis.ichor
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
@@ -29,7 +31,7 @@ class RepositoryTest {
         val heartRateEmissionCounter = AtomicInteger(0)
 
         sut?.run {
-            collectHeartRateFromHeartRateService().collect {
+            collectHeartRateFromHeartRateService().take(3).collect {
                 val actualValue = it.first().value.asDouble()
                 val expectedDataPoints =
                     expectedHeartRateDataPoints[heartRateEmissionCounter.get()]
