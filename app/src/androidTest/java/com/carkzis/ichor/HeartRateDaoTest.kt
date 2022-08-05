@@ -36,7 +36,7 @@ class HeartRateDaoTest {
     }
 
     @Test
-    fun insertHeartRate_insertIntoEmptyDatabase_retrieveInsertedHeartRate() = runTest {
+    fun insertHeartRate_insertOneHeartRate_retrieveInsertedHeartRate() = runTest {
         val heartRate = LocalHeartRate(pk = "1", date = "01/01/1900", value = "100")
 
         database.heartRateDao().insertHeartRate(heartRate = heartRate)
@@ -49,5 +49,43 @@ class HeartRateDaoTest {
 
         assertThat(heartRates.size, `is`(1))
         assertThat(heartRate, `is`(heartRates[0]))
+    }
+
+    @Test
+    fun insertHeartRate_insertDuplicateHeartRate_retrieveOnlyOneOfHeartRateFromDatabase() = runTest {
+        val heartRate1 = LocalHeartRate(pk = "1", date = "01/01/1900", value = "100")
+        val heartRate2 = LocalHeartRate(pk = "1", date = "01/01/1900", value = "100")
+
+        database.heartRateDao().insertHeartRate(heartRate = heartRate1)
+        database.heartRateDao().insertHeartRate(heartRate = heartRate2)
+
+        val heartRates = database
+            .heartRateDao()
+            .getAllLocalHeartRates()
+            .take(1)
+            .toList()[0]
+
+        assertThat(heartRates.size, `is`(1))
+        assertThat(heartRate1, `is`(heartRates[0]))
+    }
+
+    @Test
+    fun insertHeartRate_insertTwoDifferentHeartRates_retrieveTwoDifferentHeartRates() = runTest {
+        val heartRate1 = LocalHeartRate(pk = "1", date = "01/01/1900", value = "100")
+        val heartRate2 = LocalHeartRate(pk = "2", date = "01/01/1900", value = "200")
+
+        database.heartRateDao().insertHeartRate(heartRate = heartRate1)
+        database.heartRateDao().insertHeartRate(heartRate = heartRate2)
+
+        val heartRates = database
+            .heartRateDao()
+            .getAllLocalHeartRates()
+            .take(1)
+            .toList()[0]
+
+        println(heartRates)
+        assertThat(heartRates.size, `is`(2))
+        assertThat(heartRate1, `is`(heartRates[0]))
+        assertThat(heartRate2, `is`(heartRates[1]))
     }
 }
