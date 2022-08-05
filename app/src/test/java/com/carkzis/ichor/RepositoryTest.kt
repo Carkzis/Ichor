@@ -4,6 +4,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.After
@@ -21,10 +24,11 @@ class RepositoryTest {
     }
 
     @Test
-    fun `repository emits heart rate data points when received`() = runBlocking {
+    fun `repository emits heart rate data points when received`() = runTest {
         val expectedHeartRateDataPoints = listOfHeartRateMeasureData()
+        val mockDatabase = mutableListOf<LocalHeartRate>()
 
-        sut = FakeRepository().apply {
+        sut = FakeRepository(mockDatabase).apply {
             mockHeartRateSample = expectedHeartRateDataPoints
         }
 
@@ -42,8 +46,8 @@ class RepositoryTest {
             }
         }
 
+        assertThat(mockDatabase.size, `is`(1))
         assertThat(heartRateEmissionCounter.get(), `is`(3))
-
     }
 
 }
