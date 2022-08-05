@@ -8,11 +8,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class FakeRepository(database: MutableList<LocalHeartRate>) : Repository {
+class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : Repository {
 
     var mockHeartRateSample: List<MeasureClientData> = listOf()
     var mockAvailabilities: List<MeasureClientData> = listOf()
     var mockDatabase = database
+    var sampleRateFromHeart = 0L
+    var sampleRateForDatabaseInsertion = 1L
+    var initialSampleTimeForDatabaseInsertion = 1L
 
     private var shouldSampleDatabase = false
 
@@ -24,25 +27,30 @@ class FakeRepository(database: MutableList<LocalHeartRate>) : Repository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun collectHeartRateFromHeartRateService(): Flow<List<HeartRateDataPoint>> = flow {
-        coroutineScope {
-            launch {
-                initiateHeartRateSampler()
-            }
-            for (measureClientData in mockHeartRateSample) {
-                delay(500)
-                val listOfDataPoints = (measureClientData as MeasureClientData.HeartRateDataPoints).dataPoints
-                if (shouldSampleDatabase) {
-                    insertValueIntoDatabase(listOfDataPoints.last())
-                    shouldSampleDatabase = false
+    override suspend fun collectHeartRateFromHeartRateService(): Flow<List<HeartRateDataPoint>> =
+        flow {
+            coroutineScope {
+                launch {
+                    initiateHeartRateSampler()
                 }
-                emit(listOfDataPoints)
+                for (measureClientData in mockHeartRateSample) {
+                    delay(sampleRateFromHeart)
+                    val listOfDataPoints =
+                        (measureClientData as MeasureClientData.HeartRateDataPoints).dataPoints
+                    if (shouldSampleDatabase) {
+                        insertValueIntoDatabase(listOfDataPoints.last())
+                        shouldSampleDatabase = false
+                    }
+                    emit(listOfDataPoints)
+                }
             }
-        }
-    }.flowOn(Dispatchers.IO)
+        }.flowOn(Dispatchers.IO)
 
     private suspend fun initiateHeartRateSampler() {
-        Sampler().sampleAtIntervals(1000, 1000).onEach {
+        Sampler().sampleAtIntervals(
+            initialSampleTimeForDatabaseInsertion,
+            initialSampleTimeForDatabaseInsertion
+        ).onEach {
             shouldSampleDatabase = true
         }.collect()
     }

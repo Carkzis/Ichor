@@ -26,9 +26,8 @@ class RepositoryTest {
     @Test
     fun `repository emits heart rate data points when received`() = runTest {
         val expectedHeartRateDataPoints = listOfHeartRateMeasureData()
-        val mockDatabase = mutableListOf<LocalHeartRate>()
 
-        sut = FakeRepository(mockDatabase).apply {
+        sut = FakeRepository().apply {
             mockHeartRateSample = expectedHeartRateDataPoints
         }
 
@@ -42,6 +41,26 @@ class RepositoryTest {
                             as MeasureClientData.HeartRateDataPoints
                 val expectedValue = expectedDataPoints.dataPoints.first().value.asDouble()
                 assertThat(actualValue, `is`(expectedValue))
+                heartRateEmissionCounter.incrementAndGet()
+            }
+        }
+
+        assertThat(heartRateEmissionCounter.get(), `is`(3))
+    }
+
+    @Test
+    fun `repository inserts latest heart rate data into database at given interval`() = runTest {
+        val expectedHeartRateDataPoints = listOfHeartRateMeasureData()
+        val mockDatabase = mutableListOf<LocalHeartRate>()
+
+        sut = FakeRepository(mockDatabase).apply {
+            mockHeartRateSample = expectedHeartRateDataPoints
+        }
+
+        val heartRateEmissionCounter = AtomicInteger(0)
+
+        sut?.run {
+            collectHeartRateFromHeartRateService().take(3).collect {
                 heartRateEmissionCounter.incrementAndGet()
             }
         }

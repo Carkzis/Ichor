@@ -39,7 +39,7 @@ class MainViewModelTest {
         val listOfDummyHeartRateDataPoints = listOfHeartRateDataPoints()
         val expectedHeartRate = listOfDummyHeartRateDataPoints.last().last()
 
-        repository = FakeRepository(mutableListOf()).apply {
+        repository = FakeRepository().apply {
             mockHeartRateSample = listOfDummyHeartRateDataPoints.map {
                 MeasureClientData.HeartRateDataPoints(it)
             }
