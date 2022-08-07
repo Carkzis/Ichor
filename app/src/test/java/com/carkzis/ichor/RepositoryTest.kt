@@ -1,10 +1,13 @@
 package com.carkzis.ichor
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -62,11 +65,16 @@ class RepositoryTest {
 
         val heartRateEmissionCounter = AtomicInteger(0)
 
-        sut?.run {
-            collectHeartRateFromHeartRateService().take(3).collect {
-                heartRateEmissionCounter.incrementAndGet()
+        launch {
+            sut?.run {
+                collectHeartRateFromHeartRateService().take(3).collect {
+                    heartRateEmissionCounter.incrementAndGet()
+                }
             }
         }
+
+        runCurrent()
+        advanceTimeBy(1501)
 
         assertThat(mockDatabase.size, `is`(1))
         assertThat(heartRateEmissionCounter.get(), `is`(3))

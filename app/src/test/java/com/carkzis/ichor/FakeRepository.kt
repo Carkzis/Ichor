@@ -44,7 +44,7 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
                     emit(listOfDataPoints)
                 }
             }
-        }.flowOn(Dispatchers.IO)
+        }
 
     private suspend fun initiateHeartRateSampler() {
         Sampler().sampleAtIntervals(
