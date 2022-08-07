@@ -55,6 +55,9 @@ class RepositoryTest {
 
         sut = FakeRepository(mockDatabase).apply {
             mockHeartRateSample = expectedHeartRateDataPoints
+            sampleRateFromHeart = 500L
+            sampleRateForDatabaseInsertion = 1000L
+            initialSampleTimeForDatabaseInsertion = 1000L
         }
 
         val heartRateEmissionCounter = AtomicInteger(0)
