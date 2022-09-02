@@ -13,6 +13,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.time.LocalDateTime
+import java.util.*
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -88,4 +90,5 @@ class HeartRateDaoTest {
         assertThat(heartRate1, `is`(heartRates[0]))
         assertThat(heartRate2, `is`(heartRates[1]))
     }
+
 }
