@@ -16,7 +16,7 @@ class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatab
         TODO("Not yet implemented")
     }
 
-    override suspend fun collectHeartRateFromHeartRateService(): Flow<List<HeartRateDataPoint>> = flow {
+    override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<List<HeartRateDataPoint>> = flow {
         Timber.e("Entered collectHeartRateFromHeartRateService.")
         heartRateService.retrieveHeartRate().collect {
             when (it) {

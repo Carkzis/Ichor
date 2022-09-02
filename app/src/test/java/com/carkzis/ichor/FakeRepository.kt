@@ -17,8 +17,6 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
     var sampleRateForDatabaseInsertion = 1L
     var initialSampleTimeForDatabaseInsertion = 1L
 
-    private var shouldSampleDatabase = false
-
     override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> {
         TODO("Not yet implemented")
     }
@@ -27,11 +25,16 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
         TODO("Not yet implemented")
     }
 
-    override suspend fun collectHeartRateFromHeartRateService(): Flow<List<HeartRateDataPoint>> =
+    // TODO: 1. Make sampler use constructor arguments instead of function arguments.
+    // TODO: 2. Change test to use in-memory database.
+    override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<List<HeartRateDataPoint>> =
         flow {
             coroutineScope {
+                var shouldSampleDatabase = true
                 launch {
-                    initiateHeartRateSampler()
+                    initiateHeartRateSampler().collect {
+                        shouldSampleDatabase = it
+                    }
                 }
                 for (measureClientData in mockHeartRateSample) {
                     delay(sampleRateFromHeart)
@@ -46,13 +49,13 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
             }
         }
 
-    private suspend fun initiateHeartRateSampler() {
+    private fun initiateHeartRateSampler() = flow {
         Sampler().sampleAtIntervals(
-            initialSampleTimeForDatabaseInsertion,
+            sampleRateForDatabaseInsertion,
             initialSampleTimeForDatabaseInsertion
         ).onEach {
-            shouldSampleDatabase = true
-        }.collect()
+            emit(true)
+        }
     }
 
     private fun insertValueIntoDatabase(heartRate: DataPoint) {
