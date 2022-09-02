@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flow
 const val DEFAULT_INTERVAL_MS = 1L
 const val DEFAULT_INITIAL_INTERVAL_MS = 0L
 
-class Sampler(private val intervalInMs: Long = DEFAULT_INTERVAL_MS, private val initialIntervalInMs: Long = DEFAULT_INITIAL_INTERVAL_MS) {
+class Sampler(val intervalInMs: Long = DEFAULT_INTERVAL_MS, val initialIntervalInMs: Long = DEFAULT_INITIAL_INTERVAL_MS) {
 
     fun sampleAtIntervals() = flow {
         checkIntervalValues(intervalInMs, initialIntervalInMs)
