@@ -25,12 +25,14 @@ fun HeartRateDataPoint.toLocalHeartRate() = LocalHeartRate(
     value = this.value.asDouble().toString()
 )
 
-fun LocalHeartRate.toDomainHeartRate() = DomainHeartRate(
-    date = this.date,
-    value = try {
-        this.value.toDouble()
-    } catch (e: Exception) {
-        Timber.e(e.localizedMessage)
-        0.0
-    }
-)
+fun List<LocalHeartRate>.toDomainHeartRate() = this.map {
+    DomainHeartRate(
+        date = it.date,
+        value = try {
+            it.value.toDouble()
+        } catch (e: Exception) {
+            Timber.e(e.localizedMessage)
+            0.0
+        }
+    )
+}

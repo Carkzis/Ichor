@@ -2,7 +2,6 @@ package com.carkzis.ichor
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceTimeBy
@@ -14,6 +13,7 @@ import org.junit.After
 import org.junit.Test
 import java.util.concurrent.atomic.AtomicInteger
 
+// TODO: Need to use a real (but in-memory) database for more representative testing.
 @ExperimentalCoroutinesApi
 class RepositoryTest {
 

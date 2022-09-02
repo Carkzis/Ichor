@@ -23,9 +23,7 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
             val latestDataPoint = listOfDataPoints.last()
             insertValueIntoDatabase(latestDataPoint)
         }
-        val domainHeartRates = mockDatabase.map {
-            it.toDomainHeartRate()
-        }
+        val domainHeartRates = mockDatabase.toDomainHeartRate()
         emit(domainHeartRates)
     }
 

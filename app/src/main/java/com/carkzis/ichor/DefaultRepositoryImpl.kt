@@ -1,8 +1,12 @@
 package com.carkzis.ichor
 
 import androidx.health.services.client.data.Availability
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import androidx.health.services.client.data.DataPoint
+import androidx.test.core.app.ActivityScenario.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -12,22 +16,40 @@ class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatab
         TODO("Not yet implemented")
     }
 
-    override suspend fun collectHeartRatesFromDatabase(): Flow<List<DomainHeartRate>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun collectHeartRatesFromDatabase(): Flow<List<DomainHeartRate>> =
+        database.heartRateDao()
+            .getAllLocalHeartRates().map { listOfLocalHeartRates ->
+                listOfLocalHeartRates.toDomainHeartRate()
+            }.flowOn(Dispatchers.IO)
 
-    override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<HeartRateDataPoint> = flow {
+    override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<HeartRateDataPoint> = flow<HeartRateDataPoint> {
         Timber.e("Entered collectHeartRateFromHeartRateService.")
-        heartRateService.retrieveHeartRate().collect {
-            when (it) {
-                is MeasureClientData.HeartRateDataPoints -> {
-                    val latestDatapoint = it.dataPoints.last()
-                    emit(latestDatapoint)
+        coroutineScope {
+            Timber.e("Entered coroutineScope.")
+            var shouldSampleDatabase = false
+            launch {
+                sampler.sampleAtIntervals().collect {
+                    shouldSampleDatabase = true
                 }
-                is MeasureClientData.HeartRateAvailability -> {}
+            }
+            heartRateService.retrieveHeartRate().collect {
+                when (it) {
+                    is MeasureClientData.HeartRateDataPoints -> {
+                        val latestDatapoint = it.dataPoints.last()
+                        emit(latestDatapoint)
+                        if (shouldSampleDatabase) {
+                            println("Is this doing anything?")
+                            insertValueIntoDatabase(latestDatapoint)
+                            shouldSampleDatabase = false
+                        }
+                    }
+                    is MeasureClientData.HeartRateAvailability -> {}
+                }
             }
         }
+    }.flowOn(Dispatchers.IO)
+
+    private fun insertValueIntoDatabase(heartRate: DataPoint) {
+        database.heartRateDao().insertHeartRate(heartRate.toLocalHeartRate())
     }
 }
-
-//fun HeartRateDataPoint.to
