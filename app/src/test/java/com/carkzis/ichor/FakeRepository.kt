@@ -14,8 +14,6 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
     var mockAvailabilities: List<MeasureClientData> = listOf()
     var mockDatabase = database
     var sampleRateFromHeart = 0L
-    var sampleRateForDatabaseInsertion = 1L
-    var initialSampleTimeForDatabaseInsertion = 1L
 
     override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> {
         TODO("Not yet implemented")
@@ -32,7 +30,7 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
             coroutineScope {
                 var shouldSampleDatabase = true
                 launch {
-                    initiateHeartRateSampler().collect {
+                    initiateHeartRateSampler(sampler).collect {
                         shouldSampleDatabase = it
                     }
                 }
@@ -49,11 +47,8 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
             }
         }
 
-    private fun initiateHeartRateSampler() = flow {
-        Sampler().sampleAtIntervals(
-            sampleRateForDatabaseInsertion,
-            initialSampleTimeForDatabaseInsertion
-        ).onEach {
+    private fun initiateHeartRateSampler(sampler: Sampler) = flow {
+        sampler.sampleAtIntervals().onEach {
             emit(true)
         }
     }

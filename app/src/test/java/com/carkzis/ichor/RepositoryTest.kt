@@ -59,15 +59,16 @@ class RepositoryTest {
         sut = FakeRepository(mockDatabase).apply {
             mockHeartRateSample = expectedHeartRateDataPoints
             sampleRateFromHeart = 500L
-            sampleRateForDatabaseInsertion = 1000L
-            initialSampleTimeForDatabaseInsertion = 1000L
         }
 
         val heartRateEmissionCounter = AtomicInteger(0)
+        val sampleRateForDatabaseInsertion = 1000L
+        val initialSampleTimeForDatabaseInsertion = 1000L
+        val sampler = Sampler(sampleRateForDatabaseInsertion, initialSampleTimeForDatabaseInsertion)
 
         launch {
             sut?.run {
-                collectHeartRateFromHeartRateService().take(3).collect {
+                collectHeartRateFromHeartRateService(sampler).take(3).collect {
                     heartRateEmissionCounter.incrementAndGet()
                 }
             }

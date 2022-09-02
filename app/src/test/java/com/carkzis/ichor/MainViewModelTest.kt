@@ -1,21 +1,13 @@
 package com.carkzis.ichor
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.health.services.client.data.DataPoint
-import androidx.health.services.client.data.DataType
-import androidx.health.services.client.data.Value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.Duration
-import kotlin.math.exp
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime

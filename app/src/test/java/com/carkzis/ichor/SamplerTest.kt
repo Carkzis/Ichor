@@ -23,11 +23,6 @@ internal class SamplerTest {
 
     var sut: Sampler? = null
 
-    @Before
-    fun setUp() {
-        sut = Sampler()
-    }
-
     @After
     fun tearDown() {
         sut = null
@@ -35,8 +30,9 @@ internal class SamplerTest {
 
     @Test
     fun `sampler emits a value when sampleAtIntervals is called`() = runBlocking {
+        sut = Sampler(intervalInMs = 100)
         sut?.run {
-            sampleAtIntervals(100)
+            sampleAtIntervals()
                 .first()
                 .run {
                     return@runBlocking
@@ -52,10 +48,11 @@ internal class SamplerTest {
         val intervalInMs = 150L
         val initialIntervalInMs = 1000L
         val intervals = 1
+        sut = Sampler(intervalInMs, initialIntervalInMs)
 
         launch {
             sut?.run {
-                sampleAtIntervals(intervalInMs, initialIntervalInMs)
+                sampleAtIntervals()
                     .take(intervals)
                     .collect {
                         counter.incrementAndGet()
@@ -77,10 +74,11 @@ internal class SamplerTest {
         val intervalInMs = 100L
         val initialIntervalInMs = 0L
         val intervals = 10
+        sut = Sampler(intervalInMs, initialIntervalInMs)
 
         launch {
             sut?.run {
-                sampleAtIntervals(intervalInMs, initialIntervalInMs)
+                sampleAtIntervals()
                     .take(intervals)
                     .collect {
                         counter.incrementAndGet()
@@ -105,9 +103,10 @@ internal class SamplerTest {
         val intervalInMs = -100L
         val initialIntervalInMs = 0L
         val intervals = 10
+        sut = Sampler(intervalInMs, initialIntervalInMs)
 
         sut?.run {
-            sampleAtIntervals(intervalInMs, initialIntervalInMs)
+            sampleAtIntervals()
                 .take(intervals)
                 .collect {
                     counter.incrementAndGet()
@@ -122,9 +121,10 @@ internal class SamplerTest {
         val intervalInMs = 100L
         val initialIntervalInMs = -100L
         val intervals = 10
+        sut = Sampler(intervalInMs, initialIntervalInMs)
 
         sut?.run {
-            sampleAtIntervals(intervalInMs, initialIntervalInMs)
+            sampleAtIntervals()
                 .take(intervals)
                 .collect {
                     counter.incrementAndGet()

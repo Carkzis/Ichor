@@ -3,9 +3,12 @@ package com.carkzis.ichor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
-class Sampler() {
+const val DEFAULT_INTERVAL_MS = 1L
+const val DEFAULT_INITIAL_INTERVAL_MS = 0L
 
-    fun sampleAtIntervals(intervalInMs: Long, initialIntervalInMs: Long = 0L) = flow {
+class Sampler(private val intervalInMs: Long = DEFAULT_INTERVAL_MS, private val initialIntervalInMs: Long = DEFAULT_INITIAL_INTERVAL_MS) {
+
+    fun sampleAtIntervals() = flow {
         checkIntervalValues(intervalInMs, initialIntervalInMs)
         delay(initialIntervalInMs)
         while (true) {
