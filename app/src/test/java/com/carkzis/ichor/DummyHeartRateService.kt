@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flow
 
 class DummyHeartRateService : HeartRateService {
 
-    var mockHeartRateSample: List<List<DataPoint>> = listOf(listOf())
+    var mockHeartRateSample: List<List<DataPoint>> = listOf()
     var mockAvailabilities: List<Availability> = listOf()
 
     override fun retrieveHeartRate(): Flow<MeasureClientData> = flow {
