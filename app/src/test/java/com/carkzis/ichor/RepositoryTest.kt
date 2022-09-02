@@ -34,11 +34,11 @@ class RepositoryTest {
 
         sut?.run {
             collectHeartRateFromHeartRateService().take(3).collect {
-                val actualValue = it.first().value.asDouble()
+                val actualValue = it.value.asDouble()
                 val expectedDataPoints =
                     expectedHeartRateDataPoints[heartRateEmissionCounter.get()]
                             as MeasureClientData.HeartRateDataPoints
-                val expectedValue = expectedDataPoints.dataPoints.first().value.asDouble()
+                val expectedValue = expectedDataPoints.dataPoints.last().value.asDouble()
                 assertThat(actualValue, `is`(expectedValue))
                 heartRateEmissionCounter.incrementAndGet()
             }

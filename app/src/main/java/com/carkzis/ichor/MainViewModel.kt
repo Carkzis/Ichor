@@ -26,7 +26,7 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
         Timber.e("Entered assignLatestHeartRateToUI.")
         val sampler = Sampler()
         repository.collectHeartRateFromHeartRateService(sampler).collect {
-            val latestHeartRateAsDouble = it.last().value.asDouble()
+            val latestHeartRateAsDouble = it.value.asDouble()
             _latestHeartRate.value = latestHeartRateAsDouble
             Timber.e("Latest heart rate is $latestHeartRateAsDouble bpm.")
         }

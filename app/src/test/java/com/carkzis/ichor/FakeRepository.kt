@@ -2,11 +2,8 @@ package com.carkzis.ichor
 
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : Repository {
 
@@ -23,8 +20,7 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
         TODO("Not yet implemented")
     }
 
-    // TODO: 1. Change test to use in-memory database.
-    override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<List<HeartRateDataPoint>> =
+    override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<HeartRateDataPoint> =
         flow {
             coroutineScope {
                 var shouldSampleDatabase = false
@@ -37,22 +33,18 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
                     delay(sampleRateFromHeart)
                     val listOfDataPoints =
                         (measureClientData as MeasureClientData.HeartRateDataPoints).dataPoints
+                    val latestDataPoint = listOfDataPoints.last()
                     if (shouldSampleDatabase) {
-                        insertValueIntoDatabase(listOfDataPoints.last())
+                        insertValueIntoDatabase(latestDataPoint)
                         shouldSampleDatabase = false
                     }
-                    emit(listOfDataPoints)
+                    emit(latestDataPoint)
                 }
+                this.cancel()
             }
         }
 
     private fun insertValueIntoDatabase(heartRate: DataPoint) {
-        mockDatabase.add(
-            LocalHeartRate(
-                pk = "1",
-                date = "01/01/1900",
-                value = heartRate.value.asDouble().toString()
-            )
-        )
+        mockDatabase.add(heartRate.toLocalHeartRate())
     }
 }
