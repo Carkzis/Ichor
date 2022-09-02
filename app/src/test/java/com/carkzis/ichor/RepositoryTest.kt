@@ -1,6 +1,8 @@
 package com.carkzis.ichor
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceTimeBy
@@ -75,6 +77,35 @@ class RepositoryTest {
 
         assertThat(mockDatabase.size, `is`(1))
         assertThat(heartRateEmissionCounter.get(), `is`(3))
+    }
+
+    @Test
+    fun `repository emits data from local database`() = runTest {
+        val expectedHeartRateDataPoints = listOfHeartRateMeasureData()
+        val mockDatabase = mutableListOf<LocalHeartRate>()
+
+        sut = FakeRepository(mockDatabase).apply {
+            mockHeartRateSample = expectedHeartRateDataPoints
+        }
+
+        val heartRateIndex = AtomicInteger(0)
+
+        launch {
+            sut?.run {
+                collectHeartRatesFromDatabase().take(expectedHeartRateDataPoints.size).collect {
+                    for (heartRate in it) {
+                        val currentIndex = heartRateIndex.getAndIncrement()
+                        println(currentIndex)
+                        println(heartRateIndex)
+                        assertThat(it[currentIndex].value, `is`(mockDatabase[currentIndex].value.toDouble()))
+                    }
+                }
+            }
+        }
+
+        // Artificial delay.
+        delay(1)
+        assertThat(heartRateIndex.get(), `is`(expectedHeartRateDataPoints.size))
     }
 
 }

@@ -8,6 +8,6 @@ typealias HeartRateDataPoint = DataPoint
 
 interface Repository {
     suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability>
-    suspend fun collectHeartRateFromDatabase() : Flow<HeartRateDataPoint>
+    suspend fun collectHeartRatesFromDatabase() : Flow<List<DomainHeartRate>>
     suspend fun collectHeartRateFromHeartRateService(sampler: Sampler = Sampler()) : Flow<HeartRateDataPoint>
 }

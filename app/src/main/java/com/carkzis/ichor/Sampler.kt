@@ -3,7 +3,7 @@ package com.carkzis.ichor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
-const val DEFAULT_INTERVAL_MS = 1L
+const val DEFAULT_INTERVAL_MS = 1_000L
 const val DEFAULT_INITIAL_INTERVAL_MS = 0L
 
 class Sampler(val intervalInMs: Long = DEFAULT_INTERVAL_MS, val initialIntervalInMs: Long = DEFAULT_INITIAL_INTERVAL_MS) {

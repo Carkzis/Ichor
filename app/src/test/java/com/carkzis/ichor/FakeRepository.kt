@@ -16,8 +16,17 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
         TODO("Not yet implemented")
     }
 
-    override suspend fun collectHeartRateFromDatabase(): Flow<HeartRateDataPoint> {
-        TODO("Not yet implemented")
+    override suspend fun collectHeartRatesFromDatabase(): Flow<List<DomainHeartRate>> = flow {
+        for (measureClientData in mockHeartRateSample) {
+            val listOfDataPoints =
+                (measureClientData as MeasureClientData.HeartRateDataPoints).dataPoints
+            val latestDataPoint = listOfDataPoints.last()
+            insertValueIntoDatabase(latestDataPoint)
+        }
+        val domainHeartRates = mockDatabase.map {
+            it.toDomainHeartRate()
+        }
+        emit(domainHeartRates)
     }
 
     override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<HeartRateDataPoint> =

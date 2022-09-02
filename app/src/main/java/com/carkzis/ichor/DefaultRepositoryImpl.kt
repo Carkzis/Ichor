@@ -12,7 +12,7 @@ class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatab
         TODO("Not yet implemented")
     }
 
-    override suspend fun collectHeartRateFromDatabase(): Flow<HeartRateDataPoint> {
+    override suspend fun collectHeartRatesFromDatabase(): Flow<List<DomainHeartRate>> {
         TODO("Not yet implemented")
     }
 
