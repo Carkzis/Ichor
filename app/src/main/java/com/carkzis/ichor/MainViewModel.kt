@@ -1,12 +1,13 @@
 package com.carkzis.ichor
 
-import androidx.compose.runtime.collectAsState
+import androidx.health.services.client.data.Availability
+import androidx.health.services.client.data.DataTypeAvailability
+import androidx.health.services.client.proto.DataProto
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -17,6 +18,12 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     private val _latestHeartRate = MutableStateFlow(0.0)
     val latestHeartRate: StateFlow<Double>
         get() = _latestHeartRate
+
+    private val _latestAvailability : MutableStateFlow<Availability> = MutableStateFlow(
+        DataTypeAvailability.UNKNOWN
+    )
+    val latestAvailability: StateFlow<Availability>
+        get() = _latestAvailability
 
     private val _latestHeartRateList = MutableStateFlow<List<DomainHeartRate>>(listOf())
     val latestHeartRateList: StateFlow<List<DomainHeartRate>>
@@ -47,7 +54,8 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     private suspend fun assignLatestAvailabilityToUI() {
         Timber.e("Entered assignLatestAvailabilityToUI.")
         repository.collectAvailabilityFromHeartRateService().collect { availability ->
-            Timber.e(availability.toString())
+            Timber.e("Latest availability is $availability.")
+            _latestAvailability.value = availability
         }
     }
 

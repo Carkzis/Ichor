@@ -1,5 +1,6 @@
 package com.carkzis.ichor
 
+import androidx.health.services.client.data.DataTypeAvailability
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
@@ -61,6 +62,22 @@ class MainViewModelTest {
         delay(1)
 
         assertThat(sut?.latestHeartRateList?.value, `is`(expectedDomainHeartRates))
+    }
+
+    @Test
+    fun `viewmodel retrieves latest availability emitted from repository`() = runTest {
+        val expectedAvailability = DataTypeAvailability.AVAILABLE
+        val repository = FakeRepository().apply {
+            mockAvailabilities = listOfAvailabilityMeasureData()
+        }
+
+        sut = MainViewModel(repository)
+        sut?.initiateDataCollection()
+
+        // Fake delay of 1ms.
+        delay(1)
+
+        assertThat(sut?.latestAvailability?.value, `is`(expectedAvailability))
     }
 
 }
