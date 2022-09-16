@@ -1,7 +1,9 @@
 package com.carkzis.ichor
 
+import androidx.health.services.client.data.Availability
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceTimeBy
@@ -95,8 +97,6 @@ class RepositoryTest {
                 collectHeartRatesFromDatabase().take(expectedHeartRateDataPoints.size).collect {
                     for (heartRate in it) {
                         val currentIndex = heartRateIndex.getAndIncrement()
-                        println(currentIndex)
-                        println(heartRateIndex)
                         assertThat(it[currentIndex].value, `is`(mockDatabase[currentIndex].value.toDouble()))
                     }
                 }
@@ -106,6 +106,30 @@ class RepositoryTest {
         // Artificial delay.
         delay(1)
         assertThat(heartRateIndex.get(), `is`(expectedHeartRateDataPoints.size))
+    }
+
+    @Test
+    fun `repository emits availability data in order received`() = runTest {
+        val expectedAvailabilities = listOfAvailabilities()
+        val expectedAvailabilitiesAsMeasureData = listOfAvailabilityMeasureData()
+
+        sut = FakeRepository().apply {
+            mockAvailabilities = expectedAvailabilitiesAsMeasureData
+        }
+
+        val emittedAvailabilities : MutableList<Availability> = mutableListOf()
+
+        launch {
+            sut?.run {
+                collectAvailabilityFromHeartRateService().take(expectedAvailabilities.size).collect {
+                    emittedAvailabilities.add(it)
+                }
+            }
+        }
+
+        // Artificial delay.
+        delay(1)
+        assertThat(expectedAvailabilities, `is`(emittedAvailabilities))
     }
 
 }

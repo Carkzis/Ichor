@@ -12,8 +12,16 @@ import javax.inject.Inject
 
 class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatabase, private val heartRateService: HeartRateService) : Repository {
 
-    override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> {
-        TODO("Not yet implemented")
+    override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> = flow {
+        Timber.e("Entered collectAvailabilityFromHeartRateService.")
+        heartRateService.retrieveHeartRate().collect {
+            when (it) {
+                is MeasureClientData.HeartRateDataPoints -> {}
+                is MeasureClientData.HeartRateAvailability -> {
+                    emit(it.availability)
+                }
+            }
+        }
     }
 
     override suspend fun collectHeartRatesFromDatabase(): Flow<List<DomainHeartRate>> =
@@ -22,7 +30,7 @@ class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatab
                 listOfLocalHeartRates.toDomainHeartRate()
             }.flowOn(Dispatchers.IO)
 
-    override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<HeartRateDataPoint> = flow<HeartRateDataPoint> {
+    override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<HeartRateDataPoint> = flow {
         Timber.e("Entered collectHeartRateFromHeartRateService.")
         coroutineScope {
             Timber.e("Entered coroutineScope.")
@@ -38,7 +46,6 @@ class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatab
                         val latestDatapoint = it.dataPoints.last()
                         emit(latestDatapoint)
                         if (shouldSampleDatabase) {
-                            println("Is this doing anything?")
                             insertValueIntoDatabase(latestDatapoint)
                             shouldSampleDatabase = false
                         }

@@ -27,6 +27,9 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
             assignLatestHeartRateToUI()
         }
         viewModelScope.launch {
+            assignLatestAvailabilityToUI()
+        }
+        viewModelScope.launch {
             assignLatestHeartRateListToUI()
         }
     }
@@ -38,6 +41,13 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
             val latestHeartRateAsDouble = it.value.asDouble()
             _latestHeartRate.value = latestHeartRateAsDouble
             Timber.e("Latest heart rate is $latestHeartRateAsDouble bpm.")
+        }
+    }
+
+    private suspend fun assignLatestAvailabilityToUI() {
+        Timber.e("Entered assignLatestAvailabilityToUI.")
+        repository.collectAvailabilityFromHeartRateService().collect { availability ->
+            Timber.e(availability.toString())
         }
     }
 

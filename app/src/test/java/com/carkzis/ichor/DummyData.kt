@@ -3,6 +3,8 @@ package com.carkzis.ichor
 import androidx.health.services.client.data.*
 import java.time.Duration
 
+// TODO: Change these to use extension functions instead.
+
 fun listOfHeartRateDataPoints() : List<List<DataPoint>> {
     val heartRateSamplesInDoubles = listOfHeartRateDataInDoubles()
     val heartRateDataPoints: MutableList<List<DataPoint>> = mutableListOf(listOf(), listOf(), listOf())
@@ -52,4 +54,10 @@ fun listOfAvailabilities() : List<Availability> {
     return listOf(
         expectedAvailability1, expectedAvailability2, expectedAvailability3
     )
+}
+
+fun listOfAvailabilityMeasureData() : List<MeasureClientData> {
+    return listOfAvailabilities().map {
+        MeasureClientData.HeartRateAvailability(it)
+    }
 }

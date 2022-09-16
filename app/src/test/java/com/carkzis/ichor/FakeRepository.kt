@@ -12,8 +12,12 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
     var mockDatabase = database
     var sampleRateFromHeart = 0L
 
-    override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> {
-        TODO("Not yet implemented")
+    override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> = flow {
+        for (availabilityData in mockAvailabilities) {
+            val heartRateAvailability = availabilityData as MeasureClientData.HeartRateAvailability
+            val domainAvailability = heartRateAvailability.availability
+            emit(domainAvailability)
+        }
     }
 
     override suspend fun collectHeartRatesFromDatabase(): Flow<List<DomainHeartRate>> = flow {
