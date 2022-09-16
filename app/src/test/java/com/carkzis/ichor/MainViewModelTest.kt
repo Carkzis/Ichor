@@ -2,7 +2,6 @@ package com.carkzis.ichor
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
@@ -28,7 +27,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `viewmodel retrieves last heart rate data point emitted from repository`() = runTest {
+    fun `viewmodel retrieves latest heart rate data point emitted from repository`() = runTest {
         val listOfDummyHeartRateDataPoints = listOfHeartRateDataPoints()
         val expectedHeartRate = listOfDummyHeartRateDataPoints.last().last()
 
@@ -46,6 +45,22 @@ class MainViewModelTest {
         delay(1)
 
         assertThat(sut?.latestHeartRate?.value, `is`(expectedHeartRate.value.asDouble()))
+    }
+
+    @Test
+    fun `viewmodel retrieves all heart rates emitted from repository`() = runTest {
+        val mockDatabase = listOfHeartRateDataAsMockDatabase()
+        val expectedDomainHeartRates = listOfHeartRateDataAsMockDatabase().toDomainHeartRate()
+        val repository = FakeRepository(mockDatabase as MutableList)
+
+        sut = MainViewModel(repository)
+
+        sut?.initiateDataCollection()
+
+        // Fake delay of 1ms.
+        delay(1)
+
+        assertThat(sut?.latestHeartRateList?.value, `is`(expectedDomainHeartRates))
     }
 
 }

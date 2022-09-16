@@ -22,6 +22,16 @@ fun listOfHeartRateDataPoints() : List<List<DataPoint>> {
     return heartRateDataPoints
 }
 
+fun listOfHeartRateDataAsMockDatabase() : List<LocalHeartRate> {
+    return listOfHeartRateDataInDoubles().map {
+        LocalHeartRate(
+            date = "",
+            pk = "",
+            value = it.last().toString()
+        )
+    }
+}
+
 fun listOfHeartRateDataInDoubles() : List<List<Double>> {
     val expectedHeartRatesOne = listOf(45.0, 50.0, 55.0)
     val expectedHeartRatesTwo = listOf(30.0)
