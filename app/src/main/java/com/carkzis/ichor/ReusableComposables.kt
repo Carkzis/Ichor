@@ -23,6 +23,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.AppCard
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Card
@@ -77,6 +78,7 @@ fun <T> IchorStatefulText(modifier: Modifier = Modifier, state: StateFlow<T>) {
         modifier = modifier,
         textAlign = TextAlign.Center,
         color = IchorColorPalette.primary,
+        style = IchorTypography.body1,
         text = when (stateValue) {
             is Double -> {
                 String.format("%.1f", stateValue)
@@ -162,7 +164,7 @@ fun IchorCard(
         shape = RoundedCornerShape(50.dp),
         backgroundPainter = ColorPainter(color = IchorColorPalette.secondary),
         ) {
-            Text(time)
+            Text(time, color = IchorColorPalette.onSecondary, style = IchorTypography.body1, fontSize = 8.sp)
             content()
     }
 }

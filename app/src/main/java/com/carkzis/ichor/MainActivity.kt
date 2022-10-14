@@ -11,11 +11,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.*
+import com.carkzis.ichor.theme.IchorColorPalette
 import com.carkzis.ichor.theme.IchorTheme
 import com.carkzis.ichor.theme.IchorTypography
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -94,7 +96,7 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
                     IchorCard(
                         time = currentHeartRateData.date,
                         content = {
-                            Text("${currentHeartRateData.value} bpm", textAlign = TextAlign.Center)
+                            Text("${currentHeartRateData.value} bpm", color = IchorColorPalette.onSecondary)
                         }
                     )
                 }
