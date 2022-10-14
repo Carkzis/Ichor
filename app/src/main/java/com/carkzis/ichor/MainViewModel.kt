@@ -32,7 +32,6 @@ class MainViewModel @Inject constructor(private val repository: DefaultRepositor
         get() = _latestHeartRateList
 
     fun initiateDataCollection() {
-        Timber.e("How many initiations?")
         viewModelScope.launch {
             assignLatestHeartRateToUI()
         }

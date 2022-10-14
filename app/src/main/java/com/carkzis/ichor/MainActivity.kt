@@ -22,6 +22,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.sql.Time
+import java.util.concurrent.atomic.AtomicBoolean
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -57,7 +58,7 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
         positionIndicator = { PositionIndicator(scalingLazyListState = listState) }
     ) {
         val heartRates by viewModel.latestHeartRateList.collectAsState()
-        var shouldInitiateDataCollection by remember { mutableStateOf(true) }
+        var shouldInitiateDataCollection by remember { mutableStateOf(AtomicBoolean(true)) }
 
         ScalingLazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,28 +76,23 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
                 )
             }
 
-            // CURRENT HEARTRATE
+            // HEARTRATES
             if (heartRatePermission.hasPermission) {
-                if (shouldInitiateDataCollection) {
-                    // TODO: Make this atomic? Still seeing some double initiations.
-                    shouldInitiateDataCollection = false
+                if (shouldInitiateDataCollection.get()) {
+                    shouldInitiateDataCollection.getAndSet(false)
                     viewModel.initiateDataCollection()
+                    items(
+                        items = heartRates
+                    ) { currentHeartRateData ->
+                        IchorCard(
+                            time = currentHeartRateData.date,
+                            mainInfo = currentHeartRateData.value.toString()
+                        )
+                    }
                 }
                 item { IchorStatefulText(state = viewModel.latestHeartRate) }
             } else {
                 item { IchorButton(onClick = { heartRatePermission.launchPermissionRequest() }) }
-            }
-
-            Timber.e("NEW HEARTRATE LIST SIZE IS: ${heartRates.size}")
-
-            // LIST OF HEARTRATES
-            items(
-                items = heartRates
-            ) { currentHeartRateData ->
-                IchorCard(
-                    time = currentHeartRateData.date,
-                    mainInfo = currentHeartRateData.value.toString()
-                )
             }
         }
     }
