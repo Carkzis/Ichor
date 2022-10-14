@@ -72,7 +72,7 @@ fun IchorTextPreview() {
 
 @Composable
 @Suppress("IMPLICIT_CAST_TO_ANY")
-fun <T> IchorStatefulText(modifier: Modifier = Modifier, state: StateFlow<T>) {
+fun <T> IchorStatefulText(modifier: Modifier = Modifier, state: StateFlow<T>, suffix: String = "") {
     val stateValue by state.collectAsState()
     Text(
         modifier = modifier,
@@ -81,7 +81,7 @@ fun <T> IchorStatefulText(modifier: Modifier = Modifier, state: StateFlow<T>) {
         style = IchorTypography.body1,
         text = when (stateValue) {
             is Double -> {
-                String.format("%.1f", stateValue)
+                "${String.format("%.1f", stateValue)}$suffix"
             }
             else -> stateValue
         } as String

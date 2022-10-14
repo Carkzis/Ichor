@@ -87,7 +87,8 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
                 item {
                     IchorStatefulText(
                         state = viewModel.latestHeartRate,
-                        modifier = modifier.padding(bottom = 8.dp)
+                        modifier = modifier.padding(bottom = 8.dp),
+                        suffix = " bpm"
                     )
                 }
                 items(
