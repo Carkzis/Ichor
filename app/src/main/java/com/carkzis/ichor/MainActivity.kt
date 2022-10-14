@@ -72,7 +72,7 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier.fillMaxWidth(),
             autoCentering = AutoCenteringParams(itemIndex = 0),
-            state = ScalingLazyListState()
+            state = listState
         ) {
             // APP ICON
             item {
