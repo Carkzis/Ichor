@@ -66,7 +66,7 @@ class MainViewModel @Inject constructor(private val repository: DefaultRepositor
     private suspend fun assignLatestHeartRateListToUI() {
         Timber.e("Entered assignLatestHeartRateListToUI.")
         repository.collectHeartRatesFromDatabase().collect { listOfHeartRates ->
-            //Timber.e("Latest heart rates are $listOfHeartRates.")
+//            Timber.e("Latest heart rates are $listOfHeartRates.")
             _latestHeartRateList.value = listOfHeartRates
         }
     }

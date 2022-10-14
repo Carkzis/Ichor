@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import timber.log.Timber
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.math.round
 
 @Entity
 data class LocalHeartRate(
@@ -29,7 +30,7 @@ fun List<LocalHeartRate>.toDomainHeartRate() = this.map {
     DomainHeartRate(
         date = it.date,
         value = try {
-            it.value.toDouble()
+            round(it.value.toDouble() * 100) / 100
         } catch (e: Exception) {
             Timber.e(e.localizedMessage)
             0.0

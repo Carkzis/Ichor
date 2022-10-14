@@ -3,6 +3,7 @@ package com.carkzis.ichor
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -14,6 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -22,6 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.AppCard
 import androidx.wear.compose.material.Button
+import androidx.wear.compose.material.Card
+import com.carkzis.ichor.theme.IchorColorPalette
 import com.carkzis.ichor.theme.IchorTheme
 import com.carkzis.ichor.theme.IchorTypography
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +42,7 @@ fun IchorText(
     Text(
         modifier = modifier,
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
+        color = IchorColorPalette.primary,
         style = style,
         text = stringResource(id = stringResourceId)
     )
@@ -71,10 +76,11 @@ fun <T> IchorStatefulText(modifier: Modifier = Modifier, state: StateFlow<T>) {
     Text(
         modifier = modifier,
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-
+        color = IchorColorPalette.primary,
         text = when (stateValue) {
-            is Double -> String.format("%.1f", stateValue)
+            is Double -> {
+                String.format("%.1f", stateValue)
+            }
             else -> stateValue
         } as String
     )
@@ -147,25 +153,17 @@ fun IchorButtonPreview(
 @Composable
 fun IchorCard(
     modifier: Modifier = Modifier,
-    description: String = "Heartrate",
     time: String,
-    mainInfo: String,
-    additionalInfo: () -> String = { "" }
+    content: @Composable () -> Unit,
 ) {
-    AppCard(
-        modifier = Modifier,
+    Card(
+        modifier = modifier,
         onClick = { /*TODO*/ },
-        appImage = {
-            Icon(
-                imageVector = Icons.Rounded.MonitorHeart,
-                contentDescription = "Icon for the current heart rate.",
-                modifier = modifier
-            )
-        },
-        appName = { Text(description) },
-        time = { Text(time) },
-        title = { Text(mainInfo) }) {
-        Text(additionalInfo())
+        shape = RoundedCornerShape(50.dp),
+        backgroundPainter = ColorPainter(color = IchorColorPalette.secondary),
+        ) {
+            Text(time)
+            content()
     }
 }
 
@@ -182,10 +180,10 @@ fun IchorCard(
 fun IchorCardPreview() {
     IchorTheme {
         IchorCard(
-            description = "Heartrate",
-            time = "End of Time",
-            mainInfo = "140 bpm",
-            additionalInfo = { "There is some additional content here." }
-        )
+            time = "End of Time"
+        ) {
+            Text("120 bpm")
+            Text("Some additional info.")
+        }
     }
 }

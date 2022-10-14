@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,7 +32,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val viewModel by viewModels<MainViewModel>()
 
-        Timber.e("CREATIONS")
         setContent {
             IchorTheme {
                 IchorUI(viewModel = viewModel)
@@ -58,7 +58,7 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
         positionIndicator = { PositionIndicator(scalingLazyListState = listState) }
     ) {
         val heartRates by viewModel.latestHeartRateList.collectAsState()
-        var shouldInitiateDataCollection by remember { mutableStateOf(AtomicBoolean(true)) }
+        val shouldInitiateDataCollection by remember { mutableStateOf(AtomicBoolean(true)) }
 
         ScalingLazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -70,7 +70,7 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
             // TITLE
             item {
                 IchorText(
-                    modifier = Modifier,
+                    modifier = modifier,
                     style = IchorTypography.title1,
                     stringResourceId = R.string.app_name
                 )
@@ -82,13 +82,20 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
                     shouldInitiateDataCollection.getAndSet(false)
                     viewModel.initiateDataCollection()
                 }
-                item { IchorStatefulText(state = viewModel.latestHeartRate) }
+                item {
+                    IchorStatefulText(
+                        state = viewModel.latestHeartRate,
+                        modifier = modifier.padding(bottom = 8.dp)
+                    )
+                }
                 items(
                     items = heartRates
                 ) { currentHeartRateData ->
                     IchorCard(
                         time = currentHeartRateData.date,
-                        mainInfo = currentHeartRateData.value.toString()
+                        content = {
+                            Text("${currentHeartRateData.value} bpm", textAlign = TextAlign.Center)
+                        }
                     )
                 }
             } else {

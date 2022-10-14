@@ -8,22 +8,22 @@ import androidx.wear.compose.material.Typography
 
 val IchorTypography = Typography(
     body1 = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = FontFamily.Cursive,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
     title1 = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = FontFamily.Cursive,
         fontWeight = FontWeight.ExtraBold,
         fontSize = 20.sp
     ),
     button = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = FontFamily.Cursive,
         fontWeight = FontWeight.W500,
         fontSize = 14.sp
     ),
     caption1 = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = FontFamily.Cursive,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp
     )
