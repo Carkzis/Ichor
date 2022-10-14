@@ -147,19 +147,25 @@ fun IchorButtonPreview(
 @Composable
 fun IchorCard(
     modifier: Modifier = Modifier,
-    description: String = "",
+    description: String = "Heartrate",
     time: String,
-    title: String,
-    content: () -> String
+    mainInfo: String,
+    additionalInfo: () -> String = { "" }
 ) {
-    AppCard(modifier = Modifier, onClick = { /*TODO*/ }, appImage = {
-        Icon(
-            imageVector = Icons.Rounded.MonitorHeart,
-            contentDescription = "Icon for the current heart rate.",
-            modifier = modifier
-        )
-    }, appName = { Text(description) }, time = { Text(time) }, title = { Text(title) }) {
-        Text(content())
+    AppCard(
+        modifier = Modifier,
+        onClick = { /*TODO*/ },
+        appImage = {
+            Icon(
+                imageVector = Icons.Rounded.MonitorHeart,
+                contentDescription = "Icon for the current heart rate.",
+                modifier = modifier
+            )
+        },
+        appName = { Text(description) },
+        time = { Text(time) },
+        title = { Text(mainInfo) }) {
+        Text(additionalInfo())
     }
 }
 
@@ -178,8 +184,8 @@ fun IchorCardPreview() {
         IchorCard(
             description = "Heartrate",
             time = "End of Time",
-            title = "140 bpm",
-            content = { "There is some content here." }
+            mainInfo = "140 bpm",
+            additionalInfo = { "There is some additional content here." }
         )
     }
 }

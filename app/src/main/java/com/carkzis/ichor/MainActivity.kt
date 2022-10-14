@@ -49,6 +49,7 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel = viewModel(
     // TODO: DELETE ITEM functionality.
     // TODO: DELETE ALL functionality (with dialog?)
     // TODO: Change sampling time and show current sampling time (in settings view/dialog?)
+
     val listState = rememberScalingLazyListState()
 
     Scaffold(
@@ -82,11 +83,16 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel = viewModel(
                 item { IchorButton(onClick = { heartRatePermission.launchPermissionRequest() }) }
             }
 
+            Timber.e("NEW HEARTRATE LIST SIZE IS: ${heartRates.size}")
+
             // LIST OF HEARTRATES
             items(
                 items = heartRates
-            ) { index ->
-                Text("Placeholder")
+            ) { currentHeartRateData ->
+                IchorCard(
+                    time = currentHeartRateData.date,
+                    mainInfo = currentHeartRateData.value.toString()
+                )
             }
         }
     }
