@@ -5,18 +5,25 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.wear.compose.material.AutoCenteringParams
-import androidx.wear.compose.material.ScalingLazyColumn
+import androidx.wear.compose.material.*
 import com.carkzis.ichor.theme.IchorTheme
 import com.carkzis.ichor.theme.IchorTypography
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
+import java.sql.Time
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -38,24 +45,49 @@ class MainActivity : ComponentActivity() {
 fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel = viewModel()) {
     val heartRatePermission = rememberPermissionState(Manifest.permission.BODY_SENSORS)
     // Note: Reset permissions on an emulator using the command "adb shell pm reset-permissions".
+    // TODO: Need to show availability.
+    // TODO: DELETE ITEM functionality.
+    // TODO: DELETE ALL functionality (with dialog?)
+    // TODO: Change sampling time and show current sampling time (in settings view/dialog?)
+    val listState = rememberScalingLazyListState()
 
-    ScalingLazyColumn(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.fillMaxWidth(),
-        autoCentering = AutoCenteringParams(itemIndex = 0)
+    Scaffold(
+        timeText = { if (!listState.isScrollInProgress) TimeText() },
+        vignette = { Vignette(vignettePosition = VignettePosition.TopAndBottom) },
+        positionIndicator = { PositionIndicator(scalingLazyListState = listState) }
     ) {
-        item {
-            IchorText(
-                modifier = Modifier,
-                style = IchorTypography.title1,
-                stringResourceId = R.string.app_name
-            )
-        }
-        if (heartRatePermission.hasPermission) {
-            viewModel.initiateDataCollection()
-            item { IchorStatefulText(state = viewModel.latestHeartRate) }
-        } else {
-            item { IchorButton(onClick = { heartRatePermission.launchPermissionRequest() }) }
+        val heartRates by viewModel.latestHeartRateList.collectAsState()
+
+        ScalingLazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier.fillMaxWidth(),
+            autoCentering = AutoCenteringParams(itemIndex = 0),
+            state = ScalingLazyListState()
+        ) {
+
+            // TITLE
+            item {
+                IchorText(
+                    modifier = Modifier,
+                    style = IchorTypography.title1,
+                    stringResourceId = R.string.app_name
+                )
+            }
+
+            // CURRENT HEARTRATE
+            if (heartRatePermission.hasPermission) {
+                viewModel.initiateDataCollection()
+                item { IchorStatefulText(state = viewModel.latestHeartRate) }
+            } else {
+                item { IchorButton(onClick = { heartRatePermission.launchPermissionRequest() }) }
+            }
+
+            // LIST OF HEARTRATES
+            items(
+                items = heartRates
+            ) { index ->
+                Text("Placeholder")
+            }
         }
     }
 }
