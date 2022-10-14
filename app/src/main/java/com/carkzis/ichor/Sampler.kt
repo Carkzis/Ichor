@@ -12,7 +12,7 @@ class Sampler(val intervalInMs: Long = DEFAULT_INTERVAL_MS, val initialIntervalI
     fun sampleAtIntervals() = flow {
         checkIntervalValues(intervalInMs, initialIntervalInMs)
         delay(initialIntervalInMs)
-        Timber.e("Time to set up the sample.")
+        Timber.e("Time to set up the sampler.")
         while (true) {
             Timber.e("Time to emit.")
             emit(Unit)

@@ -6,14 +6,16 @@ import androidx.health.services.client.proto.DataProto
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class MainViewModel @Inject constructor(private val repository: DefaultRepositoryImpl) : ViewModel() {
 
     private val _latestHeartRate = MutableStateFlow(0.0)
     val latestHeartRate: StateFlow<Double>
@@ -30,6 +32,10 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
         get() = _latestHeartRateList
 
     fun initiateDataCollection() {
+        Timber.e("How many initiations?")
+        viewModelScope.launch {
+            repository.startSampling(Sampler())
+        }
         viewModelScope.launch {
             assignLatestHeartRateToUI()
         }
@@ -37,7 +43,9 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
             assignLatestAvailabilityToUI()
         }
         viewModelScope.launch {
-            assignLatestHeartRateListToUI()
+            withContext(Dispatchers.Main) {
+                assignLatestHeartRateListToUI()
+            }
         }
     }
 
@@ -54,7 +62,7 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     private suspend fun assignLatestAvailabilityToUI() {
         Timber.e("Entered assignLatestAvailabilityToUI.")
         repository.collectAvailabilityFromHeartRateService().collect { availability ->
-            Timber.e("Latest availability is $availability.")
+//            Timber.e("Latest availability is $availability.")
             _latestAvailability.value = availability
         }
     }

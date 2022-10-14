@@ -4,13 +4,11 @@ import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,10 +28,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val viewModel by viewModels<MainViewModel>()
 
+        Timber.e("CREATIONS")
         setContent {
             IchorTheme {
-                IchorUI()
+                IchorUI(viewModel = viewModel)
             }
         }
     }
@@ -42,14 +42,13 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel = viewModel()) {
+fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
     val heartRatePermission = rememberPermissionState(Manifest.permission.BODY_SENSORS)
     // Note: Reset permissions on an emulator using the command "adb shell pm reset-permissions".
     // TODO: Need to show availability.
     // TODO: DELETE ITEM functionality.
     // TODO: DELETE ALL functionality (with dialog?)
     // TODO: Change sampling time and show current sampling time (in settings view/dialog?)
-
     val listState = rememberScalingLazyListState()
 
     Scaffold(
@@ -58,6 +57,7 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel = viewModel(
         positionIndicator = { PositionIndicator(scalingLazyListState = listState) }
     ) {
         val heartRates by viewModel.latestHeartRateList.collectAsState()
+        var shouldInitiateDataCollection by remember { mutableStateOf(true) }
 
         ScalingLazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -77,7 +77,11 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel = viewModel(
 
             // CURRENT HEARTRATE
             if (heartRatePermission.hasPermission) {
-                viewModel.initiateDataCollection()
+                if (shouldInitiateDataCollection) {
+                    // TODO: Make this atomic? Still seeing some double initiations.
+                    shouldInitiateDataCollection = false
+                    viewModel.initiateDataCollection()
+                }
                 item { IchorStatefulText(state = viewModel.latestHeartRate) }
             } else {
                 item { IchorButton(onClick = { heartRatePermission.launchPermissionRequest() }) }
@@ -108,5 +112,5 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel = viewModel(
 )
 @Composable
 fun IchorUIPreview() {
-    IchorUI()
+    IchorUI(viewModel = viewModel())
 }
