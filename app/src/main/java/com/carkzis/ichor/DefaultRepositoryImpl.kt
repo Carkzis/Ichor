@@ -14,21 +14,6 @@ import javax.inject.Inject
 
 class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatabase, private val heartRateService: HeartRateService) : Repository {
 
-    private var shouldSampleDatabase = AtomicBoolean(false)
-
-    suspend fun startSampling(sampler: Sampler) {
-        coroutineScope {
-            Timber.e("Entered coroutineScope of sampling.")
-            launch {
-                sampler.sampleAtIntervals().collect {
-                    Timber.e("SHOULD WE SAMPLE $shouldSampleDatabase")
-                    shouldSampleDatabase.getAndSet(true)
-                    Timber.e("WE ARE OKAY TO SAMPLE $shouldSampleDatabase")
-                }
-            }
-        }
-    }
-
     override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> = flow {
         Timber.e("Entered collectAvailabilityFromHeartRateService.")
         heartRateService.retrieveHeartRate().collect {
@@ -51,24 +36,20 @@ class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatab
         Timber.e("Entered collectHeartRateFromHeartRateService.")
         coroutineScope {
             Timber.e("Entered coroutineScope.")
-//            var shouldSampleDatabase = false
-//            launch {
-//                sampler.sampleAtIntervals().collect {
-//                    Timber.e("SHOULD WE SAMPLE $shouldSampleDatabase")
-//                    shouldSampleDatabase = true
-//                    Timber.e("WE ARE OKAY TO SAMPLE $shouldSampleDatabase")
-//                }
-//            }
+            var shouldSampleDatabase = false
+            launch {
+                sampler.sampleAtIntervals().collect {
+                    shouldSampleDatabase = true
+                }
+            }
             heartRateService.retrieveHeartRate().collect {
                 when (it) {
                     is MeasureClientData.HeartRateDataPoints -> {
                         val latestDatapoint = it.dataPoints.last()
                         emit(latestDatapoint)
-                        Timber.e("SHOULD WE INSERT INTO DATABASE $shouldSampleDatabase")
-                        if (shouldSampleDatabase.get()) {
-                            Timber.e("WE WILL INSERT INTO DATABASE $shouldSampleDatabase")
+                        if (shouldSampleDatabase) {
                             insertValueIntoDatabase(latestDatapoint)
-                            shouldSampleDatabase.getAndSet(false)
+                            shouldSampleDatabase = false
                         }
                     }
                     is MeasureClientData.HeartRateAvailability -> {}
