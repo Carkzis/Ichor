@@ -81,16 +81,16 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
                 if (shouldInitiateDataCollection.get()) {
                     shouldInitiateDataCollection.getAndSet(false)
                     viewModel.initiateDataCollection()
-                    items(
-                        items = heartRates
-                    ) { currentHeartRateData ->
-                        IchorCard(
-                            time = currentHeartRateData.date,
-                            mainInfo = currentHeartRateData.value.toString()
-                        )
-                    }
                 }
                 item { IchorStatefulText(state = viewModel.latestHeartRate) }
+                items(
+                    items = heartRates
+                ) { currentHeartRateData ->
+                    IchorCard(
+                        time = currentHeartRateData.date,
+                        mainInfo = currentHeartRateData.value.toString()
+                    )
+                }
             } else {
                 item { IchorButton(onClick = { heartRatePermission.launchPermissionRequest() }) }
             }
