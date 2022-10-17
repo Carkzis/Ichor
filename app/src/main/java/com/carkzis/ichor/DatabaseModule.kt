@@ -32,18 +32,6 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideHealthServiceClient(@ApplicationContext context: Context): HealthServicesClient {
-        return HealthServices.getClient(context)
-    }
-
-    @Singleton
-    @Provides
-    fun provideHeartRateService(healthServicesClient: HealthServicesClient): HeartRateService {
-        return HeartRateServiceImpl(healthServicesClient)
-    }
-
-    @Singleton
-    @Provides
     fun provideRepository(database: IchorDatabase, heartRateService: HeartRateService): Repository {
         return DefaultRepositoryImpl(database, heartRateService)
     }
