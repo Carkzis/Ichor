@@ -9,6 +9,7 @@ import org.hamcrest.Matchers.`is`
 import org.junit.After
 import org.junit.Rule
 import org.junit.Test
+import timber.log.Timber
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime

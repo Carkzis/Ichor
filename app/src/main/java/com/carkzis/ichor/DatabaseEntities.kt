@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import timber.log.Timber
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.util.*
 import kotlin.math.round
 
@@ -29,8 +30,10 @@ fun HeartRateDataPoint.toLocalHeartRate() = LocalHeartRate(
 
 fun List<LocalHeartRate>.toDomainHeartRate() = this.map {
     DomainHeartRate(
-        date = LocalDateTime.parse(it.date)
-            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+        date = try {
+            LocalDateTime.parse(it.date)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        } catch (e: DateTimeParseException) { "" },
         value = try {
             round(it.value.toDouble() * 100) / 100
         } catch (e: Exception) {
