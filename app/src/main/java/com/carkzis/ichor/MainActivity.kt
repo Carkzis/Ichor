@@ -79,10 +79,10 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
             autoCentering = AutoCenteringParams(itemIndex = 0),
             state = listState
         ) {
-            item { displayMainIcon() }
-            item { displayTitle(modifier = modifier) }
+            item { DisplayMainIcon() }
+            item { DisplayTitle(modifier = modifier) }
             item {
-                displayAvailability(modifier = modifier, state = viewModel.latestAvailability)
+                DisplayAvailability(modifier = modifier, state = viewModel.latestAvailability)
             }
 
             // HEARTRATES
@@ -92,11 +92,7 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
                     viewModel.initiateDataCollection()
                 }
                 item {
-                    IchorStatefulText(
-                        state = viewModel.latestHeartRate,
-                        modifier = modifier.padding(bottom = 8.dp),
-                        suffix = " bpm"
-                    )
+                    DisplayLatestHeartRate(modifier = modifier, state = viewModel.latestHeartRate)
                 }
                 items(
                     items = heartRates,
@@ -140,7 +136,7 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
 }
 
 @Composable
-fun displayMainIcon() {
+fun DisplayMainIcon() {
     Icon(
         imageVector = Icons.Rounded.MonitorHeart,
         contentDescription = "Main heartbeat icon for app.",
@@ -149,7 +145,7 @@ fun displayMainIcon() {
 }
 
 @Composable
-fun displayTitle(modifier: Modifier) {
+fun DisplayTitle(modifier: Modifier) {
     IchorText(
         modifier = modifier,
         style = IchorTypography.title1,
@@ -158,12 +154,21 @@ fun displayTitle(modifier: Modifier) {
 }
 
 @Composable
-fun displayAvailability(modifier: Modifier, state: StateFlow<Availability>) {
+fun DisplayAvailability(modifier: Modifier, state: StateFlow<Availability>) {
     IchorStatefulText(
         state = state,
         modifier = modifier,
         style = IchorTypography.body2,
         prefix = "Availability: "
+    )
+}
+
+@Composable
+fun DisplayLatestHeartRate(modifier: Modifier, state: StateFlow<Double>) {
+    IchorStatefulText(
+        state = state,
+        modifier = modifier.padding(bottom = 8.dp),
+        suffix = " bpm"
     )
 }
 
