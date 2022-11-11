@@ -6,4 +6,5 @@
     -->
     <string name="hello_world">Hello Square World!</string>
     <string name="title_activity_new">NewActivity</string>
+    <string name="app_permission_was_denied">"You previously denied the app permission to access the heart rate sensor.\nThis can be changed in your watch settings."</string>
 </resources>

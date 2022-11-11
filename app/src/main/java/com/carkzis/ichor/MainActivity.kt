@@ -133,8 +133,16 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
                         }
                     )
                 }
-            } else {
+            } else if (!heartRatePermission.permissionRequested) {
                 item { IchorButton(onClick = { heartRatePermission.launchPermissionRequest() }) }
+            } else {
+                item {
+                    IchorText(
+                        modifier = modifier,
+                        style = IchorTypography.body2,
+                        stringResourceId = R.string.app_permission_was_denied
+                    )
+                }
             }
         }
     }
