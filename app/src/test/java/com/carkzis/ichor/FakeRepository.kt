@@ -31,6 +31,12 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
         emit(domainHeartRates)
     }
 
+    override suspend fun deleteHeartRateFromDatabase(primaryKey: String) {
+        mockDatabase.removeIf {
+            it.pk == primaryKey
+        }
+    }
+
     override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<HeartRateDataPoint> =
         flow {
             coroutineScope {

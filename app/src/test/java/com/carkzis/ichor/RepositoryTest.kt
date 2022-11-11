@@ -132,4 +132,46 @@ class RepositoryTest {
         assertThat(expectedAvailabilities, `is`(emittedAvailabilities))
     }
 
+    @Test
+    fun `repository deletes a selected existing item from database`() = runTest {
+        val expectedHeartRateDataPoints = listOfHeartRateMeasureData()
+        val mockDatabase = mutableListOf<LocalHeartRate>()
+
+        sut = FakeRepository(mockDatabase).apply {
+            mockHeartRateSample = expectedHeartRateDataPoints
+        }
+
+        launch {
+            sut?.run {
+                collectHeartRatesFromDatabase().take(expectedHeartRateDataPoints.size).collect {}
+                assertThat(mockDatabase.size, `is`(3))
+                deleteHeartRateFromDatabase(mockDatabase[0].pk)
+                assertThat(mockDatabase.size, `is`(2))
+            }
+        }
+
+        delay(1)
+    }
+
+    @Test
+    fun `repository does not delete an item from database if primary key does not match any existing items`() = runTest {
+        val expectedHeartRateDataPoints = listOfHeartRateMeasureData()
+        val mockDatabase = mutableListOf<LocalHeartRate>()
+
+        sut = FakeRepository(mockDatabase).apply {
+            mockHeartRateSample = expectedHeartRateDataPoints
+        }
+
+        launch {
+            sut?.run {
+                collectHeartRatesFromDatabase().take(expectedHeartRateDataPoints.size).collect {}
+                assertThat(mockDatabase.size, `is`(3))
+                deleteHeartRateFromDatabase("thisPkIsNotInDatabase")
+                assertThat(mockDatabase.size, `is`(3))
+            }
+        }
+
+        delay(1)
+    }
+
 }

@@ -2,6 +2,7 @@ package com.carkzis.ichor
 
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
+import androidx.room.PrimaryKey
 import androidx.test.core.app.ActivityScenario.launch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +32,10 @@ class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatab
             .getAllLocalHeartRates().map { listOfLocalHeartRates ->
                 listOfLocalHeartRates.toDomainHeartRate()
             }.flowOn(Dispatchers.IO)
+
+    override suspend fun deleteHeartRateFromDatabase(primaryKey: String) {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<HeartRateDataPoint> = flow {
         Timber.e("Entered collectHeartRateFromHeartRateService.")
