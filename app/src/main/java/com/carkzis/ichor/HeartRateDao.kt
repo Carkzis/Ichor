@@ -14,6 +14,9 @@ interface HeartRateDao {
     @Query("SELECT * FROM LocalHeartRate")
     fun getAllLocalHeartRates() : Flow<List<LocalHeartRate>>
 
+    @Query("DELETE FROM LocalHeartRate WHERE pk = :primaryKey")
+    fun deleteLocalHeartRate(primaryKey: String)
+
     @Query("DELETE FROM LocalHeartRate")
     fun deleteAllLocalHeartRates()
 }

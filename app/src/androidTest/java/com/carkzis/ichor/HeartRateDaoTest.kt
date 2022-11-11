@@ -85,10 +85,41 @@ class HeartRateDaoTest {
             .take(1)
             .toList()[0]
 
-        println(heartRates)
         assertThat(heartRates.size, `is`(2))
         assertThat(heartRate1, `is`(heartRates[0]))
         assertThat(heartRate2, `is`(heartRates[1]))
+    }
+
+    @Test
+    fun deleteLocalHeartRate_oneHeartRateDeleted_heartRateNoLongerExistsInDatabase() = runTest {
+        val heartRateToDelete = LocalHeartRate(pk = "1", date = "01/01/1900", value = "100")
+
+        database.heartRateDao().insertHeartRate(heartRate = heartRateToDelete)
+        database.heartRateDao().deleteLocalHeartRate("1")
+
+        val heartRates = database
+            .heartRateDao()
+            .getAllLocalHeartRates()
+            .take(1)
+            .toList()[0]
+
+        assertThat(heartRates.size, `is`(0))
+    }
+
+    @Test
+    fun deleteLocalHeartRate_heartRateDoesNotExistInDatabase_noChangeToDatabase() = runTest {
+        val heartRateToDelete = LocalHeartRate(pk = "1", date = "01/01/1900", value = "100")
+
+        database.heartRateDao().insertHeartRate(heartRate = heartRateToDelete)
+        database.heartRateDao().deleteLocalHeartRate("2")
+
+        val heartRates = database
+            .heartRateDao()
+            .getAllLocalHeartRates()
+            .take(1)
+            .toList()[0]
+
+        assertThat(heartRates.size, `is`(1))
     }
 
 }
