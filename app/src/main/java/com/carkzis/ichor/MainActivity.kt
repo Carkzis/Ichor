@@ -87,10 +87,7 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
 
             // HEARTRATES
             if (heartRatePermission.hasPermission) {
-                if (shouldInitiateDataCollection.get()) {
-                    shouldInitiateDataCollection.getAndSet(false)
-                    viewModel.initiateDataCollection()
-                }
+                initiateDataCollectionOnce(shouldInitiateDataCollection, viewModel)
                 item {
                     DisplayLatestHeartRate(modifier = modifier, state = viewModel.latestHeartRate)
                 }
@@ -135,6 +132,16 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
     }
 }
 
+private fun initiateDataCollectionOnce(
+    shouldInitiateDataCollection: AtomicBoolean,
+    viewModel: MainViewModel
+) {
+    if (shouldInitiateDataCollection.get()) {
+        shouldInitiateDataCollection.getAndSet(false)
+        viewModel.initiateDataCollection()
+    }
+}
+
 @Composable
 fun DisplayMainIcon() {
     Icon(
@@ -171,6 +178,8 @@ fun DisplayLatestHeartRate(modifier: Modifier, state: StateFlow<Double>) {
         suffix = " bpm"
     )
 }
+
+
 
 @Preview(
     widthDp = WEAR_PREVIEW_DEVICE_WIDTH_DP,
