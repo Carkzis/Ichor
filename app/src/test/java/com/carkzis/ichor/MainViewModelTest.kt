@@ -93,6 +93,9 @@ class MainViewModelTest {
 
         sut?.deleteHeartRate(heartRateDataToDelete.pk)
 
+        // Fake delay of 1ms.
+        delay(1)
+
         val attemptFilterForDeletedHeartRate = mockDatabase.filter {
             it.pk == heartRateDataToDelete.pk
         }
@@ -110,6 +113,9 @@ class MainViewModelTest {
         sut?.initiateDataCollection()
 
         sut?.deleteHeartRate("thisPkIsNotInDatabase")
+
+        // Fake delay of 1ms.
+        delay(1)
 
         val attemptFilterForDeletedHeartRate = mockDatabase.filter {
             it.pk == heartRateDataToDelete.pk

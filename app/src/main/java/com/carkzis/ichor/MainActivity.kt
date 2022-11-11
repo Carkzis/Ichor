@@ -9,8 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MonitorHeart
 import androidx.compose.material.icons.rounded.Phone
@@ -28,6 +27,8 @@ import androidx.health.services.client.data.DataTypeAvailability
 import androidx.health.services.client.proto.DataProto
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.*
+import androidx.wear.compose.material.Icon
+import androidx.wear.compose.material.Text
 import com.carkzis.ichor.theme.IchorColorPalette
 import com.carkzis.ichor.theme.IchorTheme
 import com.carkzis.ichor.theme.IchorTypography
@@ -54,7 +55,7 @@ class MainActivity : ComponentActivity() {
 
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
     val heartRatePermission = rememberPermissionState(Manifest.permission.BODY_SENSORS)

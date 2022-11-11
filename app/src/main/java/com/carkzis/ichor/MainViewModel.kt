@@ -72,7 +72,9 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
         }
     }
 
-    suspend fun deleteHeartRate(primaryKey: String) {
-        repository.deleteHeartRateFromDatabase(primaryKey)
+    fun deleteHeartRate(primaryKey: String) {
+        viewModelScope.launch {
+            repository.deleteHeartRateFromDatabase(primaryKey)
+        }
     }
 }
