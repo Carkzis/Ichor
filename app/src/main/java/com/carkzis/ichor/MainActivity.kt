@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MonitorHeart
@@ -21,6 +22,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.health.services.client.data.DataTypeAvailability
+import androidx.health.services.client.proto.DataProto
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.*
 import com.carkzis.ichor.theme.IchorColorPalette
@@ -89,6 +92,14 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
                     modifier = modifier,
                     style = IchorTypography.title1,
                     stringResourceId = R.string.app_name
+                )
+            }
+
+            // AVAILABILITY
+            item {
+                IchorStatefulText(
+                    state = viewModel.latestAvailability,
+                    modifier = modifier
                 )
             }
 

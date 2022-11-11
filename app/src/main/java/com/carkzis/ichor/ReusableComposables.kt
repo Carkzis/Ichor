@@ -1,5 +1,6 @@
 package com.carkzis.ichor
 
+import android.text.method.TextKeyListener
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
@@ -20,10 +21,12 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.health.services.client.data.DataTypeAvailability
 import androidx.wear.compose.material.AppCard
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Card
@@ -72,7 +75,12 @@ fun IchorTextPreview() {
 
 @Composable
 @Suppress("IMPLICIT_CAST_TO_ANY")
-fun <T> IchorStatefulText(modifier: Modifier = Modifier, state: StateFlow<T>, suffix: String = "") {
+fun <T> IchorStatefulText(
+    modifier: Modifier = Modifier,
+    state: StateFlow<T>,
+    prefix: String = "",
+    suffix: String = ""
+) {
     val stateValue by state.collectAsState()
     Text(
         modifier = modifier,
@@ -81,11 +89,23 @@ fun <T> IchorStatefulText(modifier: Modifier = Modifier, state: StateFlow<T>, su
         style = IchorTypography.body1,
         text = when (stateValue) {
             is Double -> {
-                "${String.format("%.1f", stateValue)}$suffix"
+                String.format("%.1f", stateValue).withSuffixAndPrefix(prefix, suffix)
+            }
+            is DataTypeAvailability -> {
+                    stateValue.toString()
+                        .capitalizeFirstCharacter()
+                        .withSuffixAndPrefix(prefix, suffix)
             }
             else -> stateValue
         } as String
     )
+}
+
+fun String.withSuffixAndPrefix(prefix: String, suffix: String): String =
+    "$prefix$this$suffix"
+
+fun String.capitalizeFirstCharacter() : String {
+    return this.lowercase().replaceFirstChar { it.uppercase() }
 }
 
 @Preview(
@@ -163,9 +183,14 @@ fun IchorCard(
         onClick = { /*TODO*/ },
         shape = RoundedCornerShape(50.dp),
         backgroundPainter = ColorPainter(color = IchorColorPalette.secondary),
-        ) {
-            Text(time, color = IchorColorPalette.onSecondary, style = IchorTypography.body1, fontSize = 8.sp)
-            content()
+    ) {
+        Text(
+            time,
+            color = IchorColorPalette.onSecondary,
+            style = IchorTypography.body1,
+            fontSize = 8.sp
+        )
+        content()
     }
 }
 
