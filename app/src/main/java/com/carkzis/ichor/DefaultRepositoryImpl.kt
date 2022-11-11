@@ -4,11 +4,8 @@ import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
 import androidx.room.PrimaryKey
 import androidx.test.core.app.ActivityScenario.launch
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -34,7 +31,9 @@ class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatab
             }.flowOn(Dispatchers.IO)
 
     override suspend fun deleteHeartRateFromDatabase(primaryKey: String) {
-        database.heartRateDao().deleteLocalHeartRate(primaryKey)
+        withContext(Dispatchers.IO) {
+            database.heartRateDao().deleteLocalHeartRate(primaryKey)
+        }
     }
 
     override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<HeartRateDataPoint> = flow {

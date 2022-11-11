@@ -5,10 +5,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MonitorHeart
@@ -121,17 +119,30 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
                     )
                 }
                 items(
-                    items = heartRates
+                    items = heartRates,
+                    key = { it.pk }
                 ) { currentHeartRateData ->
-                    IchorCard(
-                        time = currentHeartRateData.date,
-                        content = {
-                            Text(
-                                "${currentHeartRateData.value} bpm",
-                                color = IchorColorPalette.onSecondary
-                            )
+                    val dismissState = rememberDismissState {
+                        if (it == DismissValue.DismissedToEnd || it == DismissValue.DismissedToStart) {
+                            viewModel.deleteHeartRate(currentHeartRateData.pk)
                         }
-                    )
+                        true
+                    }
+
+                    SwipeToDismiss(
+                        state = dismissState,
+                        background = { Box(modifier = modifier.fillMaxSize()) },
+                        dismissContent = {
+                            IchorCard(
+                                time = currentHeartRateData.date,
+                                content = {
+                                    Text(
+                                        "${currentHeartRateData.value} bpm",
+                                        color = IchorColorPalette.onSecondary
+                                    )
+                                }
+                            )
+                        })
                 }
             } else if (!heartRatePermission.permissionRequested) {
                 item { IchorButton(onClick = { heartRatePermission.launchPermissionRequest() }) }
