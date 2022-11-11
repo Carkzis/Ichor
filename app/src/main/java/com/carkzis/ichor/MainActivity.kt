@@ -78,22 +78,10 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
             state = listState
         ) {
             // APP ICON
-            item {
-                Icon(
-                    imageVector = Icons.Rounded.MonitorHeart,
-                    contentDescription = "Main heartbeat icon for app.",
-                    tint = IchorColorPalette.secondary
-                )
-            }
+            item { displayMainIcon() }
 
             // TITLE
-            item {
-                IchorText(
-                    modifier = modifier,
-                    style = IchorTypography.title1,
-                    stringResourceId = R.string.app_name
-                )
-            }
+            item { displayTitle(modifier = modifier) }
 
             // AVAILABILITY
             item {
@@ -159,6 +147,23 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
     }
 }
 
+@Composable
+fun displayMainIcon() {
+    Icon(
+        imageVector = Icons.Rounded.MonitorHeart,
+        contentDescription = "Main heartbeat icon for app.",
+        tint = IchorColorPalette.secondary
+    )
+}
+
+@Composable
+fun displayTitle(modifier: Modifier) {
+    IchorText(
+        modifier = modifier,
+        style = IchorTypography.title1,
+        stringResourceId = R.string.app_name
+    )
+}
 
 @Preview(
     widthDp = WEAR_PREVIEW_DEVICE_WIDTH_DP,
