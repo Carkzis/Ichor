@@ -34,7 +34,7 @@ class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatab
             }.flowOn(Dispatchers.IO)
 
     override suspend fun deleteHeartRateFromDatabase(primaryKey: String) {
-        TODO("Not yet implemented")
+        database.heartRateDao().deleteLocalHeartRate(primaryKey)
     }
 
     override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<HeartRateDataPoint> = flow {
