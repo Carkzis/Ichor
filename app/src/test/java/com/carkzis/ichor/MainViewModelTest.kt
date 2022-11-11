@@ -5,7 +5,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.*
 import org.junit.After
 import org.junit.Rule
 import org.junit.Test
@@ -79,6 +79,42 @@ class MainViewModelTest {
         delay(1)
 
         assertThat(sut?.latestAvailability?.value, `is`(expectedAvailability))
+    }
+
+    @Test
+    fun `viewmodel deletes heart rate from database via repository`() = runTest {
+        val mockDatabase = listOfHeartRateDataAsMockDatabase()
+        val repository = FakeRepository(mockDatabase as MutableList)
+        val heartRateDataToDelete = mockDatabase[1]
+
+        sut = MainViewModel(repository)
+
+        sut?.initiateDataCollection()
+
+        sut?.deleteHeartRate(heartRateDataToDelete.pk)
+
+        val attemptFilterForDeletedHeartRate = mockDatabase.filter {
+            it.pk == heartRateDataToDelete.pk
+        }
+        assertThat(attemptFilterForDeletedHeartRate.size, `is`(0))
+    }
+
+    @Test
+    fun `viewmodel does not deletes heart rate from database via repository`() = runTest {
+        val mockDatabase = listOfHeartRateDataAsMockDatabase()
+        val repository = FakeRepository(mockDatabase as MutableList)
+        val heartRateDataToDelete = mockDatabase[1]
+
+        sut = MainViewModel(repository)
+
+        sut?.initiateDataCollection()
+
+        sut?.deleteHeartRate("thisPkIsNotInDatabase")
+
+        val attemptFilterForDeletedHeartRate = mockDatabase.filter {
+            it.pk == heartRateDataToDelete.pk
+        }
+        assertThat(attemptFilterForDeletedHeartRate.size, `is`(1))
     }
 
 }

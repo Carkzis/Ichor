@@ -5,6 +5,7 @@ import androidx.health.services.client.data.DataTypeAvailability
 import androidx.health.services.client.proto.DataProto
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.PrimaryKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,5 +70,9 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
 //            Timber.e("Latest heart rates are $listOfHeartRates.")
             _latestHeartRateList.value = listOfHeartRates
         }
+    }
+
+    suspend fun deleteHeartRate(primaryKey: String) {
+        repository.deleteHeartRateFromDatabase(primaryKey)
     }
 }

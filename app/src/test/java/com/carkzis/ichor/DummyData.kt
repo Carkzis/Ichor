@@ -2,6 +2,7 @@ package com.carkzis.ichor
 
 import androidx.health.services.client.data.*
 import java.time.Duration
+import java.util.*
 
 // TODO: Change these to use extension functions instead.
 
@@ -28,7 +29,7 @@ fun listOfHeartRateDataAsMockDatabase() : List<LocalHeartRate> {
     return listOfHeartRateDataInDoubles().map {
         LocalHeartRate(
             date = "",
-            pk = "",
+            pk = UUID.randomUUID().toString(),
             value = it.last().toString()
         )
     }
