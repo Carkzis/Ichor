@@ -110,7 +110,7 @@ private fun DisplayUIItems(
                 items = heartRates,
                 key = { it.pk }
             ) { currentHeartRateData ->
-                DisplayListOfHeartRates(viewModel, currentHeartRateData, modifier)
+                DisplayHeartRateItem(viewModel, currentHeartRateData, modifier)
             }
         } else if (!heartRatePermission.permissionRequested) {
             item { IchorButton(onClick = { heartRatePermission.launchPermissionRequest() }) }
@@ -130,12 +130,11 @@ private fun DisplayPermissionsInstructions(modifier: Modifier) {
 }
 
 @Composable
-private fun DisplayListOfHeartRates(
+private fun DisplayHeartRateItem(
     viewModel: MainViewModel,
     currentHeartRateData: DomainHeartRate,
     modifier: Modifier
 ) {
-    // TODO: This is getting reset without me asking. Why?
     var deleteAlertRequired by remember { mutableStateOf(false) }
 
     Timber.e("Delete item raised?: $deleteAlertRequired")
