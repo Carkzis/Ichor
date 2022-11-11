@@ -78,6 +78,7 @@ fun IchorTextPreview() {
 fun <T> IchorStatefulText(
     modifier: Modifier = Modifier,
     state: StateFlow<T>,
+    style: TextStyle = IchorTypography.body1,
     prefix: String = "",
     suffix: String = ""
 ) {
@@ -86,7 +87,7 @@ fun <T> IchorStatefulText(
         modifier = modifier,
         textAlign = TextAlign.Center,
         color = IchorColorPalette.primary,
-        style = IchorTypography.body1,
+        style = style,
         text = when (stateValue) {
             is Double -> {
                 String.format("%.1f", stateValue).withSuffixAndPrefix(prefix, suffix)

@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MonitorHeart
 import androidx.compose.material.icons.rounded.Phone
@@ -99,7 +101,9 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
             item {
                 IchorStatefulText(
                     state = viewModel.latestAvailability,
-                    modifier = modifier
+                    modifier = modifier,
+                    style = IchorTypography.body2,
+                    prefix = "Availability: "
                 )
             }
 
@@ -122,7 +126,10 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
                     IchorCard(
                         time = currentHeartRateData.date,
                         content = {
-                            Text("${currentHeartRateData.value} bpm", color = IchorColorPalette.onSecondary)
+                            Text(
+                                "${currentHeartRateData.value} bpm",
+                                color = IchorColorPalette.onSecondary
+                            )
                         }
                     )
                 }
@@ -132,6 +139,7 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
         }
     }
 }
+
 
 @Preview(
     widthDp = WEAR_PREVIEW_DEVICE_WIDTH_DP,

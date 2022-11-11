@@ -26,5 +26,10 @@ val IchorTypography = Typography(
         fontFamily = FontFamily.Monospace,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp
+    ),
+    body2 = TextStyle(
+        fontFamily = FontFamily.Monospace,
+        fontWeight = FontWeight.Normal,
+        fontSize = 8.sp
     )
 )
