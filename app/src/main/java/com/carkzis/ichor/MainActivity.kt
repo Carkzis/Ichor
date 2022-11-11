@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataTypeAvailability
 import androidx.health.services.client.proto.DataProto
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -33,6 +34,7 @@ import com.carkzis.ichor.theme.IchorTypography
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 import java.sql.Time
 import java.util.concurrent.atomic.AtomicBoolean
@@ -77,20 +79,10 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
             autoCentering = AutoCenteringParams(itemIndex = 0),
             state = listState
         ) {
-            // APP ICON
             item { displayMainIcon() }
-
-            // TITLE
             item { displayTitle(modifier = modifier) }
-
-            // AVAILABILITY
             item {
-                IchorStatefulText(
-                    state = viewModel.latestAvailability,
-                    modifier = modifier,
-                    style = IchorTypography.body2,
-                    prefix = "Availability: "
-                )
+                displayAvailability(modifier = modifier, state = viewModel.latestAvailability)
             }
 
             // HEARTRATES
@@ -162,6 +154,16 @@ fun displayTitle(modifier: Modifier) {
         modifier = modifier,
         style = IchorTypography.title1,
         stringResourceId = R.string.app_name
+    )
+}
+
+@Composable
+fun displayAvailability(modifier: Modifier, state: StateFlow<Availability>) {
+    IchorStatefulText(
+        state = state,
+        modifier = modifier,
+        style = IchorTypography.body2,
+        prefix = "Availability: "
     )
 }
 
