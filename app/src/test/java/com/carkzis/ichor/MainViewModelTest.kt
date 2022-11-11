@@ -52,7 +52,7 @@ class MainViewModelTest {
     @Test
     fun `viewmodel retrieves all heart rates emitted from repository`() = runTest {
         val mockDatabase = listOfHeartRateDataAsMockDatabase()
-        val expectedDomainHeartRates = listOfHeartRateDataAsMockDatabase().toDomainHeartRate()
+        val expectedDomainHeartRates = mockDatabase.toDomainHeartRate()
         val repository = FakeRepository(mockDatabase as MutableList)
 
         sut = MainViewModel(repository)

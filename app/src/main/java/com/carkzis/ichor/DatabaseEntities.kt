@@ -18,6 +18,7 @@ data class LocalHeartRate(
 )
 
 data class DomainHeartRate(
+    val pk: String,
     val date: String,
     val value: Double
 )
@@ -30,6 +31,7 @@ fun HeartRateDataPoint.toLocalHeartRate() = LocalHeartRate(
 
 fun List<LocalHeartRate>.toDomainHeartRate() = this.map {
     DomainHeartRate(
+        pk = it.pk,
         date = try {
             LocalDateTime.parse(it.date)
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
