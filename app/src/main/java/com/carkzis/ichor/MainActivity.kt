@@ -7,16 +7,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MonitorHeart
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.health.services.client.data.Availability
@@ -24,6 +22,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.*
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.Text
+import androidx.wear.compose.material.dialog.Alert
+import androidx.wear.compose.material.dialog.Dialog
 import com.carkzis.ichor.theme.IchorColorPalette
 import com.carkzis.ichor.theme.IchorTheme
 import com.carkzis.ichor.theme.IchorTypography
@@ -136,21 +136,39 @@ private fun DisplayHeartRateItem(
     modifier: Modifier
 ) {
     var deleteAlertRequired by remember { mutableStateOf(false) }
-
-    Timber.e("Delete item raised?: $deleteAlertRequired")
-    if (deleteAlertRequired) {
-        Timber.e("Dialog for deleting item raised: $deleteAlertRequired")
-        AlertDialog(onDismissRequest = {  }, confirmButton = { IchorButton() }, dismissButton = { IchorButton() })
-    }
-
     val dismissState = rememberDismissState {
         if (it == DismissValue.DismissedToEnd || it == DismissValue.DismissedToStart) {
             deleteAlertRequired = true
-            // TODO: Move into confirm button within alert.
-            viewModel.deleteHeartRate(currentHeartRateData.pk)
         }
         true
     }
+    if (!deleteAlertRequired) {
+        LaunchedEffect(Unit) {
+            dismissState.reset()
+        }
+    }
+
+    Timber.e("Delete item raised?: $deleteAlertRequired")
+    Dialog(
+        showDialog = deleteAlertRequired,
+        onDismissRequest = {
+            deleteAlertRequired = false
+        },
+        content = {
+            Timber.e("Dialog for deleting item raised: $deleteAlertRequired")
+            Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                Text("Delete your heartbeat record of ${currentHeartRateData.value} bpm dated ${currentHeartRateData.date}?", textAlign = TextAlign.Center)
+                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                    IchorButton {
+                        viewModel.deleteHeartRate(currentHeartRateData.pk)
+                    }
+                    IchorButton {
+                        deleteAlertRequired = false
+                    }
+                }
+            }
+        }
+    )
 
     SwipeToDismiss(
         state = dismissState,
