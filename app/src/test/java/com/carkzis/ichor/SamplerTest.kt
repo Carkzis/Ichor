@@ -30,7 +30,7 @@ internal class SamplerTest {
 
     @Test
     fun `sampler emits a value when sampleAtIntervals is called`() = runBlocking {
-        sut = Sampler(intervalInMs = 100)
+        sut = CustomSampler(intervalInMs = 100)
         sut?.run {
             sampleAtIntervals()
                 .first()
@@ -48,7 +48,7 @@ internal class SamplerTest {
         val intervalInMs = 150L
         val initialIntervalInMs = 1000L
         val intervals = 1
-        sut = Sampler(intervalInMs, initialIntervalInMs)
+        sut = CustomSampler(intervalInMs, initialIntervalInMs)
 
         launch {
             sut?.run {
@@ -74,7 +74,7 @@ internal class SamplerTest {
         val intervalInMs = 100L
         val initialIntervalInMs = 0L
         val intervals = 10
-        sut = Sampler(intervalInMs, initialIntervalInMs)
+        sut = CustomSampler(intervalInMs, initialIntervalInMs)
 
         launch {
             sut?.run {
@@ -103,7 +103,7 @@ internal class SamplerTest {
         val intervalInMs = -100L
         val initialIntervalInMs = 0L
         val intervals = 10
-        sut = Sampler(intervalInMs, initialIntervalInMs)
+        sut = CustomSampler(intervalInMs, initialIntervalInMs)
 
         sut?.run {
             sampleAtIntervals()
@@ -121,7 +121,7 @@ internal class SamplerTest {
         val intervalInMs = 100L
         val initialIntervalInMs = -100L
         val intervals = 10
-        sut = Sampler(intervalInMs, initialIntervalInMs)
+        sut = CustomSampler(intervalInMs, initialIntervalInMs)
 
         sut?.run {
             sampleAtIntervals()
@@ -131,6 +131,87 @@ internal class SamplerTest {
                 }
         }
 
+    }
+
+    @Test
+    fun `slow sampler samples at rate expected`() = runTest {
+        val counter = AtomicInteger(0)
+        val intervals = 10
+        sut = SlowSampler()
+
+        launch {
+            sut?.run {
+                sampleAtIntervals()
+                    .take(intervals)
+                    .collect {
+                        counter.incrementAndGet()
+                    }
+            }
+        }
+
+        assertThat(counter.get(), `is`(0))
+        runCurrent()
+        // Need to add 1ms to allow time counter to increment.
+        sut?.initialIntervalInMs?.let { advanceTimeBy(it + 1) }
+        assertThat(counter.get(), `is`(1))
+        sut?.intervalInMs?.let { advanceTimeBy(it) }
+        assertThat(counter.get(), `is`(2))
+        sut?.intervalInMs?.let { advanceTimeBy((it * (intervals - 2))) }
+        assertThat(counter.get(), `is`(intervals))
+    }
+
+    @Test
+    fun `default sampler samples at rate expected`() = runTest {
+        val counter = AtomicInteger(0)
+        val intervals = 10
+        sut = DefaultSampler()
+
+        launch {
+            sut?.run {
+                sampleAtIntervals()
+                    .take(intervals)
+                    .collect {
+                        counter.incrementAndGet()
+                    }
+            }
+        }
+
+        assertThat(counter.get(), `is`(0))
+        runCurrent()
+        // Need to add 1ms to allow time counter to increment.
+        sut?.initialIntervalInMs?.let { advanceTimeBy(it + 1) }
+        assertThat(counter.get(), `is`(1))
+        sut?.intervalInMs?.let { advanceTimeBy(it) }
+        assertThat(counter.get(), `is`(2))
+        sut?.intervalInMs?.let { advanceTimeBy((it * (intervals - 2))) }
+        assertThat(counter.get(), `is`(intervals))
+    }
+
+    @Test
+    fun `fast sampler samples at rate expected`() = runTest {
+        val counter = AtomicInteger(0)
+        val intervals = 10
+        sut = DefaultSampler()
+
+        launch {
+            sut?.run {
+                sampleAtIntervals()
+                    .take(intervals)
+                    .collect {
+                        counter.incrementAndGet()
+                    }
+            }
+        }
+
+        assertThat(counter.get(), `is`(0))
+        runCurrent()
+        // Need to add 1ms to allow time counter to increment.
+        sut?.initialIntervalInMs?.let { advanceTimeBy(it + 1) }
+        assertThat(counter.get(), `is`(1))
+        sut?.intervalInMs?.let { advanceTimeBy(it) }
+        assertThat(counter.get(), `is`(2))
+        sut?.intervalInMs?.let { advanceTimeBy((it * (intervals - 2))) }
+        assertThat(counter.get(), `is`(intervals))
     }
 
 }

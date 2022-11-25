@@ -50,13 +50,13 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     private fun chooseSampler(samplingSpeed: SamplingSpeed) : Sampler {
         return when (samplingSpeed) {
             SamplingSpeed.SLOW -> {
-                Sampler()
+                SlowSampler()
             }
             SamplingSpeed.DEFAULT -> {
-                Sampler()
+                DefaultSampler()
             }
             SamplingSpeed.FAST -> {
-                Sampler()
+                FastSampler()
             }
         }
     }

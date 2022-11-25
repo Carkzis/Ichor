@@ -6,8 +6,12 @@ import timber.log.Timber
 
 const val DEFAULT_INTERVAL_MS = 10_000L
 const val DEFAULT_INITIAL_INTERVAL_MS = 0L
+const val SLOW_INTERVAL_MS = 20_000L
+const val SLOW_INITIAL_INTERVAL_MS = 10_000L
+const val FAST_INTERVAL_MS = 5_000L
+const val FAST_INITIAL_INTERVAL_MS = 0L
 
-class Sampler(val intervalInMs: Long = DEFAULT_INTERVAL_MS, val initialIntervalInMs: Long = DEFAULT_INITIAL_INTERVAL_MS) {
+sealed class Sampler(open val intervalInMs: Long = DEFAULT_INTERVAL_MS, open val initialIntervalInMs: Long = DEFAULT_INITIAL_INTERVAL_MS) {
 
     fun sampleAtIntervals() = flow {
         checkIntervalValues(intervalInMs, initialIntervalInMs)
@@ -29,3 +33,7 @@ class Sampler(val intervalInMs: Long = DEFAULT_INTERVAL_MS, val initialIntervalI
     }
 }
 
+class DefaultSampler() : Sampler(DEFAULT_INTERVAL_MS, DEFAULT_INITIAL_INTERVAL_MS)
+class SlowSampler() : Sampler(SLOW_INTERVAL_MS, SLOW_INITIAL_INTERVAL_MS)
+class FastSampler() : Sampler(FAST_INTERVAL_MS, FAST_INITIAL_INTERVAL_MS)
+class CustomSampler(override var intervalInMs: Long = DEFAULT_INTERVAL_MS, override var initialIntervalInMs: Long = DEFAULT_INITIAL_INTERVAL_MS) : Sampler()

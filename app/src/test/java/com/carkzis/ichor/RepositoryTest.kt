@@ -64,7 +64,7 @@ class RepositoryTest {
         val heartRateEmissionCounter = AtomicInteger(0)
         val sampleRateForDatabaseInsertion = 1000L
         val initialSampleTimeForDatabaseInsertion = 1000L
-        val sampler = Sampler(sampleRateForDatabaseInsertion, initialSampleTimeForDatabaseInsertion)
+        val sampler = CustomSampler(sampleRateForDatabaseInsertion, initialSampleTimeForDatabaseInsertion)
 
         launch {
             sut?.run {
