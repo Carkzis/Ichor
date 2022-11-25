@@ -10,5 +10,6 @@ interface Repository {
     suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability>
     suspend fun collectHeartRatesFromDatabase() : Flow<List<DomainHeartRate>>
     suspend fun deleteHeartRateFromDatabase(primaryKey: String)
+    suspend fun deleteAllHeartRatesFromDatabase()
     suspend fun collectHeartRateFromHeartRateService(sampler: Sampler = Sampler()) : Flow<HeartRateDataPoint>
 }

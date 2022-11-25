@@ -174,4 +174,43 @@ class RepositoryTest {
         delay(1)
     }
 
+    @Test
+    fun `repository deletes all items from database`() = runTest {
+        val expectedHeartRateDataPoints = listOfHeartRateMeasureData()
+        val mockDatabase = mutableListOf<LocalHeartRate>()
+
+        sut = FakeRepository(mockDatabase).apply {
+            mockHeartRateSample = expectedHeartRateDataPoints
+        }
+
+        launch {
+            sut?.run {
+                collectHeartRatesFromDatabase().take(expectedHeartRateDataPoints.size).collect {}
+                assertThat(mockDatabase.size, `is`(3))
+                deleteAllHeartRatesFromDatabase()
+                assertThat(mockDatabase.size, `is`(0))
+            }
+        }
+
+        delay(1)
+    }
+
+    @Test
+    fun `repository can attempt to delete all items from empty database without error`() = runTest {
+        val mockDatabase = mutableListOf<LocalHeartRate>()
+
+        sut = FakeRepository(mockDatabase)
+
+        launch {
+            sut?.run {
+                collectHeartRatesFromDatabase().take(1).collect {}
+                assertThat(mockDatabase.size, `is`(0))
+                deleteAllHeartRatesFromDatabase()
+                assertThat(mockDatabase.size, `is`(0))
+            }
+        }
+
+        delay(1)
+    }
+
 }

@@ -39,6 +39,12 @@ class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatab
         }
     }
 
+    override suspend fun deleteAllHeartRatesFromDatabase() {
+        withContext(Dispatchers.IO) {
+            database.heartRateDao().deleteAllLocalHeartRates()
+        }
+    }
+
     override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<HeartRateDataPoint> = flow {
         Timber.e("Entered collectHeartRateFromHeartRateService.")
         coroutineScope {
