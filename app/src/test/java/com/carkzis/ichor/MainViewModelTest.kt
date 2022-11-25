@@ -103,7 +103,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `viewmodel does not deletes heart rate from database via repository`() = runTest {
+    fun `viewmodel does not delete heart rate from database via repository`() = runTest {
         val mockDatabase = listOfHeartRateDataAsMockDatabase()
         val repository = FakeRepository(mockDatabase as MutableList)
         val heartRateDataToDelete = mockDatabase[1]
@@ -121,6 +121,40 @@ class MainViewModelTest {
             it.pk == heartRateDataToDelete.pk
         }
         assertThat(attemptFilterForDeletedHeartRate.size, `is`(1))
+    }
+
+    @Test
+    fun `viewmodel deletes all heart rates from database via repository`() = runTest {
+        val mockDatabase = listOfHeartRateDataAsMockDatabase()
+        val repository = FakeRepository(mockDatabase as MutableList)
+
+        sut = MainViewModel(repository)
+
+        sut?.initiateDataCollection()
+
+        sut?.deleteAllHeartRates()
+
+        // Fake delay of 1ms.
+        delay(1)
+
+        assertThat(mockDatabase.size, `is`(0))
+    }
+
+    @Test
+    fun `viewmodel attempts to delete all heart rates from empty database without failing`() = runTest {
+        val mockDatabase = mutableListOf<LocalHeartRate>()
+        val repository = FakeRepository()
+
+        sut = MainViewModel(repository)
+
+        sut?.initiateDataCollection()
+
+        sut?.deleteAllHeartRates()
+
+        // Fake delay of 1ms.
+        delay(1)
+
+        assertThat(mockDatabase.size, `is`(0))
     }
 
 }

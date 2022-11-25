@@ -75,4 +75,10 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
             repository.deleteHeartRateFromDatabase(primaryKey)
         }
     }
+
+    fun deleteAllHeartRates() {
+        viewModelScope.launch {
+            repository.deleteAllHeartRatesFromDatabase()
+        }
+    }
 }
