@@ -8,24 +8,24 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.DismissValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.SwipeToDismiss
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.icons.rounded.MonitorHeart
-import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.health.services.client.data.Availability
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.*
+import androidx.wear.compose.material.Icon
+import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.dialog.Dialog
 import com.carkzis.ichor.theme.IchorColorPalette
 import com.carkzis.ichor.theme.IchorTheme
@@ -59,7 +59,6 @@ class MainActivity : ComponentActivity() {
 fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
     // Note: Reset permissions on an emulator using the command "adb shell pm reset-permissions".
 
-    // TODO: DELETE ITEM functionality (SwipeToDismiss).
     // TODO: DELETE ALL functionality (with dialog?)
     // TODO: Change sampling time and show current sampling time (in settings view/dialog?)
 
@@ -104,10 +103,16 @@ private fun DisplayUIItems(
         item {
             DisplayAvailability(modifier = modifier, state = viewModel.latestAvailability)
         }
+
         if (heartRatePermission.hasPermission) {
             initiateDataCollectionOnce(shouldInitiateDataCollection, viewModel)
             item {
-                DisplayLatestHeartRate(modifier = modifier, state = viewModel.latestHeartRate)
+                Row {
+                    DisplayLatestHeartRate(modifier = modifier, state = viewModel.latestHeartRate)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    DisplayDeleteAllButton(viewModel = viewModel, modifier = modifier)
+                }
+
             }
             items(
                 items = heartRates,
@@ -129,6 +134,52 @@ private fun DisplayPermissionsInstructions(modifier: Modifier) {
         modifier = modifier,
         style = IchorTypography.body2,
         stringResourceId = R.string.app_permission_was_denied
+    )
+}
+
+@Composable
+private fun DisplayDeleteAllButton(
+    viewModel: MainViewModel,
+    modifier: Modifier
+) {
+    var deleteAlertRequired by remember { mutableStateOf(false) }
+
+    IchorButton(
+        modifier = modifier.size(24.dp),
+        onClick = { deleteAlertRequired = true },
+        iconImage = Icons.Rounded.Delete
+    )
+
+    Dialog(
+        showDialog = deleteAlertRequired,
+        onDismissRequest = {
+            deleteAlertRequired = false
+        },
+        content = {
+            Timber.e("Dialog for deleting all items raised: $deleteAlertRequired")
+            Column(
+                modifier = modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                DeleteHeartbeatIcon()
+                Text(
+                    style = IchorTypography.body2,
+                    modifier = modifier.padding(start = 36.dp, end = 36.dp),
+                    textAlign = TextAlign.Center,
+                    text = "Delete all your heartbeats? This cannot be undone."
+                )
+                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                    IchorButton(iconImage = Icons.Rounded.Done, modifier = Modifier.size(32.dp)) {
+                        viewModel.deleteAllHeartRates()
+                        deleteAlertRequired = false
+                    }
+                    IchorButton(iconImage = Icons.Rounded.Close, modifier = Modifier.size(32.dp)) {
+                        deleteAlertRequired = false
+                    }
+                }
+            }
+        }
     )
 }
 
@@ -159,9 +210,18 @@ private fun DisplayHeartRateItem(
         },
         content = {
             Timber.e("Dialog for deleting item raised: $deleteAlertRequired")
-            Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 DeleteHeartbeatIcon()
-                Text(style = IchorTypography.body2, modifier = Modifier.padding(start = 36.dp, end = 36.dp), text = "Delete your heartbeat record of ${currentHeartRateData.value} bpm dated ${currentHeartRateData.date}?", textAlign = TextAlign.Center)
+                Text(
+                    style = IchorTypography.body2,
+                    modifier = Modifier.padding(start = 36.dp, end = 36.dp),
+                    text = "Delete your heartbeat record of ${currentHeartRateData.value} bpm dated ${currentHeartRateData.date}?",
+                    textAlign = TextAlign.Center
+                )
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     IchorButton(iconImage = Icons.Rounded.Done, modifier = Modifier.size(32.dp)) {
                         viewModel.deleteHeartRate(currentHeartRateData.pk)
