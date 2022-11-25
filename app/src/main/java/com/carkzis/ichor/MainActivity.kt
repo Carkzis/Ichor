@@ -10,10 +10,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.Done
-import androidx.compose.material.icons.rounded.MonitorHeart
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -111,12 +108,16 @@ private fun DisplayUIItems(
                     prefix = "Sampling Speed: "
                 )
             }
+
         }
         if (heartRatePermission.hasPermission) {
             initiateDataCollectionOnce(shouldInitiateDataCollection, viewModel)
             item {
+                DisplayLatestHeartRate(modifier = modifier, state = viewModel.latestHeartRate)
+            }
+            item {
                 Row {
-                    DisplayLatestHeartRate(modifier = modifier, state = viewModel.latestHeartRate)
+                    DisplaySamplingSpeedChangeButton(viewModel = viewModel, modifier = modifier)
                     Spacer(modifier = Modifier.width(8.dp))
                     DisplayDeleteAllButton(viewModel = viewModel, modifier = modifier)
                 }
@@ -187,6 +188,15 @@ private fun DisplayDeleteAllButton(
                 }
             }
         }
+    )
+}
+
+@Composable
+fun DisplaySamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
+    IchorButton(
+        modifier = modifier.size(24.dp).padding(all = 0.dp),
+        onClick = { },
+        iconImage = Icons.Rounded.Speed
     )
 }
 
@@ -309,7 +319,7 @@ fun DisplayAvailability(modifier: Modifier, state: StateFlow<Availability>) {
 fun DisplayLatestHeartRate(modifier: Modifier, state: StateFlow<Double>) {
     IchorStatefulText(
         state = state,
-        modifier = modifier.padding(bottom = 8.dp),
+        modifier = modifier,
         suffix = " bpm"
     )
 }
