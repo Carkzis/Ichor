@@ -122,4 +122,40 @@ class HeartRateDaoTest {
         assertThat(heartRates.size, `is`(1))
     }
 
+    @Test
+    fun deleteAllHeartRates_onAllHeartRatesDeleted_noHeartRatesWithinDatabase() = runTest {
+        val allHeartRates = listOf(
+            LocalHeartRate(pk = "1", date = "01/01/1900", value = "100"),
+            LocalHeartRate(pk = "2", date = "01/01/1900", value = "200"),
+            LocalHeartRate(pk = "3", date = "01/01/1900", value = "300")
+        )
+
+        allHeartRates.forEach {
+            database.heartRateDao().insertHeartRate(it)
+        }
+
+        database.heartRateDao().deleteAllLocalHeartRates()
+
+        val heartRates = database
+            .heartRateDao()
+            .getAllLocalHeartRates()
+            .take(1)
+            .toList()[0]
+
+        assertThat(heartRates.size, `is`(0))
+    }
+
+    @Test
+    fun deleteAllHeartRates_onAttemptDeleteAllHeartRatesFromEmptyDatabase_noHeartRatesWithinDatabase() = runTest {
+        database.heartRateDao().deleteAllLocalHeartRates()
+
+        val heartRates = database
+            .heartRateDao()
+            .getAllLocalHeartRates()
+            .take(1)
+            .toList()[0]
+
+        assertThat(heartRates.size, `is`(0))
+    }
+
 }
