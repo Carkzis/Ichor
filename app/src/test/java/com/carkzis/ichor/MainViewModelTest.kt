@@ -3,6 +3,8 @@ package com.carkzis.ichor
 import androidx.health.services.client.data.DataTypeAvailability
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -158,48 +160,49 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `viewmodel can change clear running coroutines when sample changed`() = runTest {
+    fun `viewmodel can begins new collection when sample changed`() = runTest {
         val listOfDummyHeartRateDataPoints = listOfHeartRateDataPoints()
-        val expectedHeartRate = listOfDummyHeartRateDataPoints.last().last()
+        val mockDatabase = mutableListOf<LocalHeartRate>()
 
-        repository = FakeRepository().apply {
+        repository = FakeRepository(mockDatabase).apply {
             mockHeartRateSample = listOfDummyHeartRateDataPoints.map {
                 MeasureClientData.HeartRateDataPoints(it)
             }
         }
+
         sut = MainViewModel(repository as FakeRepository)
+
+        // Fake delay of 1ms.
+        delay(1)
+
+        assertThat(sut?.latestHeartRateList?.value, `is`(empty()))
 
         sut?.changeSampleRate(samplerRate = SamplingSpeed.SLOW)
 
-        // TODO: This shouldn't pass.
-
         // Fake delay of 1ms.
         delay(1)
 
-        assertThat(sut?.latestHeartRateList?.value?.last()?.value, `is`(expectedHeartRate.value.asDouble()))
+        assertThat(mockDatabase, `is`(not(empty())))
+        assertThat(sut?.latestHeartRateList?.value, `is`(mockDatabase.toDomainHeartRate()))
     }
 
     @Test
-    fun `viewmodel can change sampler being used when sample rate changed and samples start again`() = runTest {
-        // TODO: This needs sorting, doesn't currently test changing the sample rate.
-        val listOfDummyHeartRateDataPoints = listOfHeartRateDataPoints()
-        val expectedHeartRate = listOfDummyHeartRateDataPoints.last().last()
+    fun `viewmodel changes sampler on request`() = runTest {
+        val repository = FakeRepository()
+        sut = MainViewModel(repository)
 
-        repository = FakeRepository().apply {
-            mockHeartRateSample = listOfDummyHeartRateDataPoints.map {
-                MeasureClientData.HeartRateDataPoints(it)
-            }
-        }
-        sut = MainViewModel(repository as FakeRepository)
+        assertThat(sut?.currentSamplingSpeed?.value, `is`(SamplingSpeed.DEFAULT))
 
-        sut?.initiateDataCollection()
-
-        sut?.changeSampleRate(samplerRate = SamplingSpeed.DEFAULT)
-
+        sut?.changeSampleRate(samplerRate = SamplingSpeed.SLOW)
         // Fake delay of 1ms.
         delay(1)
+        assertThat(sut?.currentSamplingSpeed?.value, `is`(SamplingSpeed.SLOW))
 
-        assertThat(sut?.latestHeartRate?.value, `is`(expectedHeartRate.value.asDouble()))
+        sut?.changeSampleRate(samplerRate = SamplingSpeed.FAST)
+        // Fake delay of 1ms.
+        delay(1)
+        assertThat(sut?.currentSamplingSpeed?.value, `is`(SamplingSpeed.FAST))
+
     }
 
 }

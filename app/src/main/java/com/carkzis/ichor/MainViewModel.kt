@@ -33,6 +33,10 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     val latestHeartRateList: StateFlow<List<DomainHeartRate>>
         get() = _latestHeartRateList
 
+    private val _currentSampleSpeed = MutableStateFlow<SamplingSpeed>(SamplingSpeed.DEFAULT)
+    val currentSamplingSpeed: StateFlow<SamplingSpeed>
+        get() = _currentSampleSpeed
+
     fun initiateDataCollection(samplingSpeed: SamplingSpeed = SamplingSpeed.DEFAULT) {
         listOfJobs.addAll(listOf(viewModelScope.launch {
             assignLatestHeartRateToUI(chooseSampler(samplingSpeed))
@@ -101,6 +105,7 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     fun changeSampleRate(samplerRate: SamplingSpeed) {
         listOfJobs.forEach { it.cancel() }
         listOfJobs.clear()
+        _currentSampleSpeed.value = samplerRate
         initiateDataCollection(samplerRate)
     }
 }
