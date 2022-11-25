@@ -8,9 +8,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.DismissValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Done
+import androidx.compose.material.icons.rounded.MonitorHeart
+import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,9 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.health.services.client.data.Availability
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.*
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.dialog.Alert
 import androidx.wear.compose.material.dialog.Dialog
 import com.carkzis.ichor.theme.IchorColorPalette
 import com.carkzis.ichor.theme.IchorTheme

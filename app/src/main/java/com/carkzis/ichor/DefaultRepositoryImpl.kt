@@ -2,12 +2,15 @@ package com.carkzis.ichor
 
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
-import androidx.room.PrimaryKey
-import androidx.test.core.app.ActivityScenario.launch
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatabase, private val heartRateService: HeartRateService) : Repository {

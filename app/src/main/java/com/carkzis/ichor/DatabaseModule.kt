@@ -1,8 +1,6 @@
 package com.carkzis.ichor
 
 import android.content.Context
-import androidx.health.services.client.HealthServices
-import androidx.health.services.client.HealthServicesClient
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides

@@ -2,10 +2,8 @@ package com.carkzis.ichor
 
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataTypeAvailability
-import androidx.health.services.client.proto.DataProto
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.PrimaryKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -2,7 +2,6 @@ package com.carkzis.ichor
 
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
-import androidx.room.PrimaryKey
 import kotlinx.coroutines.flow.Flow
 
 typealias HeartRateDataPoint = DataPoint
