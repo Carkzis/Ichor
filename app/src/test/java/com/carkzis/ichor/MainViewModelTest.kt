@@ -191,17 +191,17 @@ class MainViewModelTest {
         val repository = FakeRepository()
         sut = MainViewModel(repository)
 
-        assertThat(sut?.currentSamplingSpeed?.value, `is`(SamplingSpeed.DEFAULT))
+        assertThat(sut?.currentSamplingSpeed?.value, `is`("Default"))
 
         sut?.changeSampleRate(samplerRate = SamplingSpeed.SLOW)
         // Fake delay of 1ms.
         delay(1)
-        assertThat(sut?.currentSamplingSpeed?.value, `is`(SamplingSpeed.SLOW))
+        assertThat(sut?.currentSamplingSpeed?.value, `is`("Slow"))
 
         sut?.changeSampleRate(samplerRate = SamplingSpeed.FAST)
         // Fake delay of 1ms.
         delay(1)
-        assertThat(sut?.currentSamplingSpeed?.value, `is`(SamplingSpeed.FAST))
+        assertThat(sut?.currentSamplingSpeed?.value, `is`("Fast"))
 
     }
 

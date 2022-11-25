@@ -89,6 +89,9 @@ fun <T> IchorStatefulText(
                         .capitalizeFirstCharacter()
                         .withSuffixAndPrefix(prefix, suffix)
             }
+            is String -> {
+                "$prefix$stateValue$suffix"
+            }
             else -> stateValue
         } as String
     )

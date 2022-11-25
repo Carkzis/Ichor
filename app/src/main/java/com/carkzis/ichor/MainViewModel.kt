@@ -1,5 +1,6 @@
 package com.carkzis.ichor
 
+import androidx.compose.runtime.collectAsState
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataTypeAvailability
 import androidx.lifecycle.ViewModel
@@ -34,8 +35,12 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
         get() = _latestHeartRateList
 
     private val _currentSampleSpeed = MutableStateFlow<SamplingSpeed>(SamplingSpeed.DEFAULT)
-    val currentSamplingSpeed: StateFlow<SamplingSpeed>
-        get() = _currentSampleSpeed
+    val currentSamplingSpeed: StateFlow<String>
+        get() = when (_currentSampleSpeed.value) {
+            SamplingSpeed.SLOW -> MutableStateFlow("Slow")
+            SamplingSpeed.DEFAULT -> MutableStateFlow("Default")
+            SamplingSpeed.FAST -> MutableStateFlow("Fast")
+        }
 
     fun initiateDataCollection(samplingSpeed: SamplingSpeed = SamplingSpeed.DEFAULT) {
         listOfJobs.addAll(listOf(viewModelScope.launch {

@@ -17,7 +17,6 @@ import androidx.compose.material.icons.rounded.MonitorHeart
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -103,7 +102,16 @@ private fun DisplayUIItems(
         item {
             DisplayAvailability(modifier = modifier, state = viewModel.latestAvailability)
         }
-
+        item {
+            Row {
+                IchorStatefulText(
+                    modifier = modifier,
+                    style = IchorTypography.body2,
+                    state = viewModel.currentSamplingSpeed,
+                    prefix = "Sampling Speed: "
+                )
+            }
+        }
         if (heartRatePermission.hasPermission) {
             initiateDataCollectionOnce(shouldInitiateDataCollection, viewModel)
             item {
@@ -112,7 +120,6 @@ private fun DisplayUIItems(
                     Spacer(modifier = Modifier.width(8.dp))
                     DisplayDeleteAllButton(viewModel = viewModel, modifier = modifier)
                 }
-
             }
             items(
                 items = heartRates,
