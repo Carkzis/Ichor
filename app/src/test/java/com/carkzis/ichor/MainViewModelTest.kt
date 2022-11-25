@@ -44,7 +44,7 @@ class MainViewModelTest {
         sut?.initiateDataCollection()
 
         // Fake delay of 1ms.
-        delay(1)
+        delay(20_001)
 
         assertThat(sut?.latestHeartRate?.value, `is`(expectedHeartRate.value.asDouble()))
     }
@@ -155,6 +155,51 @@ class MainViewModelTest {
         delay(1)
 
         assertThat(mockDatabase.size, `is`(0))
+    }
+
+    @Test
+    fun `viewmodel can change clear running coroutines when sample changed`() = runTest {
+        val listOfDummyHeartRateDataPoints = listOfHeartRateDataPoints()
+        val expectedHeartRate = listOfDummyHeartRateDataPoints.last().last()
+
+        repository = FakeRepository().apply {
+            mockHeartRateSample = listOfDummyHeartRateDataPoints.map {
+                MeasureClientData.HeartRateDataPoints(it)
+            }
+        }
+        sut = MainViewModel(repository as FakeRepository)
+
+        sut?.changeSampleRate(samplerRate = SamplingSpeed.SLOW)
+
+        // TODO: This shouldn't pass.
+
+        // Fake delay of 1ms.
+        delay(1)
+
+        assertThat(sut?.latestHeartRateList?.value?.last()?.value, `is`(expectedHeartRate.value.asDouble()))
+    }
+
+    @Test
+    fun `viewmodel can change sampler being used when sample rate changed and samples start again`() = runTest {
+        // TODO: This needs sorting, doesn't currently test changing the sample rate.
+        val listOfDummyHeartRateDataPoints = listOfHeartRateDataPoints()
+        val expectedHeartRate = listOfDummyHeartRateDataPoints.last().last()
+
+        repository = FakeRepository().apply {
+            mockHeartRateSample = listOfDummyHeartRateDataPoints.map {
+                MeasureClientData.HeartRateDataPoints(it)
+            }
+        }
+        sut = MainViewModel(repository as FakeRepository)
+
+        sut?.initiateDataCollection()
+
+        sut?.changeSampleRate(samplerRate = SamplingSpeed.DEFAULT)
+
+        // Fake delay of 1ms.
+        delay(1)
+
+        assertThat(sut?.latestHeartRate?.value, `is`(expectedHeartRate.value.asDouble()))
     }
 
 }

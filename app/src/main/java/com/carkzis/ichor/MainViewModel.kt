@@ -97,6 +97,12 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
             repository.deleteAllHeartRatesFromDatabase()
         }
     }
+
+    fun changeSampleRate(samplerRate: SamplingSpeed) {
+        listOfJobs.forEach { it.cancel() }
+        listOfJobs.clear()
+        initiateDataCollection(samplerRate)
+    }
 }
 
 enum class SamplingSpeed {

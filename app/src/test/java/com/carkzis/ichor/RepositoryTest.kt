@@ -37,7 +37,7 @@ class RepositoryTest {
         val heartRateEmissionCounter = AtomicInteger(0)
 
         sut?.run {
-            collectHeartRateFromHeartRateService().take(3).collect {
+            collectHeartRateFromHeartRateService(sampler = CustomSampler(intervalInMs = 0)).take(3).collect {
                 val actualValue = it.value.asDouble()
                 val expectedDataPoints =
                     expectedHeartRateDataPoints[heartRateEmissionCounter.get()]
