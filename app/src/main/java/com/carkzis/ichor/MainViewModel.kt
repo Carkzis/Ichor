@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -15,6 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+
+    private val listOfJobs = mutableListOf<Job>()
 
     private val _latestHeartRate = MutableStateFlow(0.0)
     val latestHeartRate: StateFlow<Double>
@@ -30,23 +33,36 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     val latestHeartRateList: StateFlow<List<DomainHeartRate>>
         get() = _latestHeartRateList
 
-    fun initiateDataCollection() {
-        viewModelScope.launch {
-            assignLatestHeartRateToUI()
-        }
+    fun initiateDataCollection(samplingSpeed: SamplingSpeed = SamplingSpeed.DEFAULT) {
+        listOfJobs.addAll(listOf(viewModelScope.launch {
+            assignLatestHeartRateToUI(chooseSampler(samplingSpeed))
+        },
         viewModelScope.launch {
             assignLatestAvailabilityToUI()
-        }
+        },
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
                 assignLatestHeartRateListToUI()
             }
+        }))
+    }
+
+    private fun chooseSampler(samplingSpeed: SamplingSpeed) : Sampler {
+        return when (samplingSpeed) {
+            SamplingSpeed.SLOW -> {
+                Sampler()
+            }
+            SamplingSpeed.DEFAULT -> {
+                Sampler()
+            }
+            SamplingSpeed.FAST -> {
+                Sampler()
+            }
         }
     }
 
-    private suspend fun assignLatestHeartRateToUI() {
+    private suspend fun assignLatestHeartRateToUI(sampler: Sampler) {
         Timber.e("Entered assignLatestHeartRateToUI.")
-        val sampler = Sampler()
         repository.collectHeartRateFromHeartRateService(sampler).collect {
             val latestHeartRateAsDouble = it.value.asDouble()
             _latestHeartRate.value = latestHeartRateAsDouble
@@ -81,4 +97,10 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
             repository.deleteAllHeartRatesFromDatabase()
         }
     }
+}
+
+enum class SamplingSpeed {
+    SLOW,
+    DEFAULT,
+    FAST
 }

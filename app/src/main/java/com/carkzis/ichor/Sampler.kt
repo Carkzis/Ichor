@@ -27,5 +27,5 @@ class Sampler(val intervalInMs: Long = DEFAULT_INTERVAL_MS, val initialIntervalI
             throw IllegalArgumentException("Only zero or positive initial intervals allowed.")
         }
     }
-
 }
+

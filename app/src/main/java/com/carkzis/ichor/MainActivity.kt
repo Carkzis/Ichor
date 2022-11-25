@@ -59,8 +59,8 @@ class MainActivity : ComponentActivity() {
 fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
     // Note: Reset permissions on an emulator using the command "adb shell pm reset-permissions".
 
-    // TODO: DELETE ALL functionality (with dialog?)
     // TODO: Change sampling time and show current sampling time (in settings view/dialog?)
+    // TODO: Look into constant recomposing when opening dialog.
 
     val heartRatePermission = rememberPermissionState(Manifest.permission.BODY_SENSORS)
     val listState = rememberScalingLazyListState()
