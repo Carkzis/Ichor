@@ -10,7 +10,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.MonitorHeart
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -157,12 +157,13 @@ private fun DisplayHeartRateItem(
         content = {
             Timber.e("Dialog for deleting item raised: $deleteAlertRequired")
             Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Delete your heartbeat record of ${currentHeartRateData.value} bpm dated ${currentHeartRateData.date}?", textAlign = TextAlign.Center)
+                DeleteHeartbeatIcon()
+                Text(style = IchorTypography.body2, modifier = Modifier.padding(start = 36.dp, end = 36.dp), text = "Delete your heartbeat record of ${currentHeartRateData.value} bpm dated ${currentHeartRateData.date}?", textAlign = TextAlign.Center)
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    IchorButton {
+                    IchorButton(iconImage = Icons.Rounded.Done, modifier = Modifier.size(32.dp)) {
                         viewModel.deleteHeartRate(currentHeartRateData.pk)
                     }
-                    IchorButton {
+                    IchorButton(iconImage = Icons.Rounded.Close, modifier = Modifier.size(32.dp)) {
                         deleteAlertRequired = false
                     }
                 }
@@ -201,6 +202,16 @@ fun DisplayMainIcon() {
     Icon(
         imageVector = Icons.Rounded.MonitorHeart,
         contentDescription = "Main heartbeat icon for app.",
+        tint = IchorColorPalette.secondary
+    )
+}
+
+@Composable
+fun DeleteHeartbeatIcon() {
+    Icon(
+        modifier = Modifier.size(48.dp),
+        imageVector = Icons.Rounded.Delete,
+        contentDescription = "Delete heartbeat icon for app.",
         tint = IchorColorPalette.secondary
     )
 }
