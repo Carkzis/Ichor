@@ -115,8 +115,18 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     }
 }
 
-enum class SamplingSpeed {
-    SLOW,
-    DEFAULT,
-    FAST
+enum class SamplingSpeed(val descriptor: String) {
+    SLOW("Slow"),
+    DEFAULT("Default"),
+    FAST("Fast");
+
+    override fun toString(): String {
+        return descriptor
+    }
+
+    companion object {
+        fun forDescriptor(value: String): SamplingSpeed {
+            return values().first { it.descriptor == value }
+        }
+    }
 }

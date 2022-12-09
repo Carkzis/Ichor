@@ -193,6 +193,8 @@ private fun DisplayDeleteAllButton(
 @Composable
 fun DisplaySamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
     var samplingSpeedAlertRequired by remember { mutableStateOf(false) }
+    val currentSamplingSpeed by viewModel.currentSamplingSpeed.collectAsState()
+
     IchorButton(
         modifier = modifier
             .size(24.dp)
@@ -221,17 +223,32 @@ fun DisplaySamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifie
                     text = "Change sampling speed?"
                 )
                 Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    IchorButton(iconImage = Icons.Rounded.DirectionsWalk, modifier = Modifier.size(32.dp)) {
-                        viewModel.changeSampleRate(SamplingSpeed.SLOW)
-                        samplingSpeedAlertRequired = false
+                    Row {
+                        IchorButton(iconImage = Icons.Rounded.DirectionsWalk, modifier = Modifier.size(32.dp)) {
+                            viewModel.changeSampleRate(SamplingSpeed.SLOW)
+                            samplingSpeedAlertRequired = false
+                        }
+                        if (currentSamplingSpeed == SamplingSpeed.SLOW.toString()) {
+                            TickIcon()
+                        }
                     }
-                    IchorButton(iconImage = Icons.Rounded.DirectionsRun, modifier = Modifier.size(32.dp)) {
-                        viewModel.changeSampleRate(SamplingSpeed.DEFAULT)
-                        samplingSpeedAlertRequired = false
+                    Row {
+                        IchorButton(iconImage = Icons.Rounded.DirectionsRun, modifier = Modifier.size(32.dp)) {
+                            viewModel.changeSampleRate(SamplingSpeed.DEFAULT)
+                            samplingSpeedAlertRequired = false
+                        }
+                        if (currentSamplingSpeed == SamplingSpeed.DEFAULT.toString()) {
+                            TickIcon()
+                        }
                     }
-                    IchorButton(iconImage = Icons.Rounded.DirectionsBike, modifier = Modifier.size(32.dp)) {
-                        viewModel.changeSampleRate(SamplingSpeed.FAST)
-                        samplingSpeedAlertRequired = false
+                    Row {
+                        IchorButton(iconImage = Icons.Rounded.DirectionsBike, modifier = Modifier.size(32.dp)) {
+                            viewModel.changeSampleRate(SamplingSpeed.FAST)
+                            samplingSpeedAlertRequired = false
+                        }
+                        if (currentSamplingSpeed == SamplingSpeed.FAST.toString()) {
+                            TickIcon()
+                        }
                     }
                 }
             }
@@ -335,12 +352,23 @@ fun DeleteHeartbeatIcon() {
     )
 }
 
+
 @Composable
 fun ChangeSamplingSpeedIcon() {
     Icon(
         modifier = Modifier.size(48.dp),
         imageVector = Icons.Rounded.Speed,
         contentDescription = "Change heartbeat sampling speed.",
+        tint = IchorColorPalette.secondary
+    )
+}
+
+@Composable
+fun TickIcon() {
+    Icon(
+        modifier = Modifier.size(32.dp),
+        imageVector = Icons.Rounded.Done,
+        contentDescription = "Affirmation icon.",
         tint = IchorColorPalette.secondary
     )
 }
