@@ -50,7 +50,6 @@ class MainActivity : ComponentActivity() {
 
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
     // Note: Reset permissions on an emulator using the command "adb shell pm reset-permissions".
@@ -193,10 +192,50 @@ private fun DisplayDeleteAllButton(
 
 @Composable
 fun DisplaySamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
+    var samplingSpeedAlertRequired by remember { mutableStateOf(false) }
     IchorButton(
-        modifier = modifier.size(24.dp).padding(all = 0.dp),
-        onClick = { },
+        modifier = modifier
+            .size(24.dp)
+            .padding(all = 0.dp),
+        onClick = { samplingSpeedAlertRequired = true },
         iconImage = Icons.Rounded.Speed
+    )
+
+    Dialog(
+        showDialog = samplingSpeedAlertRequired,
+        onDismissRequest = {
+            samplingSpeedAlertRequired = false
+        },
+        content = {
+            Timber.e("Dialog for changing sampling speed: $samplingSpeedAlertRequired")
+            Column(
+                modifier = modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                ChangeSamplingSpeedIcon()
+                Text(
+                    style = IchorTypography.body2,
+                    modifier = modifier.padding(start = 36.dp, end = 36.dp),
+                    textAlign = TextAlign.Center,
+                    text = "Change sampling speed?"
+                )
+                Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                    IchorButton(iconImage = Icons.Rounded.DirectionsWalk, modifier = Modifier.size(32.dp)) {
+                        viewModel.changeSampleRate(SamplingSpeed.SLOW)
+                        samplingSpeedAlertRequired = false
+                    }
+                    IchorButton(iconImage = Icons.Rounded.DirectionsRun, modifier = Modifier.size(32.dp)) {
+                        viewModel.changeSampleRate(SamplingSpeed.DEFAULT)
+                        samplingSpeedAlertRequired = false
+                    }
+                    IchorButton(iconImage = Icons.Rounded.DirectionsBike, modifier = Modifier.size(32.dp)) {
+                        viewModel.changeSampleRate(SamplingSpeed.FAST)
+                        samplingSpeedAlertRequired = false
+                    }
+                }
+            }
+        }
     )
 }
 
@@ -292,6 +331,16 @@ fun DeleteHeartbeatIcon() {
         modifier = Modifier.size(48.dp),
         imageVector = Icons.Rounded.Delete,
         contentDescription = "Delete heartbeat icon for app.",
+        tint = IchorColorPalette.secondary
+    )
+}
+
+@Composable
+fun ChangeSamplingSpeedIcon() {
+    Icon(
+        modifier = Modifier.size(48.dp),
+        imageVector = Icons.Rounded.Speed,
+        contentDescription = "Change heartbeat sampling speed.",
         tint = IchorColorPalette.secondary
     )
 }
