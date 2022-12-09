@@ -222,6 +222,7 @@ fun DisplaySamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifie
                     textAlign = TextAlign.Center,
                     text = "Change sampling speed?"
                 )
+                Spacer(modifier = Modifier.height(8.dp))
                 Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     Row {
                         IchorButton(iconImage = Icons.Rounded.DirectionsWalk, modifier = Modifier.size(32.dp)) {
