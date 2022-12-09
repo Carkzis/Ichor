@@ -18,8 +18,6 @@ import javax.inject.Inject
 
 class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatabase, private val heartRateService: HeartRateService, private val dataStore: DataStore<Preferences>) : Repository {
 
-    @Inject lateinit var sharedPreferences: SharedPreferences
-
     override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> = flow {
         Timber.e("Entered collectAvailabilityFromHeartRateService.")
         heartRateService.retrieveHeartRate().collect {
