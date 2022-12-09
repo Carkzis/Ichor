@@ -32,7 +32,7 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDatabase(@ApplicationContext context: Context, dataStore: DataStore<Preferences>): IchorDatabase {
+    fun provideDatabase(@ApplicationContext context: Context): IchorDatabase {
         return Room.databaseBuilder(
             context,
             IchorDatabase::class.java,

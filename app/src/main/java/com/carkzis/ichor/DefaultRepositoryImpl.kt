@@ -1,6 +1,5 @@
 package com.carkzis.ichor
 
-import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.health.services.client.data.Availability
@@ -73,6 +72,14 @@ class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatab
             }
         }
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun collectSamplingPreference(): Flow<String> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun changeSamplingPreference(samplingSpeed: SamplingSpeed) {
+        TODO("Not yet implemented")
+    }
 
     private fun insertValueIntoDatabase(heartRate: DataPoint) {
         database.heartRateDao().insertHeartRate(heartRate.toLocalHeartRate())

@@ -13,6 +13,7 @@ import org.hamcrest.Matchers.`is`
 import org.junit.After
 import org.junit.Test
 import java.util.concurrent.atomic.AtomicInteger
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 class RepositoryTest {
@@ -211,4 +212,45 @@ class RepositoryTest {
         delay(1)
     }
 
+    @Test
+    fun `repository obtains default sampling speed from datastore`() = runTest {
+        sut = FakeRepository()
+        var samplingSpeed: SamplingSpeed? = null
+
+        launch {
+            sut?.run {
+                collectSamplingPreference().take(1).collect {
+                    samplingSpeed = SamplingSpeed.forDescriptor(it)
+                }
+            }
+        }
+        delay(1)
+
+        val expectedSamplingSpeed = SamplingSpeed.DEFAULT
+        assertThat(samplingSpeed, `is`(expectedSamplingSpeed))
+    }
+
+    @Test
+    fun `repository obtains new sampling speed when provided to datastore`() = runTest {
+        sut = FakeRepository()
+        var samplingSpeed: SamplingSpeed? = null
+
+        val originalSamplingSpeed = SamplingSpeed.DEFAULT
+        val expectedSamplingSpeed = SamplingSpeed.SLOW
+        launch {
+            sut?.run {
+                collectSamplingPreference().collect {
+                    samplingSpeed = SamplingSpeed.forDescriptor(it)
+                }
+                assertThat(samplingSpeed, `is`(originalSamplingSpeed))
+                sut?.changeSamplingPreference(expectedSamplingSpeed)
+                collectSamplingPreference().collect {
+                    samplingSpeed = SamplingSpeed.forDescriptor(it)
+                }
+            }
+        }
+
+        delay(1)
+        assertThat(samplingSpeed, `is`(expectedSamplingSpeed))
+    }
 }
