@@ -14,7 +14,7 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
     var mockAvailabilities: List<MeasureClientData> = listOf()
     var mockDatabase = database
     var sampleRateFromHeart = 0L
-    var dataStore = MutableStateFlow("Default")
+    var dataStore = "Default"
 
     override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> = flow {
         for (availabilityData in mockAvailabilities) {
@@ -70,11 +70,11 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
         }
 
     override suspend fun collectSamplingPreference(): Flow<String> = flow {
-        emit(dataStore.value)
+        emit(dataStore)
     }
 
     override suspend fun changeSamplingPreference(samplingSpeed: SamplingSpeed) {
-        dataStore.value = samplingSpeed.toString()
+        dataStore = samplingSpeed.toString()
     }
 
     private fun insertValueIntoDatabase(heartRate: DataPoint) {
