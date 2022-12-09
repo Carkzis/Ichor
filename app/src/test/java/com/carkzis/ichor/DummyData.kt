@@ -4,8 +4,6 @@ import androidx.health.services.client.data.*
 import java.time.Duration
 import java.util.*
 
-// TODO: Change these to use extension functions instead.
-
 fun listOfHeartRateDataPoints() : List<List<DataPoint>> {
     val heartRateSamplesInDoubles = listOfHeartRateDataInDoubles()
     val heartRateDataPoints: MutableList<List<DataPoint>> = mutableListOf(listOf(), listOf(), listOf())

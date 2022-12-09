@@ -176,7 +176,7 @@ fun IchorCard(
 ) {
     Card(
         modifier = modifier,
-        onClick = { /*TODO*/ },
+        onClick = { /* Do nothing. */ },
         shape = RoundedCornerShape(50.dp),
         backgroundPainter = ColorPainter(color = IchorColorPalette.secondary),
     ) {
