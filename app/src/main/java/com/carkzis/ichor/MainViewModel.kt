@@ -1,5 +1,6 @@
 package com.carkzis.ichor
 
+import android.content.SharedPreferences
 import androidx.compose.runtime.collectAsState
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataTypeAvailability
@@ -82,7 +83,7 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     private suspend fun assignLatestAvailabilityToUI() {
         Timber.e("Entered assignLatestAvailabilityToUI.")
         repository.collectAvailabilityFromHeartRateService().collect { availability ->
-//            Timber.e("Latest availability is $availability.")
+        Timber.e("Latest availability is $availability.")
             _latestAvailability.value = availability
         }
     }
@@ -90,7 +91,7 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     private suspend fun assignLatestHeartRateListToUI() {
         Timber.e("Entered assignLatestHeartRateListToUI.")
         repository.collectHeartRatesFromDatabase().collect { listOfHeartRates ->
-//            Timber.e("Latest heart rates are $listOfHeartRates.")
+            Timber.e("Latest heart rates are $listOfHeartRates.")
             _latestHeartRateList.value = listOfHeartRates
         }
     }

@@ -1,13 +1,25 @@
 package com.carkzis.ichor
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.dataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
+
+private const val USER_PREFERENCES = "user_preferences"
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -20,7 +32,7 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDatabase(@ApplicationContext context: Context): IchorDatabase {
+    fun provideDatabase(@ApplicationContext context: Context, dataStore: DataStore<Preferences>): IchorDatabase {
         return Room.databaseBuilder(
             context,
             IchorDatabase::class.java,
@@ -30,7 +42,16 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideRepository(database: IchorDatabase, heartRateService: HeartRateService): Repository {
-        return DefaultRepositoryImpl(database, heartRateService)
+    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.create(
+            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+            produceFile = { context.preferencesDataStoreFile(USER_PREFERENCES)}
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideRepository(database: IchorDatabase, heartRateService: HeartRateService, dataStore: DataStore<Preferences>): Repository {
+        return DefaultRepositoryImpl(database, heartRateService, dataStore)
     }
 }

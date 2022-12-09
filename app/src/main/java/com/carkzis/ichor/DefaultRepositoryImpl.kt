@@ -1,5 +1,8 @@
 package com.carkzis.ichor
 
+import android.content.SharedPreferences
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +16,9 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
-class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatabase, private val heartRateService: HeartRateService) : Repository {
+class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatabase, private val heartRateService: HeartRateService, private val dataStore: DataStore<Preferences>) : Repository {
+
+    @Inject lateinit var sharedPreferences: SharedPreferences
 
     override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> = flow {
         Timber.e("Entered collectAvailabilityFromHeartRateService.")

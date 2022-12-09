@@ -3,6 +3,7 @@
 package com.carkzis.ichor
 
 import android.Manifest
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.health.services.client.data.Availability
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.*
@@ -36,6 +38,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
