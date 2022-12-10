@@ -4,8 +4,6 @@ import androidx.health.services.client.data.*
 import java.time.Duration
 import java.util.*
 
-// TODO: Temporary duplication here, work out what can be deleted, or whether anything can be moved and shared.
-
 fun listOfHeartRateDataPoints() : List<List<DataPoint>> {
     val heartRateSamplesInDoubles = listOfHeartRateDataInDoubles()
     val heartRateDataPoints: MutableList<List<DataPoint>> = mutableListOf(listOf(), listOf(), listOf())
@@ -42,12 +40,6 @@ fun listOfHeartRateDataInDoubles() : List<List<Double>> {
     return listOf(expectedHeartRatesOne, expectedHeartRatesTwo, expectedHeartRatesThree)
 }
 
-fun listOfHeartRateMeasureData() : List<MeasureClientData> {
-    return listOfHeartRateDataPoints().map {
-        MeasureClientData.HeartRateDataPoints(it)
-    }
-}
-
 fun listOfAvailabilities() : List<Availability> {
     val expectedAvailability1 = DataTypeAvailability.UNKNOWN
     val expectedAvailability2 = DataTypeAvailability.ACQUIRING
@@ -55,10 +47,4 @@ fun listOfAvailabilities() : List<Availability> {
     return listOf(
         expectedAvailability1, expectedAvailability2, expectedAvailability3
     )
-}
-
-fun listOfAvailabilityMeasureData() : List<MeasureClientData> {
-    return listOfAvailabilities().map {
-        MeasureClientData.HeartRateAvailability(it)
-    }
 }
