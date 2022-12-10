@@ -2,6 +2,7 @@ package com.carkzis.ichor
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -15,7 +16,9 @@ class SamplingPreferenceDataStoreImpl(private val dataStore: DataStore<Preferenc
     override suspend fun collectSamplingPreference(): Flow<String> = preferencesFlow.flowOn(Dispatchers.IO)
 
     override suspend fun changeSamplingPreference(samplingSpeed: SamplingSpeed) {
-        TODO("Not yet implemented")
+        dataStore.edit {
+            it[PreferenceKeys.SAMPLING_PREFERENCE] = samplingSpeed.toString()
+        }
     }
 
 }

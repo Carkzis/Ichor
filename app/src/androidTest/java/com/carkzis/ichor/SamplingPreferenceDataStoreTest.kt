@@ -11,6 +11,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
@@ -18,20 +19,24 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.File
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class SamplingPreferenceDataStoreTest {
 
+    private lateinit var preferencesScope: CoroutineScope
     private lateinit var dataStore: DataStore<Preferences>
     private lateinit var samplingPreferenceDataStore: SamplingPreferenceDataStore
+    private val testDataStoreFileName = "test_datastore"
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @Before
     fun setUp() {
+        preferencesScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
         dataStore = PreferenceDataStoreFactory.create(
-            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-            produceFile = { context.preferencesDataStoreFile("test_datastore")}
+            scope = preferencesScope,
+            produceFile = { context.preferencesDataStoreFile(testDataStoreFileName)}
         )
         samplingPreferenceDataStore = SamplingPreferenceDataStoreImpl(dataStore)
     }
@@ -42,14 +47,35 @@ class SamplingPreferenceDataStoreTest {
             dataStore.edit {
                 it.clear()
             }
+            File(context.filesDir, testDataStoreFileName).deleteRecursively()
+            preferencesScope.cancel()
         }
     }
 
-    // TODO: Tests for SamplingPreferenceDataStore, yet to be created but will be a wrapper.
     @Test
     fun `can collect default preference from data store`() = runTest {
-        val samplingPreference = samplingPreferenceDataStore.collectSamplingPreference().take(1).toList()[0]
-        assertThat(samplingPreference, `is`(SamplingSpeed.DEFAULT.toString()))
+        val expectedDefaultSamplingPreference = SamplingSpeed.DEFAULT.toString()
+        val actualDefaultSamplingPreference = samplingPreferenceDataStore.collectSamplingPreference().take(1).toList()[0]
+        assertThat(actualDefaultSamplingPreference, `is`(expectedDefaultSamplingPreference))
+    }
+
+    @Test
+    fun `can collect new preference from data store when changed`() = runTest {
+        val newSamplingSpeed = SamplingSpeed.FAST
+        val expectedNewSamplingPreference = newSamplingSpeed.toString()
+
+        val samplingSpeedPreferenceHistory = mutableListOf<String>()
+        val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
+            samplingPreferenceDataStore.collectSamplingPreference().take(2).toList(samplingSpeedPreferenceHistory)
+        }
+
+        samplingPreferenceDataStore.changeSamplingPreference(newSamplingSpeed)
+
+        collectJob.cancel()
+
+        val actualNewSamplingPreference = samplingSpeedPreferenceHistory.last()
+        assertThat(actualNewSamplingPreference, `is`(expectedNewSamplingPreference))
+        assertThat(samplingSpeedPreferenceHistory.size, `is`(2))
     }
 
 }
