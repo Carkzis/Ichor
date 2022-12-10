@@ -7,12 +7,12 @@ import androidx.health.services.client.data.DataTypeAvailability
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -25,7 +25,7 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     val latestHeartRate: StateFlow<Double>
         get() = _latestHeartRate
 
-    private val _latestAvailability : MutableStateFlow<Availability> = MutableStateFlow(
+    private val _latestAvailability: MutableStateFlow<Availability> = MutableStateFlow(
         DataTypeAvailability.UNKNOWN
     )
     val latestAvailability: StateFlow<Availability>
@@ -43,21 +43,38 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
             SamplingSpeed.FAST -> MutableStateFlow("Fast")
         }
 
-    fun initiateDataCollection(samplingSpeed: SamplingSpeed = SamplingSpeed.DEFAULT) {
-        listOfJobs.addAll(listOf(viewModelScope.launch {
-            assignLatestHeartRateToUI(chooseSampler(samplingSpeed))
-        },
+    fun initiateDataCollection(samplingSpeed: SamplingSpeed? = null) {
+        val lock = Mutex()
         viewModelScope.launch {
-            assignLatestAvailabilityToUI()
-        },
-        viewModelScope.launch {
-            withContext(Dispatchers.Main) {
-                assignLatestHeartRateListToUI()
+            lock.withLock {
+                samplingSpeed?.let {
+                    repository.changeSamplingPreference(samplingSpeed)
+                }
+                _currentSampleSpeed.value = repository.collectSamplingPreference().first()
+                addAllDataCollectionJobsToJobsList()
             }
-        }))
+        }
     }
 
-    private fun chooseSampler(samplingSpeed: SamplingSpeed) : Sampler {
+    private fun addAllDataCollectionJobsToJobsList() {
+        listOfJobs.addAll(
+            listOf(
+                viewModelScope.launch {
+                    assignLatestHeartRateToUI(chooseSampler(_currentSampleSpeed.value))
+                },
+                viewModelScope.launch {
+                    assignLatestAvailabilityToUI()
+                },
+                viewModelScope.launch {
+                    withContext(Dispatchers.Main) {
+                        assignLatestHeartRateListToUI()
+                    }
+                }
+            )
+        )
+    }
+
+    private fun chooseSampler(samplingSpeed: SamplingSpeed): Sampler {
         return when (samplingSpeed) {
             SamplingSpeed.SLOW -> {
                 SlowSampler()
@@ -83,7 +100,7 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     private suspend fun assignLatestAvailabilityToUI() {
         Timber.e("Entered assignLatestAvailabilityToUI.")
         repository.collectAvailabilityFromHeartRateService().collect { availability ->
-        Timber.e("Latest availability is $availability.")
+            Timber.e("Latest availability is $availability.")
             _latestAvailability.value = availability
         }
     }
