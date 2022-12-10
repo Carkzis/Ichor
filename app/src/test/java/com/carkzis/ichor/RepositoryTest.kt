@@ -13,7 +13,6 @@ import org.hamcrest.Matchers.`is`
 import org.junit.After
 import org.junit.Test
 import java.util.concurrent.atomic.AtomicInteger
-import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 class RepositoryTest {
@@ -220,7 +219,7 @@ class RepositoryTest {
         launch {
             sut?.run {
                 collectSamplingPreference().take(1).collect {
-                    samplingSpeed = SamplingSpeed.forDescriptor(it)
+                    samplingSpeed = it
                 }
             }
         }
@@ -240,12 +239,12 @@ class RepositoryTest {
         launch {
             sut?.run {
                 collectSamplingPreference().collect {
-                    samplingSpeed = SamplingSpeed.forDescriptor(it)
+                    samplingSpeed = it
                 }
                 assertThat(samplingSpeed, `is`(originalSamplingSpeed))
                 sut?.changeSamplingPreference(expectedSamplingSpeed)
                 collectSamplingPreference().collect {
-                    samplingSpeed = SamplingSpeed.forDescriptor(it)
+                    samplingSpeed = it
                 }
             }
         }

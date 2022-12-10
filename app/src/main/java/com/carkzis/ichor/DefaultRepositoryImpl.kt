@@ -73,7 +73,7 @@ class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatab
         }
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun collectSamplingPreference(): Flow<String> {
+    override suspend fun collectSamplingPreference(): Flow<SamplingSpeed> {
         TODO("Not yet implemented")
     }
 

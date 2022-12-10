@@ -12,6 +12,6 @@ interface Repository {
     suspend fun deleteHeartRateFromDatabase(primaryKey: String)
     suspend fun deleteAllHeartRatesFromDatabase()
     suspend fun collectHeartRateFromHeartRateService(sampler: Sampler = DefaultSampler()) : Flow<HeartRateDataPoint>
-    suspend fun collectSamplingPreference() : Flow<String>
+    suspend fun collectSamplingPreference() : Flow<SamplingSpeed>
     suspend fun changeSamplingPreference(samplingSpeed: SamplingSpeed)
 }

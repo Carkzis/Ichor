@@ -1,10 +1,7 @@
 package com.carkzis.ichor
 
-import androidx.datastore.preferences.core.PreferenceDataStoreFactory
-import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
-import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
@@ -14,7 +11,7 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
     var mockAvailabilities: List<MeasureClientData> = listOf()
     var mockDatabase = database
     var sampleRateFromHeart = 0L
-    var dataStore = "Default"
+    var dataStore = SamplingSpeed.DEFAULT
 
     override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> = flow {
         for (availabilityData in mockAvailabilities) {
@@ -69,12 +66,12 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
             }
         }
 
-    override suspend fun collectSamplingPreference(): Flow<String> = flow {
+    override suspend fun collectSamplingPreference(): Flow<SamplingSpeed> = flow {
         emit(dataStore)
     }
 
     override suspend fun changeSamplingPreference(samplingSpeed: SamplingSpeed) {
-        dataStore = samplingSpeed.toString()
+        dataStore = samplingSpeed
     }
 
     private fun insertValueIntoDatabase(heartRate: DataPoint) {
