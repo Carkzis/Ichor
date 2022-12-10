@@ -1,18 +1,19 @@
 package com.carkzis.ichor
 
-import android.content.SharedPreferences
-import androidx.compose.runtime.collectAsState
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataTypeAvailability
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,12 +36,13 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     val latestHeartRateList: StateFlow<List<DomainHeartRate>>
         get() = _latestHeartRateList
 
-    private val _currentSampleSpeed = MutableStateFlow<SamplingSpeed>(SamplingSpeed.DEFAULT)
+    private val _currentSampleSpeed = MutableStateFlow(SamplingSpeed.UNKNOWN)
     val currentSamplingSpeed: StateFlow<String>
         get() = when (_currentSampleSpeed.value) {
             SamplingSpeed.SLOW -> MutableStateFlow("Slow")
             SamplingSpeed.DEFAULT -> MutableStateFlow("Default")
             SamplingSpeed.FAST -> MutableStateFlow("Fast")
+            else -> MutableStateFlow("")
         }
 
     fun initiateDataCollection(samplingSpeed: SamplingSpeed? = null) {
@@ -84,6 +86,9 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
             }
             SamplingSpeed.FAST -> {
                 FastSampler()
+            }
+            SamplingSpeed.UNKNOWN -> {
+                throw IllegalArgumentException("You must now your sampling speed!")
             }
         }
     }
@@ -136,7 +141,8 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
 enum class SamplingSpeed(val descriptor: String) {
     SLOW("Slow"),
     DEFAULT("Default"),
-    FAST("Fast");
+    FAST("Fast"),
+    UNKNOWN("");
 
     override fun toString(): String {
         return descriptor
