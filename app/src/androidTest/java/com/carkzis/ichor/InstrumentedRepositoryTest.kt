@@ -186,6 +186,7 @@ class InstrumentedRepositoryTest {
         val heartRateHistoryBeforeDeletion = mutableListOf<List<DomainHeartRate>>()
         sut.collectHeartRatesFromDatabase().take(1).toList(heartRateHistoryBeforeDeletion)
         val heartRateListBeforeDeletion = heartRateHistoryBeforeDeletion[0]
+
         assertThat(heartRateListBeforeDeletion.size, `is`(heartRateDataPoints.size))
 
         val heartRateToDeletePk = heartRateDataPoints[0].pk
@@ -194,7 +195,72 @@ class InstrumentedRepositoryTest {
         val heartRateHistoryAfterDeletion = mutableListOf<List<DomainHeartRate>>()
         sut.collectHeartRatesFromDatabase().take(1).toList(heartRateHistoryAfterDeletion)
         val heartRateListAfterDeletion = heartRateHistoryAfterDeletion[0]
+
         assertThat(heartRateListAfterDeletion.size, `is`(heartRateDataPoints.size - 1))
+    }
+
+    @Test
+    fun `repository does not delete an item from database if primary key does not match any existing items`() = runTest {
+        val heartRateDataPoints = listOfHeartRateDataAsMockDatabase()
+
+        for (heartRateDataPoint in heartRateDataPoints) {
+            database.heartRateDao().insertHeartRate(heartRate = heartRateDataPoint)
+        }
+
+        val heartRateHistoryBeforeAttemptedDeletion = mutableListOf<List<DomainHeartRate>>()
+        sut.collectHeartRatesFromDatabase().take(1).toList(heartRateHistoryBeforeAttemptedDeletion)
+        val heartRateListBeforeAttemptedDeletion = heartRateHistoryBeforeAttemptedDeletion[0]
+
+        assertThat(heartRateListBeforeAttemptedDeletion.size, `is`(heartRateDataPoints.size))
+
+        val heartRateToNotDeletePk = "thisIsNotAnExistingPk"
+        sut.deleteHeartRateFromDatabase(heartRateToNotDeletePk)
+
+        val heartRateHistoryAfterAttemptedDeletion = mutableListOf<List<DomainHeartRate>>()
+        sut.collectHeartRatesFromDatabase().take(1).toList(heartRateHistoryAfterAttemptedDeletion)
+        val heartRateListAfterAttemptedDeletion = heartRateHistoryAfterAttemptedDeletion[0]
+
+        assertThat(heartRateListAfterAttemptedDeletion.size, `is`(heartRateDataPoints.size))
+    }
+
+    @Test
+    fun `repository deletes all items from database`() = runTest {
+        val heartRateDataPoints = listOfHeartRateDataAsMockDatabase()
+
+        for (heartRateDataPoint in heartRateDataPoints) {
+            database.heartRateDao().insertHeartRate(heartRate = heartRateDataPoint)
+        }
+
+        val heartRateHistoryBeforeDeletion = mutableListOf<List<DomainHeartRate>>()
+        sut.collectHeartRatesFromDatabase().take(1).toList(heartRateHistoryBeforeDeletion)
+        val heartRateListBeforeDeletion = heartRateHistoryBeforeDeletion[0]
+
+        assertThat(heartRateListBeforeDeletion.size, `is`(heartRateDataPoints.size))
+
+        sut.deleteAllHeartRatesFromDatabase()
+
+        val heartRateHistoryAfterDeletion = mutableListOf<List<DomainHeartRate>>()
+        sut.collectHeartRatesFromDatabase().take(1).toList(heartRateHistoryAfterDeletion)
+        val heartRateListAfterDeletion = heartRateHistoryAfterDeletion[0]
+
+        assertThat(heartRateListAfterDeletion.size, `is`(0))
+    }
+
+    @Test
+    fun `repository can attempt to delete all items from empty database without error`() = runTest {
+        val heartRateHistoryBeforeDeletion = mutableListOf<List<DomainHeartRate>>()
+        sut.collectHeartRatesFromDatabase().take(1).toList(heartRateHistoryBeforeDeletion)
+        val heartRateListBeforeDeletion = heartRateHistoryBeforeDeletion[0]
+
+        assertThat(heartRateListBeforeDeletion.size, `is`(0))
+
+        sut.deleteAllHeartRatesFromDatabase()
+
+        val heartRateHistoryAfterDeletion = mutableListOf<List<DomainHeartRate>>()
+        sut.collectHeartRatesFromDatabase().take(1).toList(heartRateHistoryAfterDeletion)
+        val heartRateListAfterDeletion = heartRateHistoryAfterDeletion[0]
+
+        assertThat(heartRateListAfterDeletion.size, `is`(0))
     }
 
 }
