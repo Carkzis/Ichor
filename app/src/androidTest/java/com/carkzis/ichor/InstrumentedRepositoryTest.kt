@@ -1,26 +1,22 @@
 package com.carkzis.ichor
 
+import androidx.health.services.client.data.Availability
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.MatcherAssert
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.`is`
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.concurrent.atomic.AtomicInteger
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -111,5 +107,27 @@ class InstrumentedRepositoryTest {
         assertThat(heartRateHistory.size, `is`(3))
     }
 
+    @Test
+    fun `repository emits availability data in order received`() = runTest {
+        val expectedAvailabilities = listOfAvailabilities()
+
+        val availabilityHistory = mutableListOf<Availability>()
+        val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
+            sut.collectAvailabilityFromHeartRateService().toList(availabilityHistory)
+        }
+
+        for (availability in expectedAvailabilities) {
+            heartRateService.mockAvailability = availability
+            heartRateService.emitAvailability()
+        }
+
+        runCurrent()
+        advanceTimeBy(1)
+
+        collectJob.cancel()
+
+        assertThat(availabilityHistory.size, `is`(expectedAvailabilities.size))
+        assertThat(availabilityHistory, `is`(expectedAvailabilities))
+    }
 
 }
