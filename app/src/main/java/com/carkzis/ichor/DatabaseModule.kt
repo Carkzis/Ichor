@@ -42,16 +42,17 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create(
+    fun provideSamplingPreferenceDataStoreImpl(@ApplicationContext context: Context): SamplingPreferenceDataStore {
+        val dataStore = PreferenceDataStoreFactory.create(
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
             produceFile = { context.preferencesDataStoreFile(USER_PREFERENCES)}
         )
+        return SamplingPreferenceDataStoreImpl(dataStore = dataStore)
     }
 
     @Singleton
     @Provides
-    fun provideRepository(database: IchorDatabase, heartRateService: HeartRateService, dataStore: DataStore<Preferences>): Repository {
+    fun provideRepository(database: IchorDatabase, heartRateService: HeartRateService, dataStore: SamplingPreferenceDataStore): Repository {
         return DefaultRepositoryImpl(database, heartRateService, dataStore)
     }
 }

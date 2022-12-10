@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
-class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatabase, private val heartRateService: HeartRateService, private val dataStore: DataStore<Preferences>) : Repository {
+class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatabase, private val heartRateService: HeartRateService, private val dataStore: SamplingPreferenceDataStore) : Repository {
 
     override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> = flow {
         Timber.e("Entered collectAvailabilityFromHeartRateService.")
@@ -73,12 +73,10 @@ class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatab
         }
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun collectSamplingPreference(): Flow<SamplingSpeed> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun collectSamplingPreference(): Flow<SamplingSpeed> = dataStore.collectSamplingPreference()
 
     override suspend fun changeSamplingPreference(samplingSpeed: SamplingSpeed) {
-        TODO("Not yet implemented")
+        dataStore.changeSamplingPreference(samplingSpeed)
     }
 
     private fun insertValueIntoDatabase(heartRate: DataPoint) {
