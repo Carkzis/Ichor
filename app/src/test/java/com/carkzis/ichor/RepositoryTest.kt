@@ -79,32 +79,32 @@ class RepositoryTest {
 //        assertThat(heartRateEmissionCounter.get(), `is`(3))
 //    }
 
-    @Test
-    fun `repository emits data from local database`() = runTest {
-        val expectedHeartRateDataPoints = listOfHeartRateMeasureData()
-        val mockDatabase = mutableListOf<LocalHeartRate>()
-
-        sut = FakeRepository(mockDatabase).apply {
-            mockHeartRateSample = expectedHeartRateDataPoints
-        }
-
-        val heartRateIndex = AtomicInteger(0)
-
-        launch {
-            sut?.run {
-                collectHeartRatesFromDatabase().take(expectedHeartRateDataPoints.size).collect {
-                    for (heartRate in it) {
-                        val currentIndex = heartRateIndex.getAndIncrement()
-                        assertThat(it[currentIndex].value, `is`(mockDatabase[currentIndex].value.toDouble()))
-                    }
-                }
-            }
-        }
-
-        // Artificial delay.
-        delay(1)
-        assertThat(heartRateIndex.get(), `is`(expectedHeartRateDataPoints.size))
-    }
+//    @Test
+//    fun `repository emits data from local database`() = runTest {
+//        val expectedHeartRateDataPoints = listOfHeartRateMeasureData()
+//        val mockDatabase = mutableListOf<LocalHeartRate>()
+//
+//        sut = FakeRepository(mockDatabase).apply {
+//            mockHeartRateSample = expectedHeartRateDataPoints
+//        }
+//
+//        val heartRateIndex = AtomicInteger(0)
+//
+//        launch {
+//            sut?.run {
+//                collectHeartRatesFromDatabase().take(expectedHeartRateDataPoints.size).collect {
+//                    for (heartRate in it) {
+//                        val currentIndex = heartRateIndex.getAndIncrement()
+//                        assertThat(it[currentIndex].value, `is`(mockDatabase[currentIndex].value.toDouble()))
+//                    }
+//                }
+//            }
+//        }
+//
+//        // Artificial delay.
+//        delay(1)
+//        assertThat(heartRateIndex.get(), `is`(expectedHeartRateDataPoints.size))
+//    }
 
 //    @Test
 //    fun `repository emits availability data in order received`() = runTest {
