@@ -93,20 +93,18 @@ class InstrumentedRepositoryTest {
     @Test
     fun `repository emits heart rate data points when received`() = runTest {
         // TODO: Flaky.
-        val expectedHeartRateDataPoints = listOfHeartRateDataPoints()
+        val mockHeartRateDataPoint = listOfHeartRateDataPoints()[0]
 
         val heartRateHistory = mutableListOf<HeartRateDataPoint>()
-        val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
-            sut.collectHeartRateFromHeartRateService(sampler = CustomSampler(intervalInMs = 0)).toList(heartRateHistory)
+        val collectJob = launch {
+            sut.collectHeartRateFromHeartRateService(sampler = CustomSampler(intervalInMs = 0, initialIntervalInMs = 0)).take(3).toList(heartRateHistory)
         }
 
-        for (heartRateDataPoint in expectedHeartRateDataPoints) {
-            heartRateService.mockHeartRateSample = heartRateDataPoint
+        for (heartRateDataPoint in 1..100) {
+            delay(1)
+            heartRateService.mockHeartRateSample = mockHeartRateDataPoint
             heartRateService.emitHeartRateDataPoint()
         }
-
-        runCurrent()
-        advanceTimeBy(1)
 
         collectJob.cancel()
 
@@ -127,9 +125,6 @@ class InstrumentedRepositoryTest {
             heartRateService.emitAvailability()
         }
 
-        runCurrent()
-        advanceTimeBy(1)
-
         collectJob.cancel()
 
         assertThat(availabilityHistory.size, `is`(expectedAvailabilities.size))
@@ -142,7 +137,7 @@ class InstrumentedRepositoryTest {
         val mockHeartRateDataPoint = listOfHeartRateDataPoints()[0]
 
         val sampleRateFromHeart = 500L
-        val sampleRateForDatabaseInsertion = 1000L
+        val sampleRateForDatabaseInsertion = 950L
         val initialSampleTimeForDatabaseInsertion = 500L
         val sampler = CustomSampler(sampleRateForDatabaseInsertion, initialSampleTimeForDatabaseInsertion)
 
