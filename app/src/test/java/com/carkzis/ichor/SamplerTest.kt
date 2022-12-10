@@ -101,7 +101,7 @@ internal class SamplerTest {
     fun `sampler throws exception if repeated interval provided negative value`(): Unit = runBlocking {
         val counter = AtomicInteger(0)
         val intervalInMs = -100L
-        val initialIntervalInMs = 0L
+        val initialIntervalInMs = 1L
         val intervals = 10
         sut = CustomSampler(intervalInMs, initialIntervalInMs)
 

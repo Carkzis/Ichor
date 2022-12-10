@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert
 import org.hamcrest.MatcherAssert.assertThat
@@ -18,6 +20,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.atomic.AtomicInteger
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -85,5 +88,28 @@ class InstrumentedRepositoryTest {
         assertThat(actualNewSamplingPreference, `is`(expectedNewSamplingSpeed))
         assertThat(samplingSpeedPreferenceHistory.size, `is`(2))
     }
+
+    @Test
+    fun `repository emits heart rate data points when received`() = runTest {
+        val expectedHeartRateDataPoints = listOfHeartRateDataPoints()
+
+        val heartRateHistory = mutableListOf<HeartRateDataPoint>()
+        val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
+            sut.collectHeartRateFromHeartRateService(sampler = CustomSampler(intervalInMs = 0)).toList(heartRateHistory)
+        }
+
+        for (heartRateDataPoint in expectedHeartRateDataPoints) {
+            heartRateService.mockHeartRateSample = heartRateDataPoint
+            heartRateService.emitHeartRateDataPoint()
+        }
+
+        runCurrent()
+        advanceTimeBy(1)
+
+        collectJob.cancel()
+
+        assertThat(heartRateHistory.size, `is`(3))
+    }
+
 
 }
