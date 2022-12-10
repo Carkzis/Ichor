@@ -24,60 +24,60 @@ class RepositoryTest {
         sut = null
     }
 
-    @Test
-    fun `repository emits heart rate data points when received`() = runTest {
-        val expectedHeartRateDataPoints = listOfHeartRateMeasureData()
+//    @Test
+//    fun `repository emits heart rate data points when received`() = runTest {
+//        val expectedHeartRateDataPoints = listOfHeartRateMeasureData()
+//
+//        sut = FakeRepository().apply {
+//            mockHeartRateSample = expectedHeartRateDataPoints
+//        }
+//
+//        val heartRateEmissionCounter = AtomicInteger(0)
+//
+//        sut?.run {
+//            collectHeartRateFromHeartRateService(sampler = CustomSampler(intervalInMs = 0)).take(3).collect {
+//                val actualValue = it.value.asDouble()
+//                val expectedDataPoints =
+//                    expectedHeartRateDataPoints[heartRateEmissionCounter.get()]
+//                            as MeasureClientData.HeartRateDataPoints
+//                val expectedValue = expectedDataPoints.dataPoints.last().value.asDouble()
+//                assertThat(actualValue, `is`(expectedValue))
+//                heartRateEmissionCounter.incrementAndGet()
+//            }
+//        }
+//
+//        assertThat(heartRateEmissionCounter.get(), `is`(3))
+//    }
 
-        sut = FakeRepository().apply {
-            mockHeartRateSample = expectedHeartRateDataPoints
-        }
-
-        val heartRateEmissionCounter = AtomicInteger(0)
-
-        sut?.run {
-            collectHeartRateFromHeartRateService(sampler = CustomSampler(intervalInMs = 0)).take(3).collect {
-                val actualValue = it.value.asDouble()
-                val expectedDataPoints =
-                    expectedHeartRateDataPoints[heartRateEmissionCounter.get()]
-                            as MeasureClientData.HeartRateDataPoints
-                val expectedValue = expectedDataPoints.dataPoints.last().value.asDouble()
-                assertThat(actualValue, `is`(expectedValue))
-                heartRateEmissionCounter.incrementAndGet()
-            }
-        }
-
-        assertThat(heartRateEmissionCounter.get(), `is`(3))
-    }
-
-    @Test
-    fun `repository inserts latest heart rate data into database at given interval`() = runTest {
-        val expectedHeartRateDataPoints = listOfHeartRateMeasureData()
-        val mockDatabase = mutableListOf<LocalHeartRate>()
-
-        sut = FakeRepository(mockDatabase).apply {
-            mockHeartRateSample = expectedHeartRateDataPoints
-            sampleRateFromHeart = 500L
-        }
-
-        val heartRateEmissionCounter = AtomicInteger(0)
-        val sampleRateForDatabaseInsertion = 1000L
-        val initialSampleTimeForDatabaseInsertion = 1000L
-        val sampler = CustomSampler(sampleRateForDatabaseInsertion, initialSampleTimeForDatabaseInsertion)
-
-        launch {
-            sut?.run {
-                collectHeartRateFromHeartRateService(sampler).take(3).collect {
-                    heartRateEmissionCounter.incrementAndGet()
-                }
-            }
-        }
-
-        runCurrent()
-        advanceTimeBy(1501)
-
-        assertThat(mockDatabase.size, `is`(1))
-        assertThat(heartRateEmissionCounter.get(), `is`(3))
-    }
+//    @Test
+//    fun `repository inserts latest heart rate data into database at given interval`() = runTest {
+//        val expectedHeartRateDataPoints = listOfHeartRateMeasureData()
+//        val mockDatabase = mutableListOf<LocalHeartRate>()
+//
+//        sut = FakeRepository(mockDatabase).apply {
+//            mockHeartRateSample = expectedHeartRateDataPoints
+//            sampleRateFromHeart = 500L
+//        }
+//
+//        val heartRateEmissionCounter = AtomicInteger(0)
+//        val sampleRateForDatabaseInsertion = 1000L
+//        val initialSampleTimeForDatabaseInsertion = 1000L
+//        val sampler = CustomSampler(sampleRateForDatabaseInsertion, initialSampleTimeForDatabaseInsertion)
+//
+//        launch {
+//            sut?.run {
+//                collectHeartRateFromHeartRateService(sampler).take(3).collect {
+//                    heartRateEmissionCounter.incrementAndGet()
+//                }
+//            }
+//        }
+//
+//        runCurrent()
+//        advanceTimeBy(1501)
+//
+//        assertThat(mockDatabase.size, `is`(1))
+//        assertThat(heartRateEmissionCounter.get(), `is`(3))
+//    }
 
     @Test
     fun `repository emits data from local database`() = runTest {
@@ -106,29 +106,29 @@ class RepositoryTest {
         assertThat(heartRateIndex.get(), `is`(expectedHeartRateDataPoints.size))
     }
 
-    @Test
-    fun `repository emits availability data in order received`() = runTest {
-        val expectedAvailabilities = listOfAvailabilities()
-        val expectedAvailabilitiesAsMeasureData = listOfAvailabilityMeasureData()
-
-        sut = FakeRepository().apply {
-            mockAvailabilities = expectedAvailabilitiesAsMeasureData
-        }
-
-        val emittedAvailabilities : MutableList<Availability> = mutableListOf()
-
-        launch {
-            sut?.run {
-                collectAvailabilityFromHeartRateService().take(expectedAvailabilities.size).collect {
-                    emittedAvailabilities.add(it)
-                }
-            }
-        }
-
-        // Artificial delay.
-        delay(1)
-        assertThat(expectedAvailabilities, `is`(emittedAvailabilities))
-    }
+//    @Test
+//    fun `repository emits availability data in order received`() = runTest {
+//        val expectedAvailabilities = listOfAvailabilities()
+//        val expectedAvailabilitiesAsMeasureData = listOfAvailabilityMeasureData()
+//
+//        sut = FakeRepository().apply {
+//            mockAvailabilities = expectedAvailabilitiesAsMeasureData
+//        }
+//
+//        val emittedAvailabilities : MutableList<Availability> = mutableListOf()
+//
+//        launch {
+//            sut?.run {
+//                collectAvailabilityFromHeartRateService().take(expectedAvailabilities.size).collect {
+//                    emittedAvailabilities.add(it)
+//                }
+//            }
+//        }
+//
+//        // Artificial delay.
+//        delay(1)
+//        assertThat(expectedAvailabilities, `is`(emittedAvailabilities))
+//    }
 
     @Test
     fun `repository deletes a selected existing item from database`() = runTest {
@@ -211,45 +211,45 @@ class RepositoryTest {
         delay(1)
     }
 
-    @Test
-    fun `repository obtains default sampling speed from datastore`() = runTest {
-        sut = FakeRepository()
-        var samplingSpeed: SamplingSpeed? = null
-
-        launch {
-            sut?.run {
-                collectSamplingPreference().take(1).collect {
-                    samplingSpeed = it
-                }
-            }
-        }
-        delay(1)
-
-        val expectedSamplingSpeed = SamplingSpeed.DEFAULT
-        assertThat(samplingSpeed, `is`(expectedSamplingSpeed))
-    }
-
-    @Test
-    fun `repository obtains new sampling speed when provided to datastore`() = runTest {
-        sut = FakeRepository()
-        var samplingSpeed: SamplingSpeed? = null
-
-        val originalSamplingSpeed = SamplingSpeed.DEFAULT
-        val expectedSamplingSpeed = SamplingSpeed.SLOW
-        launch {
-            sut?.run {
-                collectSamplingPreference().collect {
-                    samplingSpeed = it
-                }
-                assertThat(samplingSpeed, `is`(originalSamplingSpeed))
-                sut?.changeSamplingPreference(expectedSamplingSpeed)
-                collectSamplingPreference().collect {
-                    samplingSpeed = it
-                }
-            }
-        }
-
-        delay(1)
-        assertThat(samplingSpeed, `is`(expectedSamplingSpeed))
-    }
+//    @Test
+//    fun `repository obtains default sampling speed from datastore`() = runTest {
+//        sut = FakeRepository()
+//        var samplingSpeed: SamplingSpeed? = null
+//
+//        launch {
+//            sut?.run {
+//                collectSamplingPreference().take(1).collect {
+//                    samplingSpeed = it
+//                }
+//            }
+//        }
+//        delay(1)
+//
+//        val expectedSamplingSpeed = SamplingSpeed.DEFAULT
+//        assertThat(samplingSpeed, `is`(expectedSamplingSpeed))
+//    }
+//
+//    @Test
+//    fun `repository obtains new sampling speed when provided to datastore`() = runTest {
+//        sut = FakeRepository()
+//        var samplingSpeed: SamplingSpeed? = null
+//
+//        val originalSamplingSpeed = SamplingSpeed.DEFAULT
+//        val expectedSamplingSpeed = SamplingSpeed.SLOW
+//        launch {
+//            sut?.run {
+//                collectSamplingPreference().collect {
+//                    samplingSpeed = it
+//                }
+//                assertThat(samplingSpeed, `is`(originalSamplingSpeed))
+//                sut?.changeSamplingPreference(expectedSamplingSpeed)
+//                collectSamplingPreference().collect {
+//                    samplingSpeed = it
+//                }
+//            }
+//        }
+//
+//        delay(1)
+//        assertThat(samplingSpeed, `is`(expectedSamplingSpeed))
+//    }
 }

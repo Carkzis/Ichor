@@ -2,11 +2,16 @@ package com.carkzis.ichor
 
 import androidx.health.services.client.data.Availability
 import androidx.room.Room
+import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
@@ -25,7 +30,7 @@ class InstrumentedRepositoryTest {
     private lateinit var database: IchorDatabase
     private lateinit var samplingPreferenceDataStore: FakeSamplingPreferenceDataStore
     private lateinit var heartRateService: FakeHeartRateService
-    private lateinit var sut: Repository
+    private lateinit var sut: DefaultRepositoryImpl
 
     @Before
     fun setUp() {
@@ -87,6 +92,7 @@ class InstrumentedRepositoryTest {
 
     @Test
     fun `repository emits heart rate data points when received`() = runTest {
+        // TODO: Flaky.
         val expectedHeartRateDataPoints = listOfHeartRateDataPoints()
 
         val heartRateHistory = mutableListOf<HeartRateDataPoint>()
@@ -128,6 +134,39 @@ class InstrumentedRepositoryTest {
 
         assertThat(availabilityHistory.size, `is`(expectedAvailabilities.size))
         assertThat(availabilityHistory, `is`(expectedAvailabilities))
+    }
+
+    @Test
+    fun `repository inserts latest heart rate data into database at given interval`() = runBlocking {
+        // NOTE: Using runBlocking, so that items are inserted into the database as expected.
+        val mockHeartRateDataPoint = listOfHeartRateDataPoints()[0]
+
+        val sampleRateFromHeart = 500L
+        val sampleRateForDatabaseInsertion = 1000L
+        val initialSampleTimeForDatabaseInsertion = 500L
+        val sampler = CustomSampler(sampleRateForDatabaseInsertion, initialSampleTimeForDatabaseInsertion)
+
+        val heartRateHistory = mutableListOf<HeartRateDataPoint>()
+        val collectJob = launch {
+            sut.collectHeartRateFromHeartRateService(sampler = sampler).toList(heartRateHistory)
+        }
+
+        val samples = (sampleRateForDatabaseInsertion + initialSampleTimeForDatabaseInsertion) / sampleRateFromHeart
+        for (sampleEmission in 1..samples) {
+            delay(sampleRateFromHeart)
+            heartRateService.mockHeartRateSample = mockHeartRateDataPoint
+            heartRateService.emitHeartRateDataPoint()
+        }
+
+        collectJob.cancel()
+
+        val heartRates = database
+            .heartRateDao()
+            .getAllLocalHeartRates()
+            .take(1)
+            .toList()[0]
+
+        assertThat(heartRates.size, `is`(1))
     }
 
 }
