@@ -5,23 +5,20 @@ import androidx.room.Room
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.runCurrent
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import timber.log.Timber
+import java.util.concurrent.atomic.AtomicInteger
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -92,7 +89,6 @@ class InstrumentedRepositoryTest {
 
     @Test
     fun `repository emits heart rate data points when received`() = runTest {
-        // TODO: Flaky.
         val mockHeartRateDataPoint = listOfHeartRateDataPoints()[0]
 
         val heartRateHistory = mutableListOf<HeartRateDataPoint>()
@@ -162,6 +158,28 @@ class InstrumentedRepositoryTest {
             .toList()[0]
 
         assertThat(heartRates.size, `is`(1))
+    }
+
+    @Test
+    fun `repository emits data from local database`() = runTest {
+        val expectedHeartRateDataPoints = listOfHeartRateDataAsMockDatabase()
+
+        for (heartRateDataPoint in expectedHeartRateDataPoints) {
+            database.heartRateDao().insertHeartRate(heartRate = heartRateDataPoint)
+        }
+
+        val heartRateHistory = mutableListOf<List<DomainHeartRate>>()
+        sut.collectHeartRatesFromDatabase().take(1).toList(heartRateHistory)
+
+        delay(1)
+
+        val latestHeartRateList = heartRateHistory.last()
+        assertThat(latestHeartRateList.size, `is`(expectedHeartRateDataPoints.size))
+
+        heartRateHistory.forEachIndexed { index, heartRateList ->
+            assertThat(heartRateList[index].value, `is`(latestHeartRateList[index].value))
+        }
+
     }
 
 }
