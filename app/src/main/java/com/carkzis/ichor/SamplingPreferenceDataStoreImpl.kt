@@ -8,12 +8,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
 class SamplingPreferenceDataStoreImpl(private val dataStore: DataStore<Preferences>) : SamplingPreferenceDataStore {
-    private val preferencesFlow : Flow<String> = dataStore.data.map {
-        val samplingPreference = it[PreferenceKeys.SAMPLING_PREFERENCE] ?: SamplingSpeed.DEFAULT.toString()
+    private val preferencesFlow : Flow<SamplingSpeed> = dataStore.data.map {
+        val samplingPreference = it[PreferenceKeys.SAMPLING_PREFERENCE]?.let { speedAsString ->
+            SamplingSpeed.forDescriptor(
+                speedAsString
+            )
+        } ?: SamplingSpeed.DEFAULT
         samplingPreference
     }
 
-    override suspend fun collectSamplingPreference(): Flow<String> = preferencesFlow.flowOn(Dispatchers.IO)
+    override suspend fun collectSamplingPreference(): Flow<SamplingSpeed> = preferencesFlow.flowOn(Dispatchers.IO)
 
     override suspend fun changeSamplingPreference(samplingSpeed: SamplingSpeed) {
         dataStore.edit {

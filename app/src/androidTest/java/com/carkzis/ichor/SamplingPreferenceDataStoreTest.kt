@@ -54,27 +54,26 @@ class SamplingPreferenceDataStoreTest {
 
     @Test
     fun `can collect default preference from data store`() = runTest {
-        val expectedDefaultSamplingPreference = SamplingSpeed.DEFAULT.toString()
+        val expectedDefaultSamplingPreference = SamplingSpeed.DEFAULT
         val actualDefaultSamplingPreference = samplingPreferenceDataStore.collectSamplingPreference().take(1).toList()[0]
         assertThat(actualDefaultSamplingPreference, `is`(expectedDefaultSamplingPreference))
     }
 
     @Test
     fun `can collect new preference from data store when changed`() = runTest {
-        val newSamplingSpeed = SamplingSpeed.FAST
-        val expectedNewSamplingPreference = newSamplingSpeed.toString()
+        val expectedNewSamplingSpeed = SamplingSpeed.FAST
 
-        val samplingSpeedPreferenceHistory = mutableListOf<String>()
+        val samplingSpeedPreferenceHistory = mutableListOf<SamplingSpeed>()
         val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
             samplingPreferenceDataStore.collectSamplingPreference().take(2).toList(samplingSpeedPreferenceHistory)
         }
 
-        samplingPreferenceDataStore.changeSamplingPreference(newSamplingSpeed)
+        samplingPreferenceDataStore.changeSamplingPreference(expectedNewSamplingSpeed)
 
         collectJob.cancel()
 
         val actualNewSamplingPreference = samplingSpeedPreferenceHistory.last()
-        assertThat(actualNewSamplingPreference, `is`(expectedNewSamplingPreference))
+        assertThat(actualNewSamplingPreference, `is`(expectedNewSamplingSpeed))
         assertThat(samplingSpeedPreferenceHistory.size, `is`(2))
     }
 
