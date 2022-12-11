@@ -23,7 +23,7 @@ class HeartRateServiceImpl @Inject constructor(healthServicesClient: HealthServi
                 trySendBlocking(MeasureClientData.HeartRateAvailability(availability))
             }
             override fun onData(data: List<DataPoint>) {
-                Timber.e("Attempting to send heart rate data.")
+                Timber.e("Attempting to send heart rate data. $data")
                 trySendBlocking(MeasureClientData.HeartRateDataPoints(data))
             }
         }

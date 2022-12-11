@@ -1,61 +1,57 @@
-@file:OptIn(ExperimentalMaterialApi::class, ExperimentalPermissionsApi::class)
+@file:OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterialApi::class)
 
-package com.carkzis.ichor
+package com.carkzis.ichor.ui
 
 import android.Manifest
-import android.content.Context
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.DismissValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.health.services.client.data.Availability
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.*
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.dialog.Dialog
+import com.carkzis.ichor.*
+import com.carkzis.ichor.R.*
 import com.carkzis.ichor.theme.IchorColorPalette
-import com.carkzis.ichor.theme.IchorTheme
 import com.carkzis.ichor.theme.IchorTypography
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
-@AndroidEntryPoint
-class MainActivity : ComponentActivity() {
-
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val viewModel by viewModels<MainViewModel>()
-
-        setContent {
-            IchorTheme {
-                IchorUI(viewModel = viewModel)
-            }
-        }
-    }
-
-}
-
 @Composable
-fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
+fun IchorBody(modifier: Modifier = Modifier, viewModel: MainViewModel) {
+    /*
+    To allow synthetic providers, use:
+        adb shell am broadcast \
+        -a "whs.USE_SYNTHETIC_PROVIDERS" \
+        com.google.android.wearable.healthservices
+    You can disable them with:
+        adb shell am broadcast \
+        -a "whs.USE_SENSOR_PROVIDERS" \
+        com.google.android.wearable.healthservices
+    For walking, try:
+        adb shell am broadcast \
+        -a "whs.synthetic.user.START_WALKING" \
+        com.google.android.wearable.healthservices
+    There are many other speeds on https://developer.android.com/training/wearables/health-services/synthetic-data.
+    Stop activity with:
+        adb shell am broadcast \
+        -a "whs.synthetic.user.STOP_EXERCISE" \
+        com.google.android.wearable.healthservices
+     */
     // Note: Reset permissions on an emulator using the command "adb shell pm reset-permissions".
 
     // TODO: Look into constant recomposing when opening dialog.
@@ -70,7 +66,7 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
         vignette = { Vignette(vignettePosition = VignettePosition.TopAndBottom) },
         positionIndicator = { PositionIndicator(scalingLazyListState = listState) }
     ) {
-        DisplayUIItems(
+        IchorBodyComponents(
             modifier,
             listState,
             viewModel,
@@ -82,7 +78,7 @@ fun IchorUI(modifier: Modifier = Modifier, viewModel: MainViewModel) {
 }
 
 @Composable
-private fun DisplayUIItems(
+private fun IchorBodyComponents(
     modifier: Modifier,
     listState: ScalingLazyListState,
     viewModel: MainViewModel,
@@ -96,8 +92,8 @@ private fun DisplayUIItems(
         autoCentering = AutoCenteringParams(itemIndex = 0),
         state = listState
     ) {
-        item { DisplayMainIcon() }
-        item { DisplayTitle(modifier = modifier) }
+        item { MainIcon() }
+        item { TitleText(modifier = modifier) }
         item {
             DisplayAvailability(modifier = modifier, state = viewModel.latestAvailability)
         }
@@ -119,27 +115,27 @@ private fun DisplayUIItems(
             }
             item {
                 Row {
-                    DisplaySamplingSpeedChangeButton(viewModel = viewModel, modifier = modifier)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    DisplayDeleteAllButton(viewModel = viewModel, modifier = modifier)
+                    SamplingSpeedChangeButton(viewModel = viewModel, modifier = modifier)
+                    Spacer(modifier = androidx.compose.ui.Modifier.width(8.dp))
+                    DeleteAllButton(viewModel = viewModel, modifier = modifier)
                 }
             }
             items(
                 items = heartRates,
                 key = { it.pk }
             ) { currentHeartRateData ->
-                DisplayHeartRateItem(viewModel, currentHeartRateData, modifier)
+                HeartRateItem(viewModel, currentHeartRateData, modifier)
             }
         } else if (!heartRatePermission.permissionRequested) {
             item { IchorButton(onClick = { heartRatePermission.launchPermissionRequest() }) }
         } else {
-            item { DisplayPermissionsInstructions(modifier) }
+            item { PermissionsInstructions(modifier) }
         }
     }
 }
 
 @Composable
-private fun DisplayPermissionsInstructions(modifier: Modifier) {
+private fun PermissionsInstructions(modifier: Modifier) {
     IchorText(
         modifier = modifier,
         style = IchorTypography.body2,
@@ -148,7 +144,7 @@ private fun DisplayPermissionsInstructions(modifier: Modifier) {
 }
 
 @Composable
-private fun DisplayDeleteAllButton(
+private fun DeleteAllButton(
     viewModel: MainViewModel,
     modifier: Modifier
 ) {
@@ -180,11 +176,17 @@ private fun DisplayDeleteAllButton(
                     text = "Delete all your heartbeats? This cannot be undone."
                 )
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    IchorButton(iconImage = Icons.Rounded.Done, modifier = Modifier.size(32.dp)) {
+                    IchorButton(
+                        iconImage = Icons.Rounded.Done,
+                        modifier = androidx.compose.ui.Modifier.size(32.dp)
+                    ) {
                         viewModel.deleteAllHeartRates()
                         deleteAlertRequired = false
                     }
-                    IchorButton(iconImage = Icons.Rounded.Close, modifier = Modifier.size(32.dp)) {
+                    IchorButton(
+                        iconImage = Icons.Rounded.Close,
+                        modifier = androidx.compose.ui.Modifier.size(32.dp)
+                    ) {
                         deleteAlertRequired = false
                     }
                 }
@@ -194,7 +196,7 @@ private fun DisplayDeleteAllButton(
 }
 
 @Composable
-fun DisplaySamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
+fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
     var samplingSpeedAlertRequired by remember { mutableStateOf(false) }
     val currentSamplingSpeed by viewModel.currentSamplingSpeed.collectAsState()
 
@@ -225,10 +227,13 @@ fun DisplaySamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifie
                     textAlign = TextAlign.Center,
                     text = "Change sampling speed?"
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = androidx.compose.ui.Modifier.height(8.dp))
                 Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     Row {
-                        IchorButton(iconImage = Icons.Rounded.DirectionsWalk, modifier = Modifier.size(32.dp)) {
+                        IchorButton(
+                            iconImage = Icons.Rounded.DirectionsWalk,
+                            modifier = androidx.compose.ui.Modifier.size(32.dp)
+                        ) {
                             viewModel.changeSampleRate(SamplingSpeed.SLOW)
                             samplingSpeedAlertRequired = false
                         }
@@ -237,7 +242,10 @@ fun DisplaySamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifie
                         }
                     }
                     Row {
-                        IchorButton(iconImage = Icons.Rounded.DirectionsRun, modifier = Modifier.size(32.dp)) {
+                        IchorButton(
+                            iconImage = Icons.Rounded.DirectionsRun,
+                            modifier = androidx.compose.ui.Modifier.size(32.dp)
+                        ) {
                             viewModel.changeSampleRate(SamplingSpeed.DEFAULT)
                             samplingSpeedAlertRequired = false
                         }
@@ -246,7 +254,10 @@ fun DisplaySamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifie
                         }
                     }
                     Row {
-                        IchorButton(iconImage = Icons.Rounded.DirectionsBike, modifier = Modifier.size(32.dp)) {
+                        IchorButton(
+                            iconImage = Icons.Rounded.DirectionsBike,
+                            modifier = androidx.compose.ui.Modifier.size(32.dp)
+                        ) {
                             viewModel.changeSampleRate(SamplingSpeed.FAST)
                             samplingSpeedAlertRequired = false
                         }
@@ -261,7 +272,7 @@ fun DisplaySamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifie
 }
 
 @Composable
-private fun DisplayHeartRateItem(
+private fun HeartRateItem(
     viewModel: MainViewModel,
     currentHeartRateData: DomainHeartRate,
     modifier: Modifier
@@ -300,10 +311,16 @@ private fun DisplayHeartRateItem(
                     textAlign = TextAlign.Center
                 )
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    IchorButton(iconImage = Icons.Rounded.Done, modifier = Modifier.size(32.dp)) {
+                    IchorButton(
+                        iconImage = Icons.Rounded.Done,
+                        modifier = androidx.compose.ui.Modifier.size(32.dp)
+                    ) {
                         viewModel.deleteHeartRate(currentHeartRateData.pk)
                     }
-                    IchorButton(iconImage = Icons.Rounded.Close, modifier = Modifier.size(32.dp)) {
+                    IchorButton(
+                        iconImage = Icons.Rounded.Close,
+                        modifier = androidx.compose.ui.Modifier.size(32.dp)
+                    ) {
                         deleteAlertRequired = false
                     }
                 }
@@ -338,7 +355,7 @@ private fun initiateDataCollectionOnce(
 }
 
 @Composable
-fun DisplayMainIcon() {
+fun MainIcon() {
     Icon(
         imageVector = Icons.Rounded.MonitorHeart,
         contentDescription = "Main heartbeat icon for app.",
@@ -349,18 +366,17 @@ fun DisplayMainIcon() {
 @Composable
 fun DeleteHeartbeatIcon() {
     Icon(
-        modifier = Modifier.size(48.dp),
+        modifier = androidx.compose.ui.Modifier.size(48.dp),
         imageVector = Icons.Rounded.Delete,
         contentDescription = "Delete heartbeat icon for app.",
         tint = IchorColorPalette.secondary
     )
 }
 
-
 @Composable
 fun ChangeSamplingSpeedIcon() {
     Icon(
-        modifier = Modifier.size(48.dp),
+        modifier = androidx.compose.ui.Modifier.size(48.dp),
         imageVector = Icons.Rounded.Speed,
         contentDescription = "Change heartbeat sampling speed.",
         tint = IchorColorPalette.secondary
@@ -370,7 +386,7 @@ fun ChangeSamplingSpeedIcon() {
 @Composable
 fun TickIcon() {
     Icon(
-        modifier = Modifier.size(32.dp),
+        modifier = androidx.compose.ui.Modifier.size(32.dp),
         imageVector = Icons.Rounded.Done,
         contentDescription = "Affirmation icon.",
         tint = IchorColorPalette.secondary
@@ -378,11 +394,11 @@ fun TickIcon() {
 }
 
 @Composable
-fun DisplayTitle(modifier: Modifier) {
+fun TitleText(modifier: Modifier) {
     IchorText(
         modifier = modifier,
         style = IchorTypography.title1,
-        stringResourceId = R.string.app_name
+        stringResourceId = string.app_name
     )
 }
 
@@ -405,7 +421,6 @@ fun DisplayLatestHeartRate(modifier: Modifier, state: StateFlow<Double>) {
     )
 }
 
-
 @Preview(
     widthDp = WEAR_PREVIEW_DEVICE_WIDTH_DP,
     heightDp = WEAR_PREVIEW_DEVICE_HEIGHT_DP,
@@ -415,6 +430,6 @@ fun DisplayLatestHeartRate(modifier: Modifier, state: StateFlow<Double>) {
     showBackground = WEAR_PREVIEW_SHOW_BACKGROUND
 )
 @Composable
-fun IchorUIPreview() {
-    IchorUI(viewModel = viewModel())
+fun IchorScreenPreview() {
+    IchorBody(viewModel = viewModel())
 }
