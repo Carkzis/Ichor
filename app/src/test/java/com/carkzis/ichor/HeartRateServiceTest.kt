@@ -22,37 +22,37 @@ class HeartRateServiceTest {
         sut = null
     }
 
-    @Test
-    fun `heart rate service emits heart rate data points in given order`() = runBlocking {
-        val expectedHeartRateDataPoints = listOfHeartRateDataPoints()
-
-        sut = DummyHeartRateService().apply {
-            mockHeartRateSample = expectedHeartRateDataPoints
-        }
-
-        val heartRateEmissionCounter = AtomicInteger(0)
-        val availabilityCounter = AtomicInteger(0)
-
-        sut?.run {
-            retrieveHeartRate().collect {
-                when (it) {
-                    is MeasureClientData.HeartRateDataPoints -> {
-                        val currentIndex = heartRateEmissionCounter.getAndIncrement()
-                        val expectedHeartRateSample = expectedHeartRateDataPoints[currentIndex]
-                        val actualHeartRateSample = it.dataPoints
-                        assertThat(actualHeartRateSample, `is`(expectedHeartRateSample))
-                    }
-                    is MeasureClientData.HeartRateAvailability -> {
-                        availabilityCounter.incrementAndGet()
-                    }
-                }
-            }
-        }
-
-        assertThat(heartRateEmissionCounter.get(), `is`(expectedHeartRateDataPoints.size))
-        assertThat(availabilityCounter.get(), `is`(0))
-
-    }
+//    @Test
+//    fun `heart rate service emits heart rate data points in given order`() = runBlocking {
+//        val expectedHeartRateDataPoints = listOfHeartRateDataPoints()
+//
+//        sut = DummyHeartRateService().apply {
+//            mockHeartRateSample = expectedHeartRateDataPoints
+//        }
+//
+//        val heartRateEmissionCounter = AtomicInteger(0)
+//        val availabilityCounter = AtomicInteger(0)
+//
+//        sut?.run {
+//            retrieveHeartRate().collect {
+//                when (it) {
+//                    is MeasureClientData.HeartRateDataPoints -> {
+//                        val currentIndex = heartRateEmissionCounter.getAndIncrement()
+//                        val expectedHeartRateSample = expectedHeartRateDataPoints[currentIndex]
+//                        val actualHeartRateSample = it.dataPoints
+//                        assertThat(actualHeartRateSample, `is`(expectedHeartRateSample))
+//                    }
+//                    is MeasureClientData.HeartRateAvailability -> {
+//                        availabilityCounter.incrementAndGet()
+//                    }
+//                }
+//            }
+//        }
+//
+//        assertThat(heartRateEmissionCounter.get(), `is`(expectedHeartRateDataPoints.size))
+//        assertThat(availabilityCounter.get(), `is`(0))
+//
+//    }
 
     @Test
     fun `heart rate service emits availability in given order`() = runBlocking {
