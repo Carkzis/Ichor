@@ -41,7 +41,7 @@ open class HeartRateServiceImpl @Inject constructor(
         awaitClose {
             heartRateMeasureClient.unregisterCallback(
                 DataType.HEART_RATE_BPM,
-                heartRateCallbackProxy?.retrieveMeasureCallback(this@HeartRateServiceImpl) as MeasureCallback
+                heartRateCallbackProxy.retrieveMeasureCallback(this@HeartRateServiceImpl) as MeasureCallback
             )
         }
     }
@@ -55,9 +55,9 @@ interface HeartRateCallbackProxy {
     }
 }
 
-class HeartRateCallbackProxyImpl(
+class HeartRateCallbackProxyImpl : HeartRateCallbackProxy {
     private var callback: MeasureCallback? = null
-) : HeartRateCallbackProxy {
+
     override fun invokeOnAvailabilityChanged(dataType: DataType, availability: Availability) {
         callback?.onAvailabilityChanged(dataType, availability)
     }

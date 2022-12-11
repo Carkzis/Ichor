@@ -1,5 +1,8 @@
 package com.carkzis.ichor
 
+import android.content.Context
+import androidx.health.services.client.HealthServices
+import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
@@ -13,12 +16,11 @@ class HeartRateServiceTest {
 
     private var sut: HeartRateService? = null
 
+
     @After
     fun tearDown() {
         sut = null
     }
-
-    // TODO: Can use a real HeartRateService; wrap the HealthServicesClient!
 
     @Test
     fun `heart rate service emits heart rate data points in given order`() = runBlocking {
