@@ -18,6 +18,8 @@ class HeartRateServiceTest {
         sut = null
     }
 
+    // TODO: Can use a real HeartRateService; wrap the HealthServicesClient!
+
     @Test
     fun `heart rate service emits heart rate data points in given order`() = runBlocking {
         val expectedHeartRateDataPoints = listOfHeartRateDataPoints()

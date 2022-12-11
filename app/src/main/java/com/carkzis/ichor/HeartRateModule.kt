@@ -21,6 +21,12 @@ object HeartRateModule {
 
     @Singleton
     @Provides
+    fun provideHeartRateCallback() : HeartRateCallbackProxy? {
+        return null
+    }
+
+    @Singleton
+    @Provides
     fun provideHeartRateService(healthServicesClient: HealthServicesClient): HeartRateService {
         return HeartRateServiceImpl(healthServicesClient)
     }
