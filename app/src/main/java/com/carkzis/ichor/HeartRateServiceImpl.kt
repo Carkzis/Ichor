@@ -12,10 +12,12 @@ import kotlinx.coroutines.flow.callbackFlow
 import timber.log.Timber
 import javax.inject.Inject
 
-open class HeartRateServiceImpl @Inject constructor(healthServicesClient: HealthServicesClient, heartRateCallbackProxy: HeartRateCallbackProxy? = null) : HeartRateService {
+open class HeartRateServiceImpl @Inject constructor(
+    healthServicesClient: HealthServicesClient,
+    private var heartRateCallbackProxy: HeartRateCallbackProxy? = null
+) : HeartRateService {
 
     private val heartRateMeasureClient = healthServicesClient.measureClient
-    private var heartRateCallbackProxy : HeartRateCallbackProxy? = heartRateCallbackProxy
 
     override fun retrieveHeartRate(): Flow<MeasureClientData> = callbackFlow {
         Timber.e("Entered retrieveHeartRate.")
@@ -23,19 +25,23 @@ open class HeartRateServiceImpl @Inject constructor(healthServicesClient: Health
             override fun onAvailabilityChanged(dataType: DataType, availability: Availability) {
                 trySendBlocking(MeasureClientData.HeartRateAvailability(availability))
             }
+
             override fun onData(data: List<DataPoint>) {
                 Timber.e("Attempting to send heart rate data. $data")
                 trySendBlocking(MeasureClientData.HeartRateDataPoints(data))
             }
         }
-        heartRateCallbackProxy = HeartRateCallbackImpl(callback = heartRateCallback)
+        heartRateCallbackProxy =
+            HeartRateCallbackImpl(callback = heartRateCallback, this@HeartRateServiceImpl)
 
-        heartRateMeasureClient.registerCallback(DataType.HEART_RATE_BPM,
+        heartRateMeasureClient.registerCallback(
+            DataType.HEART_RATE_BPM,
             heartRateCallbackProxy?.retrieveMeasureCallback(this@HeartRateServiceImpl) as MeasureCallback
         )
 
         awaitClose {
-            heartRateMeasureClient.unregisterCallback(DataType.HEART_RATE_BPM,
+            heartRateMeasureClient.unregisterCallback(
+                DataType.HEART_RATE_BPM,
                 heartRateCallbackProxy?.retrieveMeasureCallback(this@HeartRateServiceImpl) as MeasureCallback
             )
         }
@@ -48,15 +54,20 @@ interface HeartRateCallbackProxy {
     fun retrieveMeasureCallback(heartRateService: HeartRateService): MeasureCallback?
 }
 
-class HeartRateCallbackImpl(private val callback: MeasureCallback) : HeartRateCallbackProxy {
+class HeartRateCallbackImpl(
+    private val callback: MeasureCallback,
+    private val heartRateServiceForCallback: HeartRateServiceImpl
+) : HeartRateCallbackProxy {
     override fun invokeOnAvailabilityChanged(dataType: DataType, availability: Availability) {
         callback.onAvailabilityChanged(dataType, availability)
     }
+
     override fun invokeOnData(data: List<DataPoint>) {
         callback.onData(data)
     }
+
     override fun retrieveMeasureCallback(heartRateService: HeartRateService): MeasureCallback? {
-        return if (heartRateService is HeartRateServiceImpl) {
+        return if (heartRateService == heartRateServiceForCallback) {
             callback
         } else {
             null
