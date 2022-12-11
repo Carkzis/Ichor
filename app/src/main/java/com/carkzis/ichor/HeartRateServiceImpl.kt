@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 open class HeartRateServiceImpl @Inject constructor(
     healthServicesClient: HealthServicesClient,
-    private var heartRateCallbackProxy: HeartRateCallbackProxy? = null
+    private val heartRateCallbackProxy: HeartRateCallbackProxy
 ) : HeartRateService {
 
     private val heartRateMeasureClient = healthServicesClient.measureClient
@@ -31,12 +31,11 @@ open class HeartRateServiceImpl @Inject constructor(
                 trySendBlocking(MeasureClientData.HeartRateDataPoints(data))
             }
         }
-        heartRateCallbackProxy =
-            HeartRateCallbackImpl(callback = heartRateCallback, this@HeartRateServiceImpl)
+        heartRateCallbackProxy.addCallback(heartRateCallback)
 
         heartRateMeasureClient.registerCallback(
             DataType.HEART_RATE_BPM,
-            heartRateCallbackProxy?.retrieveMeasureCallback(this@HeartRateServiceImpl) as MeasureCallback
+            heartRateCallbackProxy.retrieveMeasureCallback(this@HeartRateServiceImpl) as MeasureCallback
         )
 
         awaitClose {
@@ -52,26 +51,31 @@ interface HeartRateCallbackProxy {
     fun invokeOnAvailabilityChanged(dataType: DataType, availability: Availability)
     fun invokeOnData(data: List<DataPoint>)
     fun retrieveMeasureCallback(heartRateService: HeartRateService): MeasureCallback?
+    fun addCallback(providedCallback: MeasureCallback) {
+    }
 }
 
-class HeartRateCallbackImpl(
-    private val callback: MeasureCallback,
-    private val heartRateServiceForCallback: HeartRateServiceImpl
+class HeartRateCallbackProxyImpl(
+    private var callback: MeasureCallback? = null
 ) : HeartRateCallbackProxy {
     override fun invokeOnAvailabilityChanged(dataType: DataType, availability: Availability) {
-        callback.onAvailabilityChanged(dataType, availability)
+        callback?.onAvailabilityChanged(dataType, availability)
     }
 
     override fun invokeOnData(data: List<DataPoint>) {
-        callback.onData(data)
+        callback?.onData(data)
     }
 
     override fun retrieveMeasureCallback(heartRateService: HeartRateService): MeasureCallback? {
-        return if (heartRateService == heartRateServiceForCallback) {
+        return if (heartRateService is HeartRateServiceImpl) {
             callback
         } else {
             null
         }
     }
 
+    override fun addCallback(providedCallback: MeasureCallback) {
+        callback = providedCallback
+    }
 }
+
