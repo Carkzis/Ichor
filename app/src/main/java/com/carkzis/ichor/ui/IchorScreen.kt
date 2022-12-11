@@ -32,7 +32,7 @@ import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 @Composable
-fun IchorBody(modifier: Modifier = Modifier, viewModel: MainViewModel) {
+fun IchorBody(modifier: Modifier = Modifier, viewModel: MainViewModel, onClickAbout: () -> Unit) {
     /*
     To allow synthetic providers, use:
         adb shell am broadcast \
@@ -139,7 +139,7 @@ private fun PermissionsInstructions(modifier: Modifier) {
     IchorText(
         modifier = modifier,
         style = IchorTypography.body2,
-        stringResourceId = R.string.app_permission_was_denied
+        stringResourceId = string.app_permission_was_denied
     )
 }
 
@@ -431,5 +431,5 @@ fun DisplayLatestHeartRate(modifier: Modifier, state: StateFlow<Double>) {
 )
 @Composable
 fun IchorScreenPreview() {
-    IchorBody(viewModel = viewModel())
+    IchorBody(viewModel = viewModel()) {}
 }
