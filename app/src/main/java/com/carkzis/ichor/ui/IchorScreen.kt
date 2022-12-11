@@ -117,6 +117,8 @@ private fun IchorBodyComponents(
                 Row {
                     SamplingSpeedChangeButton(viewModel = viewModel, modifier = modifier)
                     Spacer(modifier = androidx.compose.ui.Modifier.width(8.dp))
+                    AboutButton(viewModel = viewModel, modifier = modifier)
+                    Spacer(modifier = androidx.compose.ui.Modifier.width(8.dp))
                     DeleteAllButton(viewModel = viewModel, modifier = modifier)
                 }
             }
@@ -178,14 +180,14 @@ private fun DeleteAllButton(
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     IchorButton(
                         iconImage = Icons.Rounded.Done,
-                        modifier = androidx.compose.ui.Modifier.size(32.dp)
+                        modifier = Modifier.size(32.dp)
                     ) {
                         viewModel.deleteAllHeartRates()
                         deleteAlertRequired = false
                     }
                     IchorButton(
                         iconImage = Icons.Rounded.Close,
-                        modifier = androidx.compose.ui.Modifier.size(32.dp)
+                        modifier = Modifier.size(32.dp)
                     ) {
                         deleteAlertRequired = false
                     }
@@ -232,7 +234,7 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
                     Row {
                         IchorButton(
                             iconImage = Icons.Rounded.DirectionsWalk,
-                            modifier = androidx.compose.ui.Modifier.size(32.dp)
+                            modifier = Modifier.size(32.dp)
                         ) {
                             viewModel.changeSampleRate(SamplingSpeed.SLOW)
                             samplingSpeedAlertRequired = false
@@ -244,7 +246,7 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
                     Row {
                         IchorButton(
                             iconImage = Icons.Rounded.DirectionsRun,
-                            modifier = androidx.compose.ui.Modifier.size(32.dp)
+                            modifier = Modifier.size(32.dp)
                         ) {
                             viewModel.changeSampleRate(SamplingSpeed.DEFAULT)
                             samplingSpeedAlertRequired = false
@@ -256,7 +258,7 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
                     Row {
                         IchorButton(
                             iconImage = Icons.Rounded.DirectionsBike,
-                            modifier = androidx.compose.ui.Modifier.size(32.dp)
+                            modifier = Modifier.size(32.dp)
                         ) {
                             viewModel.changeSampleRate(SamplingSpeed.FAST)
                             samplingSpeedAlertRequired = false
@@ -268,6 +270,17 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
                 }
             }
         }
+    )
+}
+
+@Composable
+private fun AboutButton(viewModel: MainViewModel, modifier: Modifier) {
+    IchorButton(
+        modifier = modifier
+            .size(24.dp)
+            .padding(all = 0.dp),
+        onClick = { },
+        iconImage = Icons.Rounded.QuestionMark
     )
 }
 
@@ -313,13 +326,13 @@ private fun HeartRateItem(
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     IchorButton(
                         iconImage = Icons.Rounded.Done,
-                        modifier = androidx.compose.ui.Modifier.size(32.dp)
+                        modifier = Modifier.size(32.dp)
                     ) {
                         viewModel.deleteHeartRate(currentHeartRateData.pk)
                     }
                     IchorButton(
                         iconImage = Icons.Rounded.Close,
-                        modifier = androidx.compose.ui.Modifier.size(32.dp)
+                        modifier = Modifier.size(32.dp)
                     ) {
                         deleteAlertRequired = false
                     }
@@ -366,7 +379,7 @@ fun MainIcon() {
 @Composable
 fun DeleteHeartbeatIcon() {
     Icon(
-        modifier = androidx.compose.ui.Modifier.size(48.dp),
+        modifier = Modifier.size(48.dp),
         imageVector = Icons.Rounded.Delete,
         contentDescription = "Delete heartbeat icon for app.",
         tint = IchorColorPalette.secondary
@@ -376,7 +389,7 @@ fun DeleteHeartbeatIcon() {
 @Composable
 fun ChangeSamplingSpeedIcon() {
     Icon(
-        modifier = androidx.compose.ui.Modifier.size(48.dp),
+        modifier = Modifier.size(48.dp),
         imageVector = Icons.Rounded.Speed,
         contentDescription = "Change heartbeat sampling speed.",
         tint = IchorColorPalette.secondary
@@ -386,9 +399,19 @@ fun ChangeSamplingSpeedIcon() {
 @Composable
 fun TickIcon() {
     Icon(
-        modifier = androidx.compose.ui.Modifier.size(32.dp),
+        modifier = Modifier.size(32.dp),
         imageVector = Icons.Rounded.Done,
         contentDescription = "Affirmation icon.",
+        tint = IchorColorPalette.secondary
+    )
+}
+
+@Composable
+fun AboutIcon() {
+    Icon(
+        modifier = Modifier.size(48.dp),
+        imageVector = Icons.Rounded.QuestionMark,
+        contentDescription = "Learn more about Ichor.",
         tint = IchorColorPalette.secondary
     )
 }
