@@ -3,18 +3,23 @@ package com.carkzis.ichor
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 
 class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatabase, private val heartRateService: HeartRateService, private val dataStore: SamplingPreferenceDataStore) : Repository {
 
+    private var sharedFlow = MutableSharedFlow<MeasureClientData>()
+    override suspend fun startSharedFlowForDataCollectionFromHeartRateService() {
+        heartRateService.retrieveHeartRate().collect {
+            sharedFlow.emit(it)
+        }
+    }
+
     override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> = flow {
         Timber.e("Entered collectAvailabilityFromHeartRateService.")
-        heartRateService.retrieveHeartRate().collect {
+        //heartRateService.retrieveHeartRate().collect {
+        sharedFlow.collect {
             when (it) {
                 is MeasureClientData.HeartRateDataPoints -> {}
                 is MeasureClientData.HeartRateAvailability -> {
@@ -52,7 +57,7 @@ class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatab
                     shouldSampleDatabase = true
                 }
             }
-            heartRateService.retrieveHeartRate().collect {
+            sharedFlow.collect {
                 when (it) {
                     is MeasureClientData.HeartRateDataPoints -> {
                         val latestDatapoint = it.dataPoints.last()

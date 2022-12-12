@@ -74,6 +74,10 @@ class FakeRepository(database: MutableList<LocalHeartRate> = mutableListOf()) : 
         dataStore = samplingSpeed
     }
 
+    override suspend fun startSharedFlowForDataCollectionFromHeartRateService() {
+        // Do nothing.
+    }
+
     private fun insertValueIntoDatabase(heartRate: DataPoint) {
         mockDatabase.add(heartRate.toLocalHeartRate())
     }

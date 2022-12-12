@@ -62,6 +62,9 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
         listOfJobs.addAll(
             listOf(
                 viewModelScope.launch {
+                    repository.startSharedFlowForDataCollectionFromHeartRateService()
+                },
+                viewModelScope.launch {
                     assignLatestHeartRateToUI(chooseSampler(_currentSampleSpeed.value))
                 },
                 viewModelScope.launch {

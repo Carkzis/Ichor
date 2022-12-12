@@ -31,6 +31,7 @@ class HeartRateServiceImpl @Inject constructor(
                 trySendBlocking(MeasureClientData.HeartRateDataPoints(data))
             }
         }
+        Timber.e("Should not change: $heartRateCallback")
         heartRateCallbackProxy.addCallback(heartRateCallback)
 
         heartRateMeasureClient.registerCallback(

@@ -88,6 +88,9 @@ class InstrumentedRepositoryTest {
 
         val heartRateHistory = mutableListOf<HeartRateDataPoint>()
         val collectJob = launch {
+            launch {
+                sut.startSharedFlowForDataCollectionFromHeartRateService()
+            }
             sut.collectHeartRateFromHeartRateService(sampler = CustomSampler(intervalInMs = 0, initialIntervalInMs = 0)).take(3).toList(heartRateHistory)
         }
 
@@ -107,7 +110,11 @@ class InstrumentedRepositoryTest {
         val expectedAvailabilities = listOfAvailabilities()
 
         val availabilityHistory = mutableListOf<Availability>()
+
         val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
+            launch {
+                sut.startSharedFlowForDataCollectionFromHeartRateService()
+            }
             sut.collectAvailabilityFromHeartRateService().toList(availabilityHistory)
         }
 
@@ -134,7 +141,12 @@ class InstrumentedRepositoryTest {
 
         val heartRateHistory = mutableListOf<HeartRateDataPoint>()
         val collectJob = launch {
-            sut.collectHeartRateFromHeartRateService(sampler = sampler).toList(heartRateHistory)
+            launch {
+                sut.startSharedFlowForDataCollectionFromHeartRateService()
+            }
+            launch {
+                sut.collectHeartRateFromHeartRateService(sampler = sampler).toList(heartRateHistory)
+            }
         }
 
         val samples = (sampleRateForDatabaseInsertion + initialSampleTimeForDatabaseInsertion) / sampleRateFromHeart

@@ -14,4 +14,5 @@ interface Repository {
     suspend fun collectHeartRateFromHeartRateService(sampler: Sampler = DefaultSampler()) : Flow<HeartRateDataPoint>
     suspend fun collectSamplingPreference() : Flow<SamplingSpeed>
     suspend fun changeSamplingPreference(samplingSpeed: SamplingSpeed)
+    suspend fun startSharedFlowForDataCollectionFromHeartRateService()
 }
