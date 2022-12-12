@@ -10,9 +10,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -48,7 +50,7 @@ class NavHostTest {
     }
 
     @Test
-    fun `navigates to about screen and title of new screen displayed`() {
+    fun `navigates to about screen using button and title of new screen displayed`() {
         composeTestRule
             .onNodeWithContentDescription("About Button")
             .performClick()
@@ -59,5 +61,17 @@ class NavHostTest {
         val route = navController.currentBackStackEntry?.destination?.route
         assertThat(route, `is`(IchorScreens.ABOUT.toString()))
     }
-    
+
+    @Test
+    fun `navigates to about screen using navController directly and title of new screen displayed`() {
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                navController.navigate(IchorScreens.ABOUT.toString())
+            }
+        }
+        composeTestRule
+            .onNodeWithText("About Ichor")
+            .assertIsDisplayed()
+    }
+
 }
