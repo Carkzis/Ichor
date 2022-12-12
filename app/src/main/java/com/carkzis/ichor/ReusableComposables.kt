@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.StateFlow
 fun IchorText(
     modifier: Modifier = Modifier,
     style: TextStyle = IchorTypography.body1,
-    stringResourceId: Int = R.string.app_name
+    stringResourceId: Int = R.string.app_name,
 ) {
     Text(
         modifier = modifier,

@@ -19,12 +19,12 @@ class IchorActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //val viewModel by viewModels<MainViewModel>()
+
         val viewModel by viewModels<MainViewModel>()
         setContent {
             IchorTheme {
-                IchorNavHost(viewModel = viewModel)
-                //IchorBody(viewModel = viewModel)
+                val navHostController = rememberSwipeDismissableNavController()
+                IchorNavHost(viewModel = viewModel, navHostController = navHostController)
             }
         }
     }
@@ -33,7 +33,7 @@ class IchorActivity : ComponentActivity() {
 
 @Composable
 fun IchorNavHost(
-    navHostController: NavHostController = rememberSwipeDismissableNavController(),
+    navHostController: NavHostController,
     startDestination: String = IchorScreens.ICHOR.toString(),
     viewModel: MainViewModel
     ) {
