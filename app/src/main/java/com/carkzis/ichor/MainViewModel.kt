@@ -18,7 +18,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+open class MainViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     private val listOfJobs = mutableListOf<Job>()
 
