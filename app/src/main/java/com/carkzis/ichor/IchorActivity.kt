@@ -10,6 +10,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.carkzis.ichor.theme.IchorTheme
+import com.carkzis.ichor.ui.AboutBody
 import com.carkzis.ichor.ui.IchorBody
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,12 +34,26 @@ class IchorActivity : ComponentActivity() {
 @Composable
 fun IchorNavHost(
     navHostController: NavHostController = rememberSwipeDismissableNavController(),
-    startDestination: String = "ichor_screen",
+    startDestination: String = IchorScreens.ICHOR.toString(),
     viewModel: MainViewModel
     ) {
     SwipeDismissableNavHost(navHostController, startDestination = startDestination) {
         composable(startDestination) {
-            IchorBody(viewModel = viewModel) {}
+            IchorBody(viewModel = viewModel, onClickAbout = {
+                navHostController.navigate(IchorScreens.ABOUT.toString())
+            })
         }
+        composable(IchorScreens.ABOUT.toString()) {
+            AboutBody()
+        }
+    }
+}
+
+enum class IchorScreens(val descriptor: String) {
+    ICHOR("ichor_screen"),
+    ABOUT("about_screen");
+
+    override fun toString() : String {
+        return descriptor
     }
 }

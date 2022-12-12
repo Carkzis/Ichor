@@ -72,7 +72,8 @@ fun IchorBody(modifier: Modifier = Modifier, viewModel: MainViewModel, onClickAb
             viewModel,
             heartRatePermission,
             shouldInitiateDataCollection,
-            heartRates
+            heartRates,
+            onClickAbout
         )
     }
 }
@@ -84,7 +85,8 @@ private fun IchorBodyComponents(
     viewModel: MainViewModel,
     heartRatePermission: PermissionState,
     shouldInitiateDataCollection: AtomicBoolean,
-    heartRates: List<DomainHeartRate>
+    heartRates: List<DomainHeartRate>,
+    onClickAbout: () -> Unit
 ) {
     ScalingLazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -116,9 +118,9 @@ private fun IchorBodyComponents(
             item {
                 Row {
                     SamplingSpeedChangeButton(viewModel = viewModel, modifier = modifier)
-                    Spacer(modifier = androidx.compose.ui.Modifier.width(8.dp))
-                    AboutButton(viewModel = viewModel, modifier = modifier)
-                    Spacer(modifier = androidx.compose.ui.Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    AboutButton(viewModel = viewModel, modifier = modifier, onClickAbout)
+                    Spacer(modifier = Modifier.width(8.dp))
                     DeleteAllButton(viewModel = viewModel, modifier = modifier)
                 }
             }
@@ -274,12 +276,12 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
 }
 
 @Composable
-private fun AboutButton(viewModel: MainViewModel, modifier: Modifier) {
+private fun AboutButton(viewModel: MainViewModel, modifier: Modifier, onClickAbout: () -> Unit) {
     IchorButton(
         modifier = modifier
             .size(24.dp)
             .padding(all = 0.dp),
-        onClick = { },
+        onClick = onClickAbout,
         iconImage = Icons.Rounded.QuestionMark
     )
 }

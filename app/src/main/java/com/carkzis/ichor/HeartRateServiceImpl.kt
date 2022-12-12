@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import timber.log.Timber
 import javax.inject.Inject
 
-open class HeartRateServiceImpl @Inject constructor(
+class HeartRateServiceImpl @Inject constructor(
     healthServicesClient: HealthServicesClient,
     private val heartRateCallbackProxy: HeartRateCallbackProxy
 ) : HeartRateService {
