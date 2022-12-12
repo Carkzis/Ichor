@@ -5,8 +5,11 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.test.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
@@ -14,6 +17,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -134,12 +138,18 @@ class InstrumentedRepositoryTest {
         // NOTE: Using runBlocking, so that items are inserted into the database as expected.
         val mockHeartRateDataPoint = listOfHeartRateDataPoints()[0]
 
-        val sampleRateFromHeart = 500L
-        val sampleRateForDatabaseInsertion = 950L
-        val initialSampleTimeForDatabaseInsertion = 500L
+        // 1. Sample rate from heart is 100ms. There are a total of 3 samples, coming to 300ms.
+        val sampleRateFromHeart = 100L
+        val samples = 3
+        // 2. At initial time to insert into database, 150ms, we will do one database insertion.
+        val initialSampleTimeForDatabaseInsertion = 150L
+        // 3. No sample at next sample time, 100ms+150ms=450ms, as all samples completed at 300ms.
+        val sampleRateForDatabaseInsertion = 200L
+
         val sampler = CustomSampler(sampleRateForDatabaseInsertion, initialSampleTimeForDatabaseInsertion)
 
         val heartRateHistory = mutableListOf<HeartRateDataPoint>()
+
         val collectJob = launch {
             launch {
                 sut.startSharedFlowForDataCollectionFromHeartRateService()
@@ -149,7 +159,6 @@ class InstrumentedRepositoryTest {
             }
         }
 
-        val samples = (sampleRateForDatabaseInsertion + initialSampleTimeForDatabaseInsertion) / sampleRateFromHeart
         for (sampleEmission in 1..samples) {
             delay(sampleRateFromHeart)
             heartRateService.mockHeartRateSample = mockHeartRateDataPoint
