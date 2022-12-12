@@ -1,10 +1,7 @@
 package com.carkzis.ichor
 
-import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.navigation.NavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -71,6 +68,36 @@ class NavHostTest {
         }
         composeTestRule
             .onNodeWithText("About Ichor")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `navigates back to ichor screen from about screen by swiping`() {
+        composeTestRule
+            .onNodeWithContentDescription("About Button")
+            .performClick()
+        composeTestRule
+            .onNodeWithText("About Ichor")
+            .assertIsDisplayed()
+        composeTestRule.onRoot().performTouchInput {
+            swipeRight()
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription("About Button")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `navigates back to ichor screen using navController directly and about button displayed again`() {
+        runBlocking {
+            withContext(Dispatchers.Main) {
+                navController.navigate(IchorScreens.ABOUT.toString())
+                navController.navigate(IchorScreens.ICHOR.toString())
+            }
+        }
+        composeTestRule
+            .onNodeWithContentDescription("About Button")
             .assertIsDisplayed()
     }
 
