@@ -131,12 +131,13 @@ fun IchorButton(
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier,
     iconImage: ImageVector = Icons.Rounded.LockPerson,
+    contentDescription: String = "No content description available.",
     onClick: () -> Unit = {}
 ) {
     Button(modifier = modifier.padding(4.dp), onClick = { onClick() }) {
         Icon(
             imageVector = iconImage,
-            contentDescription = "Requests permission to access heartrate.",
+            contentDescription = contentDescription,
             modifier = iconModifier
         )
     }

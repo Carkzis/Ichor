@@ -282,7 +282,8 @@ private fun AboutButton(viewModel: MainViewModel, modifier: Modifier, onClickAbo
             .size(24.dp)
             .padding(all = 0.dp),
         onClick = onClickAbout,
-        iconImage = Icons.Rounded.QuestionMark
+        iconImage = Icons.Rounded.QuestionMark,
+        contentDescription = "About Button"
     )
 }
 
