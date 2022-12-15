@@ -1,16 +1,8 @@
 package com.carkzis.ichor.utils
 
-import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
-
-//const val DEFAULT_INTERVAL_MS = 10_000L
-//const val DEFAULT_INITIAL_INTERVAL_MS = 0L
-//const val SLOW_INTERVAL_MS = 20_000L
-//const val SLOW_INITIAL_INTERVAL_MS = 10_000L
-//const val FAST_INTERVAL_MS = 5_000L
-//const val FAST_INITIAL_INTERVAL_MS = 0L
 
 sealed class Sampler(
     open val intervalInMs: Long = PostInitialSamplingIntervals.forSamplingSpeed(
@@ -41,17 +33,17 @@ sealed class Sampler(
     }
 }
 
-class DefaultSampler() : Sampler(
+class DefaultSampler : Sampler(
     PostInitialSamplingIntervals.forSamplingSpeed(SamplingSpeed.DEFAULT),
     InitialSamplingIntervals.forSamplingSpeed(SamplingSpeed.DEFAULT)
 )
 
-class SlowSampler() : Sampler(
+class SlowSampler : Sampler(
     PostInitialSamplingIntervals.forSamplingSpeed(SamplingSpeed.SLOW),
     InitialSamplingIntervals.forSamplingSpeed(SamplingSpeed.SLOW)
 )
 
-class FastSampler() : Sampler(
+class FastSampler : Sampler(
     PostInitialSamplingIntervals.forSamplingSpeed(SamplingSpeed.FAST),
     InitialSamplingIntervals.forSamplingSpeed(SamplingSpeed.FAST)
 )
