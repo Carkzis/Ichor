@@ -1,4 +1,4 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.tests.data
 
 import androidx.health.services.client.data.Availability
 import androidx.room.Room
@@ -8,6 +8,11 @@ import com.carkzis.ichor.data.DefaultRepositoryImpl
 import com.carkzis.ichor.data.DomainHeartRate
 import com.carkzis.ichor.data.HeartRateDataPoint
 import com.carkzis.ichor.data.IchorDatabase
+import com.carkzis.ichor.listOfAvailabilities
+import com.carkzis.ichor.listOfHeartRateDataAsMockDatabase
+import com.carkzis.ichor.listOfHeartRateDataPoints
+import com.carkzis.ichor.testdoubles.FakeHeartRateService
+import com.carkzis.ichor.testdoubles.FakeSamplingPreferenceDataStore
 import com.carkzis.ichor.ui.SamplingSpeed
 import com.carkzis.ichor.utils.CustomSampler
 import kotlinx.coroutines.*
@@ -23,7 +28,7 @@ import org.junit.runner.RunWith
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
-class InstrumentedRepositoryTest {
+class RepositoryTest {
 
     private lateinit var database: IchorDatabase
     private lateinit var samplingPreferenceDataStore: FakeSamplingPreferenceDataStore

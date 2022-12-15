@@ -1,4 +1,4 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.utils
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

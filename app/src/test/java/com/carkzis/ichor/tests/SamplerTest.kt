@@ -1,4 +1,4 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.tests
 
 import com.carkzis.ichor.utils.CustomSampler
 import com.carkzis.ichor.utils.DefaultSampler
@@ -16,7 +16,6 @@ import org.hamcrest.Matchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Assert.*
-import org.junit.Before
 import org.junit.Test
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.time.ExperimentalTime

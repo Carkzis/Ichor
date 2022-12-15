@@ -1,4 +1,4 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.tests.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore

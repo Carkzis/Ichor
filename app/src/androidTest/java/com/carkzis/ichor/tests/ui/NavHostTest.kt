@@ -1,10 +1,13 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.tests.ui
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.navigation.NavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.carkzis.ichor.IchorNavHost
+import com.carkzis.ichor.IchorScreens
+import com.carkzis.ichor.testdoubles.DummyViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.Dispatchers

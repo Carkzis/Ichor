@@ -1,4 +1,4 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.tests.data
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider

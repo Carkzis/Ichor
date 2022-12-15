@@ -1,12 +1,17 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.tests
 
 import androidx.health.services.client.data.DataTypeAvailability
 import com.carkzis.ichor.data.LocalHeartRate
 import com.carkzis.ichor.data.MeasureClientData
 import com.carkzis.ichor.data.Repository
 import com.carkzis.ichor.data.toDomainHeartRate
+import com.carkzis.ichor.listOfAvailabilityMeasureData
+import com.carkzis.ichor.listOfHeartRateDataAsMockDatabase
+import com.carkzis.ichor.listOfHeartRateDataPoints
+import com.carkzis.ichor.testdoubles.FakeRepository
 import com.carkzis.ichor.ui.MainViewModel
 import com.carkzis.ichor.ui.SamplingSpeed
+import com.carkzis.ichor.utils.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest

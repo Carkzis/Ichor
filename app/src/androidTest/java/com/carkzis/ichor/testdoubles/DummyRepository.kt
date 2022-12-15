@@ -1,4 +1,4 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.testdoubles
 
 import androidx.health.services.client.data.*
 import com.carkzis.ichor.data.*

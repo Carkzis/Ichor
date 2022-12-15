@@ -1,4 +1,4 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.testdoubles
 
 import com.carkzis.ichor.data.SamplingPreferenceDataStore
 import com.carkzis.ichor.ui.SamplingSpeed
