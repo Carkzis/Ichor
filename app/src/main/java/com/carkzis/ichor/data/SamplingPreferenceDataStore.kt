@@ -1,5 +1,6 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.data
 
+import com.carkzis.ichor.ui.SamplingSpeed
 import kotlinx.coroutines.flow.Flow
 
 interface SamplingPreferenceDataStore {

@@ -1,4 +1,4 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.data
 
 import kotlinx.coroutines.flow.Flow
 

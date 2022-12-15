@@ -1,8 +1,12 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.di
 
 import android.content.Context
 import androidx.health.services.client.HealthServices
 import androidx.health.services.client.HealthServicesClient
+import com.carkzis.ichor.data.HeartRateCallbackProxy
+import com.carkzis.ichor.data.HeartRateCallbackProxyImpl
+import com.carkzis.ichor.data.HeartRateService
+import com.carkzis.ichor.data.HeartRateServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

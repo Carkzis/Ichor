@@ -12,6 +12,7 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.carkzis.ichor.theme.IchorTheme
 import com.carkzis.ichor.ui.AboutBody
 import com.carkzis.ichor.ui.IchorBody
+import com.carkzis.ichor.ui.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

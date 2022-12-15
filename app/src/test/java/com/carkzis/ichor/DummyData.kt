@@ -1,6 +1,8 @@
 package com.carkzis.ichor
 
 import androidx.health.services.client.data.*
+import com.carkzis.ichor.data.LocalHeartRate
+import com.carkzis.ichor.data.MeasureClientData
 import java.time.Duration
 import java.util.*
 

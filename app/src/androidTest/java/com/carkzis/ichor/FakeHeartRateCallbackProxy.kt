@@ -4,6 +4,8 @@ import androidx.health.services.client.MeasureCallback
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
 import androidx.health.services.client.data.DataType
+import com.carkzis.ichor.data.HeartRateCallbackProxy
+import com.carkzis.ichor.data.HeartRateService
 
 class FakeHeartRateCallbackProxy : HeartRateCallbackProxy {
     private var callback: MeasureCallback? = null

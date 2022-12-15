@@ -1,5 +1,7 @@
 package com.carkzis.ichor
 
+import com.carkzis.ichor.data.SamplingPreferenceDataStore
+import com.carkzis.ichor.ui.SamplingSpeed
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 

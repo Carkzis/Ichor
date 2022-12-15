@@ -1,9 +1,15 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.ui
 
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataTypeAvailability
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.carkzis.ichor.data.DomainHeartRate
+import com.carkzis.ichor.data.Repository
+import com.carkzis.ichor.utils.DefaultSampler
+import com.carkzis.ichor.utils.FastSampler
+import com.carkzis.ichor.utils.Sampler
+import com.carkzis.ichor.utils.SlowSampler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

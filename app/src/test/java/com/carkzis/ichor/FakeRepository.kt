@@ -2,6 +2,9 @@ package com.carkzis.ichor
 
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
+import com.carkzis.ichor.data.*
+import com.carkzis.ichor.ui.SamplingSpeed
+import com.carkzis.ichor.utils.Sampler
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 

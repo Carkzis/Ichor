@@ -1,7 +1,8 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.carkzis.ichor.data.HeartRateDataPoint
 import timber.log.Timber
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

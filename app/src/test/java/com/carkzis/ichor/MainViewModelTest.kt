@@ -1,17 +1,20 @@
 package com.carkzis.ichor
 
 import androidx.health.services.client.data.DataTypeAvailability
+import com.carkzis.ichor.data.LocalHeartRate
+import com.carkzis.ichor.data.MeasureClientData
+import com.carkzis.ichor.data.Repository
+import com.carkzis.ichor.data.toDomainHeartRate
+import com.carkzis.ichor.ui.MainViewModel
+import com.carkzis.ichor.ui.SamplingSpeed
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.After
 import org.junit.Rule
 import org.junit.Test
-import timber.log.Timber
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime

@@ -1,10 +1,12 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.data
 
 import androidx.health.services.client.HealthServicesClient
 import androidx.health.services.client.MeasureCallback
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
 import androidx.health.services.client.data.DataType
+import com.carkzis.ichor.data.HeartRateService
+import com.carkzis.ichor.data.MeasureClientData
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow

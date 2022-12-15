@@ -3,11 +3,10 @@ package com.carkzis.ichor
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
 import androidx.health.services.client.data.DataTypeAvailability
-import kotlinx.coroutines.Dispatchers
+import com.carkzis.ichor.data.HeartRateService
+import com.carkzis.ichor.data.MeasureClientData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 
 class FakeHeartRateService : HeartRateService {
 

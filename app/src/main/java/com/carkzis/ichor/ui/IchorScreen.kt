@@ -22,6 +22,7 @@ import androidx.wear.compose.material.*
 import androidx.wear.compose.material.dialog.Dialog
 import com.carkzis.ichor.*
 import com.carkzis.ichor.R.*
+import com.carkzis.ichor.data.DomainHeartRate
 import com.carkzis.ichor.theme.IchorColorPalette
 import com.carkzis.ichor.theme.IchorTypography
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -91,7 +92,7 @@ private fun IchorBodyComponents(
     ScalingLazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxWidth(),
-        autoCentering = AutoCenteringParams(itemIndex = 1),
+        autoCentering = AutoCenteringParams(itemIndex = 0),
         state = listState
     ) {
         item { MainIcon() }

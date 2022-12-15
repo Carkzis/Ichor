@@ -4,12 +4,15 @@ import androidx.health.services.client.data.Availability
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.carkzis.ichor.data.DefaultRepositoryImpl
+import com.carkzis.ichor.data.DomainHeartRate
+import com.carkzis.ichor.data.HeartRateDataPoint
+import com.carkzis.ichor.data.IchorDatabase
+import com.carkzis.ichor.ui.SamplingSpeed
+import com.carkzis.ichor.utils.CustomSampler
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.test.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
@@ -17,7 +20,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)

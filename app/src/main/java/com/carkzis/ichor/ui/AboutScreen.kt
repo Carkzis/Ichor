@@ -28,7 +28,7 @@ fun AboutBody(modifier: Modifier = Modifier) {
         ScalingLazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier.fillMaxWidth(),
-            autoCentering = AutoCenteringParams(itemIndex = 1),
+            autoCentering = AutoCenteringParams(itemIndex = 0),
             state = listState
         ) {
             // Initial info.

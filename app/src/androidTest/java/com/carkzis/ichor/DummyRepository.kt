@@ -1,6 +1,9 @@
 package com.carkzis.ichor
 
 import androidx.health.services.client.data.*
+import com.carkzis.ichor.data.*
+import com.carkzis.ichor.ui.SamplingSpeed
+import com.carkzis.ichor.utils.Sampler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.time.Duration
@@ -13,11 +16,13 @@ class DummyRepository : Repository {
     }
 
     override suspend fun collectHeartRatesFromDatabase(): Flow<List<DomainHeartRate>> = flow {
-        emit(listOf(LocalHeartRate(
+        emit(listOf(
+            LocalHeartRate(
             date = "",
             pk = "",
             value = ""
-        )).toDomainHeartRate())
+        )
+        ).toDomainHeartRate())
     }
 
     override suspend fun deleteHeartRateFromDatabase(primaryKey: String) {}

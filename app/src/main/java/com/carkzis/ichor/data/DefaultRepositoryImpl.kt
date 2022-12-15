@@ -1,13 +1,17 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.data
 
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
+import com.carkzis.ichor.*
+import com.carkzis.ichor.ui.SamplingSpeed
+import com.carkzis.ichor.utils.Sampler
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatabase, private val heartRateService: HeartRateService, private val dataStore: SamplingPreferenceDataStore) : Repository {
+class DefaultRepositoryImpl @Inject constructor(private val database: IchorDatabase, private val heartRateService: HeartRateService, private val dataStore: SamplingPreferenceDataStore) :
+    Repository {
 
     private var sharedFlow = MutableSharedFlow<MeasureClientData>()
     override suspend fun startSharedFlowForDataCollectionFromHeartRateService() {
