@@ -11,9 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.*
 import com.carkzis.ichor.*
 import com.carkzis.ichor.R.*
@@ -35,7 +36,7 @@ fun AboutBody(modifier: Modifier = Modifier) {
             autoCentering = AutoCenteringParams(itemIndex = 1),
             state = listState
         ) {
-            item { AboutIcon() }
+            item { TitleAboutIcon() }
             item {
                 IchorText(stringResourceId = string.about_ichor, modifier = modifier, style = IchorTypography.title1)
             }
@@ -55,12 +56,54 @@ fun AboutBody(modifier: Modifier = Modifier) {
                     IchorText(stringResourceId = string.about_permissions, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                 }
             }
+            item {
+                Row(modifier = modifier.fillMaxWidth()) {
+                    AboutIcon()
+                    IchorText(stringResourceId = string.about_about, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
+                }
+            }
+            item {
+                IchorText(stringResourceId = string.about_what_you_can_see, modifier = modifier, style = IchorTypography.title3)
+            }
+            item {
+                IchorText(stringResourceId = string.about_availability_subtitle, modifier = modifier, style = IchorTypography.body2.plus(
+                    TextStyle(fontWeight = FontWeight.Bold)
+                ))
+            }
+            item {
+                IchorText(stringResourceId = string.about_availability, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
+            }
+            item {
+                IchorText(stringResourceId = string.about_sampling_speed_subtitle, modifier = modifier, style = IchorTypography.body2.plus(
+                    TextStyle(fontWeight = FontWeight.Bold)
+                ))
+            }
+            item {
+                IchorText(stringResourceId = string.about_sampling_speed_display, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
+            }
+            item {
+                IchorText(stringResourceId = string.about_bpm_subtitle, modifier = modifier, style = IchorTypography.body2.plus(
+                    TextStyle(fontWeight = FontWeight.Bold)
+                ))
+            }
+            item {
+                IchorText(stringResourceId = string.about_bpm, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
+            }
+            item {
+                IchorText(stringResourceId = string.about_history_subtitle, modifier = modifier, style = IchorTypography.body2.plus(
+                    TextStyle(fontWeight = FontWeight.Bold)
+                ))
+            }
+            item {
+                IchorText(stringResourceId = string.about_history, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
+            }
+
         }
     }
 }
 
 @Composable
-fun AboutIcon() {
+fun TitleAboutIcon() {
     Icon(
         modifier = Modifier.size(48.dp),
         imageVector = Icons.Rounded.QuestionMark,
@@ -75,6 +118,16 @@ fun PermissionIcon() {
         modifier = Modifier.size(24.dp),
         imageVector = Icons.Rounded.LockPerson,
         contentDescription = "Icon for health services permission request.",
+        tint = IchorColorPalette.secondary
+    )
+}
+
+@Composable
+fun AboutIcon() {
+    Icon(
+        modifier = Modifier.size(24.dp),
+        imageVector = Icons.Rounded.QuestionMark,
+        contentDescription = "Learn more about Ichor.",
         tint = IchorColorPalette.secondary
     )
 }

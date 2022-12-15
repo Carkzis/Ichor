@@ -8,6 +8,16 @@
     <string name="app_permission_was_denied">"You previously denied the app permission to access the heart rate sensor.\nThis can be changed in your watch settings."</string>
     <string name="about_ichor">"About Ichor"</string>
     <string name="about_description">"Welcome to Ichor, where you can log your heartbeat with your watch!\n\nYou can view your current heart rate, record your heart rate into a local database to be stored on your watch using various sampling speeds,and view your heart rate history.\n\nYou can also delete your heart rate history if you so choose!"</string>
-    <string name="about_starting_up">Starting Up</string>
-    <string name="about_permissions">You will need to provide the app with your permission to take your heart rate, so click the button with the associated icon to the left and grant the app permissions. If you initially refuse this permission, you will need to go into the watch settings to change the it.</string>
+    <string name="about_starting_up">"Starting Up"</string>
+    <string name="about_permissions">"You will need to provide the app with your permission to take your heart rate, so click the button with the associated icon to the left and grant the app permissions. If you initially refuse this permission, you will need to go into the watch settings to change the it."</string>
+    <string name="about_about">"You can get to the \"About Ichor\" screen by clicking the button with this icon… but you already knew that, didn't you?"</string>
+    <string name="about_what_you_can_see">"What You Can See"</string>
+    <string name="about_bpm">"You can view your current heart rate on the main screen of the app, it will say, for example \"80 bpm\", which means 80 beats per minute."</string>
+    <string name="about_availability">"The availability of heart rate data will be displayed, which should ideally be \"Available\" after initially being \"Acquiring\"; it will otherwise be \"Unknown\""</string>
+    <string name="about_sampling_speed_display">"Your sampling speed dictates how often your current heart rate is added to the heart rate history. It can be \"Slow\", \"Default\", or \"Fast\". More about this is detailed below in the section on changing sampling speed."</string>
+    <string name="about_bpm_subtitle">"BPM"</string>
+    <string name="about_availability_subtitle">"Availability"</string>
+    <string name="about_sampling_speed_subtitle">"Sampling Speed"</string>
+    <string name="about_history_subtitle">Heart Rate History</string>
+    <string name="about_history">"Your heart rate history will be displayed at the bottom of the main screen. It shows a list of all recorded heart rates, with their respective heart rate and time of recording. These can be swiped to the edge of the screen if you wish to delete them; more on this below."</string>
 </resources>
