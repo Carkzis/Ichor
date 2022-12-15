@@ -154,18 +154,18 @@ private fun IchorBodyComponents(
         item {
             DisplayAvailability(modifier = modifier, state = viewModel.latestAvailability)
         }
-        item {
-            Row {
-                IchorStatefulText(
-                    modifier = modifier,
-                    style = IchorTypography.body2,
-                    state = viewModel.currentSamplingSpeed,
-                    prefix = "Sampling Speed: "
-                )
-            }
-        }
         if (hasPermission) {
             initiateDataCollectionOnce(shouldInitiateDataCollection, viewModel)
+            item {
+                Row {
+                    IchorStatefulText(
+                        modifier = modifier,
+                        style = IchorTypography.body2,
+                        state = viewModel.currentSamplingSpeed,
+                        prefix = "Sampling Speed: "
+                    )
+                }
+            }
             item {
                 DisplayLatestHeartRate(modifier = modifier, state = viewModel.latestHeartRate)
             }
