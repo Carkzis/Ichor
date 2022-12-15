@@ -126,6 +126,20 @@ fun AboutBody(modifier: Modifier = Modifier) {
 
                 }
             }
+            item {
+                Row(modifier = modifier.fillMaxWidth()) {
+                    AboutDeleteAllIcon()
+                    IchorText(stringResourceId = string.about_delete_all, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
+                }
+            }
+            item {
+                IchorText(stringResourceId = string.about_delete_one_subtitle, modifier = modifier, style = IchorTypography.body2.plus(
+                    TextStyle(fontWeight = FontWeight.Bold)
+                ))
+            }
+            item {
+                IchorText(stringResourceId = string.about_delete_one, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
+            }
         }
     }
 }
@@ -196,6 +210,16 @@ fun AboutFastSamplingSpeedIcon() {
         modifier = Modifier.size(18.dp),
         imageVector = Icons.Rounded.DirectionsBike,
         contentDescription = "Learn about the fast sampling speed.",
+        tint = IchorColorPalette.secondary
+    )
+}
+
+@Composable
+fun AboutDeleteAllIcon() {
+    Icon(
+        modifier = Modifier.size(24.dp),
+        imageVector = Icons.Rounded.Delete,
+        contentDescription = "Learn about the deleting all records.",
         tint = IchorColorPalette.secondary
     )
 }

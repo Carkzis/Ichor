@@ -25,4 +25,7 @@
     <string name="about_slow_sampling">Slow: This will sample slowly, and have a delay before initially sampling.</string>
     <string name="about_default_sampling">Default: This will sample at a moderate pace, and will initiate sampling immediately.</string>
     <string name="about_fast_sampling">Fast: This will sample often, and will initiate sampling immediately.</string>
+    <string name="about_delete_all">You can delete all records by clicking this button and confirming you wish to do so with the prompt. Note that this is a nuclear option, and cannot be undone!</string>
+    <string name="about_delete_one_subtitle">Delete a Single Record</string>
+    <string name="about_delete_one">You can delete a single record by swiping the record all the way left or right and confirming with the prompt. Note that this cannot be undone!</string>
 </resources>
