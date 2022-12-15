@@ -8,4 +8,6 @@
     <string name="app_permission_was_denied">"You previously denied the app permission to access the heart rate sensor.\nThis can be changed in your watch settings."</string>
     <string name="about_ichor">"About Ichor"</string>
     <string name="about_description">"Welcome to Ichor, where you can log your heartbeat with your watch!\n\nYou can view your current heart rate, record your heart rate into a local database to be stored on your watch using various sampling speeds,and view your heart rate history.\n\nYou can also delete your heart rate history if you so choose!"</string>
+    <string name="about_starting_up">Starting Up</string>
+    <string name="about_permissions">You will need to provide the app with your permission to take your heart rate, so click the button with the associated icon to the left and grant the app permissions. If you initially refuse this permission, you will need to go into the watch settings to change the it.</string>
 </resources>

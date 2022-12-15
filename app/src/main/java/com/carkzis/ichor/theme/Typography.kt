@@ -22,6 +22,11 @@ val IchorTypography = Typography(
         fontWeight = FontWeight.ExtraBold,
         fontSize = 18.sp
     ),
+    title3 = TextStyle(
+        fontFamily = FontFamily.Monospace,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 16.sp
+    ),
     button = TextStyle(
         fontFamily = FontFamily.Monospace,
         fontWeight = FontWeight.W500,

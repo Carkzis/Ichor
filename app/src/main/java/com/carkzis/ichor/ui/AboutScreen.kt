@@ -1,12 +1,16 @@
 package com.carkzis.ichor.ui
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.LockPerson
 import androidx.compose.material.icons.rounded.QuestionMark
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -42,6 +46,15 @@ fun AboutBody(modifier: Modifier = Modifier) {
                     stringResourceId = string.about_description
                 )
             }
+            item {
+                IchorText(stringResourceId = string.about_starting_up, modifier = modifier, style = IchorTypography.title3)
+            }
+            item {
+                Row(modifier = modifier.fillMaxWidth()) {
+                    PermissionIcon()
+                    IchorText(stringResourceId = string.about_permissions, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
+                }
+            }
         }
     }
 }
@@ -52,6 +65,16 @@ fun AboutIcon() {
         modifier = Modifier.size(48.dp),
         imageVector = Icons.Rounded.QuestionMark,
         contentDescription = "Learn more about Ichor.",
+        tint = IchorColorPalette.secondary
+    )
+}
+
+@Composable
+fun PermissionIcon() {
+    Icon(
+        modifier = Modifier.size(24.dp),
+        imageVector = Icons.Rounded.LockPerson,
+        contentDescription = "Icon for health services permission request.",
         tint = IchorColorPalette.secondary
     )
 }
