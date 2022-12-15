@@ -22,6 +22,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import timber.log.Timber
 import java.io.File
 
 @ExperimentalCoroutinesApi
@@ -68,9 +69,11 @@ class SamplingPreferenceDataStoreTest {
 
         val samplingSpeedPreferenceHistory = mutableListOf<SamplingSpeed>()
         val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
-            samplingPreferenceDataStore.collectSamplingPreference().take(2).toList(samplingSpeedPreferenceHistory)
+            samplingPreferenceDataStore.collectSamplingPreference().toList(samplingSpeedPreferenceHistory)
         }
 
+        // Fake delay of 1ms.
+        delay(1)
         samplingPreferenceDataStore.changeSamplingPreference(expectedNewSamplingSpeed)
 
         collectJob.cancel()
