@@ -91,7 +91,7 @@ private fun IchorBodyComponents(
     ScalingLazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxWidth(),
-        autoCentering = AutoCenteringParams(itemIndex = 0),
+        autoCentering = AutoCenteringParams(itemIndex = 1),
         state = listState
     ) {
         item { MainIcon() }
@@ -405,16 +405,6 @@ fun TickIcon() {
         modifier = Modifier.size(32.dp),
         imageVector = Icons.Rounded.Done,
         contentDescription = "Affirmation icon.",
-        tint = IchorColorPalette.secondary
-    )
-}
-
-@Composable
-fun AboutIcon() {
-    Icon(
-        modifier = Modifier.size(48.dp),
-        imageVector = Icons.Rounded.QuestionMark,
-        contentDescription = "Learn more about Ichor.",
         tint = IchorColorPalette.secondary
     )
 }

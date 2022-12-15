@@ -1,12 +1,20 @@
 package com.carkzis.ichor.ui
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.QuestionMark
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.*
-import com.carkzis.ichor.IchorText
-import com.carkzis.ichor.R
+import com.carkzis.ichor.*
+import com.carkzis.ichor.R.*
+import com.carkzis.ichor.theme.IchorColorPalette
+import com.carkzis.ichor.theme.IchorTypography
 
 @Composable
 fun AboutBody(modifier: Modifier = Modifier) {
@@ -20,12 +28,43 @@ fun AboutBody(modifier: Modifier = Modifier) {
         ScalingLazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier.fillMaxWidth(),
-            autoCentering = AutoCenteringParams(itemIndex = 0),
+            autoCentering = AutoCenteringParams(itemIndex = 1),
             state = listState
         ) {
+            item { AboutIcon() }
             item {
-                IchorText(stringResourceId = R.string.about_ichor)
+                IchorText(stringResourceId = string.about_ichor, modifier = modifier, style = IchorTypography.title1)
+            }
+            item {
+                IchorText(
+                    modifier = modifier,
+                    style = IchorTypography.body2,
+                    stringResourceId = string.about_description
+                )
             }
         }
     }
+}
+
+@Composable
+fun AboutIcon() {
+    Icon(
+        modifier = Modifier.size(48.dp),
+        imageVector = Icons.Rounded.QuestionMark,
+        contentDescription = "Learn more about Ichor.",
+        tint = IchorColorPalette.secondary
+    )
+}
+
+@Preview(
+    widthDp = WEAR_PREVIEW_DEVICE_WIDTH_DP,
+    heightDp = WEAR_PREVIEW_DEVICE_HEIGHT_DP,
+    apiLevel = WEAR_PREVIEW_API_LEVEL,
+    uiMode = WEAR_PREVIEW_UI_MODE,
+    backgroundColor = WEAR_PREVIEW_BACKGROUND_COLOR_BLACK,
+    showBackground = WEAR_PREVIEW_SHOW_BACKGROUND
+)
+@Composable
+fun AboutScreenPreview() {
+    AboutBody()
 }
