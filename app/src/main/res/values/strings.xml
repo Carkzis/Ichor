@@ -20,4 +20,9 @@
     <string name="about_sampling_speed_subtitle">"Sampling Speed"</string>
     <string name="about_history_subtitle">Heart Rate History</string>
     <string name="about_history">"Your heart rate history will be displayed at the bottom of the main screen. It shows a list of all recorded heart rates, with their respective heart rate and time of recording. These can be swiped to the edge of the screen if you wish to delete them; more on this below."</string>
+    <string name="about_what_you_can_do">"What You Can Do"</string>
+    <string name="about_sampling_speed">You can change the sampling rate by clicking the button associated with this icon. It will bring up a selection of sampling speed options for you to choose from, with a check mark next to your current option.</string>
+    <string name="about_slow_sampling">Slow: This will sample slowly, and have a delay before initially sampling.</string>
+    <string name="about_default_sampling">Default: This will sample at a moderate pace, and will initiate sampling immediately.</string>
+    <string name="about_fast_sampling">Fast: This will sample often, and will initiate sampling immediately.</string>
 </resources>

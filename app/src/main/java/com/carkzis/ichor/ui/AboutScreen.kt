@@ -1,12 +1,8 @@
 package com.carkzis.ichor.ui
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.LockPerson
-import androidx.compose.material.icons.rounded.QuestionMark
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +32,7 @@ fun AboutBody(modifier: Modifier = Modifier) {
             state = listState
         ) {
             // Initial info.
-            item { TitleAboutIcon() }
+            item { AboutTitleIcon() }
             item {
                 IchorText(stringResourceId = string.about_ichor, modifier = modifier, style = IchorTypography.title1)
             }
@@ -54,13 +50,13 @@ fun AboutBody(modifier: Modifier = Modifier) {
             }
             item {
                 Row(modifier = modifier.fillMaxWidth()) {
-                    PermissionIcon()
+                    AboutPermissionIcon()
                     IchorText(stringResourceId = string.about_permissions, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                 }
             }
             item {
                 Row(modifier = modifier.fillMaxWidth()) {
-                    AboutIcon()
+                    AboutAboutIcon()
                     IchorText(stringResourceId = string.about_about, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                 }
             }
@@ -102,13 +98,40 @@ fun AboutBody(modifier: Modifier = Modifier) {
                 IchorText(stringResourceId = string.about_history, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
             }
 
+            // What you can do.
+            item {
+                IchorText(stringResourceId = string.about_what_you_can_do, modifier = modifier, style = IchorTypography.title3)
+            }
+            item {
+                Row(modifier = modifier.fillMaxWidth()) {
+                    AboutSamplingSpeedIcon()
+                    Column(modifier = modifier.fillMaxWidth()) {
+                        IchorText(stringResourceId = string.about_sampling_speed, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(modifier = modifier.fillMaxWidth()) {
+                            AboutSlowSamplingSpeedIcon()
+                            IchorText(stringResourceId = string.about_slow_sampling, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
+                        }
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row(modifier = modifier.fillMaxWidth()) {
+                            AboutDefaultSamplingSpeedIcon()
+                            IchorText(stringResourceId = string.about_default_sampling, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
+                        }
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row(modifier = modifier.fillMaxWidth()) {
+                            AboutFastSamplingSpeedIcon()
+                            IchorText(stringResourceId = string.about_fast_sampling, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
+                        }
+                    }
 
+                }
+            }
         }
     }
 }
 
 @Composable
-fun TitleAboutIcon() {
+fun AboutTitleIcon() {
     Icon(
         modifier = Modifier.size(48.dp),
         imageVector = Icons.Rounded.QuestionMark,
@@ -118,21 +141,61 @@ fun TitleAboutIcon() {
 }
 
 @Composable
-fun PermissionIcon() {
+fun AboutPermissionIcon() {
     Icon(
         modifier = Modifier.size(24.dp),
         imageVector = Icons.Rounded.LockPerson,
-        contentDescription = "Icon for health services permission request.",
+        contentDescription = "Learn about the health services permission request.",
         tint = IchorColorPalette.secondary
     )
 }
 
 @Composable
-fun AboutIcon() {
+fun AboutAboutIcon() {
     Icon(
         modifier = Modifier.size(24.dp),
         imageVector = Icons.Rounded.QuestionMark,
         contentDescription = "Learn more about Ichor.",
+        tint = IchorColorPalette.secondary
+    )
+}
+
+@Composable
+fun AboutSamplingSpeedIcon() {
+    Icon(
+        modifier = Modifier.size(24.dp),
+        imageVector = Icons.Rounded.Speed,
+        contentDescription = "Learn about the sampling speed.",
+        tint = IchorColorPalette.secondary
+    )
+}
+
+@Composable
+fun AboutSlowSamplingSpeedIcon() {
+    Icon(
+        modifier = Modifier.size(18.dp),
+        imageVector = Icons.Rounded.DirectionsWalk,
+        contentDescription = "Learn about the slow sampling speed.",
+        tint = IchorColorPalette.secondary
+    )
+}
+
+@Composable
+fun AboutDefaultSamplingSpeedIcon() {
+    Icon(
+        modifier = Modifier.size(18.dp),
+        imageVector = Icons.Rounded.DirectionsRun,
+        contentDescription = "Learn about the default sampling speed.",
+        tint = IchorColorPalette.secondary
+    )
+}
+
+@Composable
+fun AboutFastSamplingSpeedIcon() {
+    Icon(
+        modifier = Modifier.size(18.dp),
+        imageVector = Icons.Rounded.DirectionsBike,
+        contentDescription = "Learn about the fast sampling speed.",
         tint = IchorColorPalette.secondary
     )
 }
