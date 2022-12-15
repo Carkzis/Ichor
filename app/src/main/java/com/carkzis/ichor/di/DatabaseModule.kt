@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
-import com.carkzis.ichor.*
-import com.carkzis.ichor.data.*
+import com.carkzis.ichor.data.heartrates.HeartRateService
+import com.carkzis.ichor.data.local.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

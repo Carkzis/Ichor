@@ -1,7 +1,7 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.testdoubles
 
 import androidx.health.services.client.data.*
-import com.carkzis.ichor.data.LocalHeartRate
+import com.carkzis.ichor.data.local.LocalHeartRate
 import java.time.Duration
 import java.util.*
 

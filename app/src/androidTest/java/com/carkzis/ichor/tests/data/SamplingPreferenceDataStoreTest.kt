@@ -8,9 +8,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.carkzis.ichor.data.SamplingPreferenceDataStore
-import com.carkzis.ichor.data.SamplingPreferenceDataStoreImpl
-import com.carkzis.ichor.ui.SamplingSpeed
+import com.carkzis.ichor.data.local.SamplingPreferenceDataStore
+import com.carkzis.ichor.data.local.SamplingPreferenceDataStoreImpl
+import com.carkzis.ichor.utils.SamplingSpeed
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList

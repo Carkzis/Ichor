@@ -1,4 +1,4 @@
-package com.carkzis.ichor.data
+package com.carkzis.ichor.data.heartrates
 
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint

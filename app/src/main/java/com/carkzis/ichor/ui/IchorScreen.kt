@@ -22,9 +22,10 @@ import androidx.wear.compose.material.*
 import androidx.wear.compose.material.dialog.Dialog
 import com.carkzis.ichor.*
 import com.carkzis.ichor.R.*
-import com.carkzis.ichor.data.DomainHeartRate
+import com.carkzis.ichor.data.domain.DomainHeartRate
 import com.carkzis.ichor.theme.IchorColorPalette
 import com.carkzis.ichor.theme.IchorTypography
+import com.carkzis.ichor.utils.SamplingSpeed
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState

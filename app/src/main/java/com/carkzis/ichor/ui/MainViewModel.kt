@@ -4,12 +4,9 @@ import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataTypeAvailability
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.carkzis.ichor.data.DomainHeartRate
-import com.carkzis.ichor.data.Repository
-import com.carkzis.ichor.utils.DefaultSampler
-import com.carkzis.ichor.utils.FastSampler
-import com.carkzis.ichor.utils.Sampler
-import com.carkzis.ichor.utils.SlowSampler
+import com.carkzis.ichor.data.domain.DomainHeartRate
+import com.carkzis.ichor.data.local.Repository
+import com.carkzis.ichor.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -147,19 +144,3 @@ open class MainViewModel @Inject constructor(private val repository: Repository)
     }
 }
 
-enum class SamplingSpeed(val descriptor: String) {
-    SLOW("Slow"),
-    DEFAULT("Default"),
-    FAST("Fast"),
-    UNKNOWN("");
-
-    override fun toString(): String {
-        return descriptor
-    }
-
-    companion object {
-        fun forDescriptor(value: String): SamplingSpeed {
-            return values().first { it.descriptor == value }
-        }
-    }
-}

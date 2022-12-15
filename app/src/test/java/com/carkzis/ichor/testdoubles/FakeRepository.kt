@@ -3,7 +3,14 @@ package com.carkzis.ichor.testdoubles
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
 import com.carkzis.ichor.data.*
-import com.carkzis.ichor.ui.SamplingSpeed
+import com.carkzis.ichor.data.domain.DomainHeartRate
+import com.carkzis.ichor.data.domain.toDomainHeartRate
+import com.carkzis.ichor.data.heartrates.MeasureClientData
+import com.carkzis.ichor.data.local.HeartRateDataPoint
+import com.carkzis.ichor.data.local.LocalHeartRate
+import com.carkzis.ichor.data.local.Repository
+import com.carkzis.ichor.data.local.toLocalHeartRate
+import com.carkzis.ichor.utils.SamplingSpeed
 import com.carkzis.ichor.utils.Sampler
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*

@@ -1,7 +1,7 @@
 package com.carkzis.ichor.testdoubles
 
-import com.carkzis.ichor.data.SamplingPreferenceDataStore
-import com.carkzis.ichor.ui.SamplingSpeed
+import com.carkzis.ichor.data.local.SamplingPreferenceDataStore
+import com.carkzis.ichor.utils.SamplingSpeed
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 

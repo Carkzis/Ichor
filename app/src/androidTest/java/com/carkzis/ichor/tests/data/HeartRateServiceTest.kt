@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.health.services.client.HealthServices
 import androidx.health.services.client.data.DataType
 import androidx.test.platform.app.InstrumentationRegistry
-import com.carkzis.ichor.data.HeartRateServiceImpl
-import com.carkzis.ichor.data.MeasureClientData
-import com.carkzis.ichor.listOfAvailabilities
-import com.carkzis.ichor.listOfHeartRateDataPoints
+import com.carkzis.ichor.data.heartrates.HeartRateServiceImpl
+import com.carkzis.ichor.data.heartrates.MeasureClientData
 import com.carkzis.ichor.testdoubles.FakeHeartRateCallbackProxy
+import com.carkzis.ichor.testdoubles.listOfAvailabilities
+import com.carkzis.ichor.testdoubles.listOfHeartRateDataPoints
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.takeWhile

@@ -1,10 +1,10 @@
-package com.carkzis.ichor.data
+package com.carkzis.ichor.data.local
 
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
 import com.carkzis.ichor.utils.DefaultSampler
-import com.carkzis.ichor.data.DomainHeartRate
-import com.carkzis.ichor.ui.SamplingSpeed
+import com.carkzis.ichor.data.domain.DomainHeartRate
+import com.carkzis.ichor.utils.SamplingSpeed
 import com.carkzis.ichor.utils.Sampler
 import kotlinx.coroutines.flow.Flow
 

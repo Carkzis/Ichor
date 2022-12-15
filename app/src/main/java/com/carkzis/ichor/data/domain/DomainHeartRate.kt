@@ -1,33 +1,16 @@
-package com.carkzis.ichor.data
+package com.carkzis.ichor.data.domain
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.carkzis.ichor.data.HeartRateDataPoint
+import com.carkzis.ichor.data.local.LocalHeartRate
 import timber.log.Timber
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import java.util.*
 import kotlin.math.round
-
-@Entity
-data class LocalHeartRate(
-    @PrimaryKey
-    val pk: String,
-    val date: String,
-    val value: String
-)
 
 data class DomainHeartRate(
     val pk: String,
     val date: String,
     val value: Double
-)
-
-fun HeartRateDataPoint.toLocalHeartRate() = LocalHeartRate(
-    pk = UUID.randomUUID().toString(),
-    date = LocalDateTime.now().toString(),
-    value = this.value.asDouble().toString()
 )
 
 fun List<LocalHeartRate>.toDomainHeartRate() = this.map {
@@ -36,7 +19,9 @@ fun List<LocalHeartRate>.toDomainHeartRate() = this.map {
         date = try {
             LocalDateTime.parse(it.date)
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-        } catch (e: DateTimeParseException) { "" },
+        } catch (e: DateTimeParseException) {
+            ""
+        },
         value = try {
             round(it.value.toDouble() * 100) / 100
         } catch (e: Exception) {

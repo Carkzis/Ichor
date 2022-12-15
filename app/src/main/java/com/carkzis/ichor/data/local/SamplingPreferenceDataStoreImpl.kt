@@ -1,11 +1,10 @@
-package com.carkzis.ichor.data
+package com.carkzis.ichor.data.local
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.carkzis.ichor.data.SamplingPreferenceDataStore
-import com.carkzis.ichor.ui.SamplingSpeed
+import com.carkzis.ichor.utils.SamplingSpeed
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 

@@ -1,12 +1,10 @@
-package com.carkzis.ichor.data
+package com.carkzis.ichor.data.heartrates
 
 import androidx.health.services.client.HealthServicesClient
 import androidx.health.services.client.MeasureCallback
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
 import androidx.health.services.client.data.DataType
-import com.carkzis.ichor.data.HeartRateService
-import com.carkzis.ichor.data.MeasureClientData
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
@@ -50,35 +48,5 @@ class HeartRateServiceImpl @Inject constructor(
     }
 }
 
-interface HeartRateCallbackProxy {
-    fun invokeOnAvailabilityChanged(dataType: DataType, availability: Availability)
-    fun invokeOnData(data: List<DataPoint>)
-    fun retrieveMeasureCallback(heartRateService: HeartRateService): MeasureCallback?
-    fun addCallback(providedCallback: MeasureCallback) {
-    }
-}
 
-class HeartRateCallbackProxyImpl : HeartRateCallbackProxy {
-    private var callback: MeasureCallback? = null
-
-    override fun invokeOnAvailabilityChanged(dataType: DataType, availability: Availability) {
-        callback?.onAvailabilityChanged(dataType, availability)
-    }
-
-    override fun invokeOnData(data: List<DataPoint>) {
-        callback?.onData(data)
-    }
-
-    override fun retrieveMeasureCallback(heartRateService: HeartRateService): MeasureCallback? {
-        return if (heartRateService is HeartRateServiceImpl) {
-            callback
-        } else {
-            null
-        }
-    }
-
-    override fun addCallback(providedCallback: MeasureCallback) {
-        callback = providedCallback
-    }
-}
 

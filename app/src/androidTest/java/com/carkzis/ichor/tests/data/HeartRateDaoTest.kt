@@ -3,8 +3,8 @@ package com.carkzis.ichor.tests.data
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.carkzis.ichor.data.IchorDatabase
-import com.carkzis.ichor.data.LocalHeartRate
+import com.carkzis.ichor.data.local.IchorDatabase
+import com.carkzis.ichor.data.local.LocalHeartRate
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList

@@ -1,4 +1,4 @@
-package com.carkzis.ichor.data
+package com.carkzis.ichor.data.heartrates
 
 import kotlinx.coroutines.flow.Flow
 

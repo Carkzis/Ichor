@@ -1,4 +1,4 @@
-package com.carkzis.ichor.data
+package com.carkzis.ichor.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
