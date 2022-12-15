@@ -29,9 +29,57 @@ import com.carkzis.ichor.utils.SamplingSpeed
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
+
+interface PermissionProvider {
+    fun getPermission(): MutableStateFlow<Boolean>
+    fun getPermissionRequested(): MutableStateFlow<Boolean>
+    fun launchPermissionRequest()
+}
+
+object DummyPermissionProvider: PermissionProvider {
+    var willGivePermission = false
+    var permissionPreviouslyDenied = false
+    var dummyHasPermission = MutableStateFlow(false)
+    var dummyPermissionRequested = MutableStateFlow(permissionPreviouslyDenied)
+
+    override fun getPermission(): MutableStateFlow<Boolean> = dummyHasPermission
+    override fun getPermissionRequested(): MutableStateFlow<Boolean> = dummyPermissionRequested
+    override fun launchPermissionRequest() {
+        // Cannot give permission if we previously denied permission.
+        willGivePermission = if (permissionPreviouslyDenied) false else willGivePermission
+        dummyHasPermission.value = willGivePermission
+        // If we will give permission, we haven't previously denied permission.
+        permissionPreviouslyDenied = !willGivePermission
+        dummyPermissionRequested.value = permissionPreviouslyDenied
+    }
+}
+
+class DefaultPermissionProvider(private val permissionState: PermissionState) : PermissionProvider {
+
+    private var hasPermission = MutableStateFlow(false)
+    private var permissionRequested = MutableStateFlow(false)
+
+    override fun getPermission(): MutableStateFlow<Boolean> {
+        hasPermission.value = permissionState.hasPermission
+        return hasPermission
+    }
+
+    override fun getPermissionRequested(): MutableStateFlow<Boolean> {
+        permissionRequested.value = permissionState.permissionRequested
+        return permissionRequested
+    }
+
+    override fun launchPermissionRequest() {
+       permissionState.launchPermissionRequest()
+    }
+
+
+}
+
 
 @Composable
 fun IchorBody(modifier: Modifier = Modifier, viewModel: MainViewModel, onClickAbout: () -> Unit) {
@@ -58,7 +106,10 @@ fun IchorBody(modifier: Modifier = Modifier, viewModel: MainViewModel, onClickAb
 
     // TODO: Look into constant recomposing when opening dialog.
 
-    val heartRatePermission = rememberPermissionState(Manifest.permission.BODY_SENSORS)
+    // TODO: Consider making this injectable.
+    // TODO: See if this permission provider causes problems.
+    val heartRatePermissionProvider: PermissionProvider = DefaultPermissionProvider(rememberPermissionState(Manifest.permission.BODY_SENSORS))
+    //val heartRatePermissionProvider = DummyPermissionProvider
     val listState = rememberScalingLazyListState()
     val heartRates by viewModel.latestHeartRateList.collectAsState()
     val shouldInitiateDataCollection by remember { mutableStateOf(AtomicBoolean(true)) }
@@ -72,7 +123,7 @@ fun IchorBody(modifier: Modifier = Modifier, viewModel: MainViewModel, onClickAb
             modifier,
             listState,
             viewModel,
-            heartRatePermission,
+            heartRatePermissionProvider,
             shouldInitiateDataCollection,
             heartRates,
             onClickAbout
@@ -85,11 +136,13 @@ private fun IchorBodyComponents(
     modifier: Modifier,
     listState: ScalingLazyListState,
     viewModel: MainViewModel,
-    heartRatePermission: PermissionState,
+    heartRatePermissionProvider: PermissionProvider,
     shouldInitiateDataCollection: AtomicBoolean,
     heartRates: List<DomainHeartRate>,
     onClickAbout: () -> Unit
 ) {
+    val hasPermission by heartRatePermissionProvider.getPermission().collectAsState()
+    val permissionRequested by heartRatePermissionProvider.getPermissionRequested().collectAsState()
     ScalingLazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxWidth(),
@@ -110,9 +163,8 @@ private fun IchorBodyComponents(
                     prefix = "Sampling Speed: "
                 )
             }
-
         }
-        if (heartRatePermission.hasPermission) {
+        if (hasPermission) {
             initiateDataCollectionOnce(shouldInitiateDataCollection, viewModel)
             item {
                 DisplayLatestHeartRate(modifier = modifier, state = viewModel.latestHeartRate)
@@ -132,8 +184,8 @@ private fun IchorBodyComponents(
             ) { currentHeartRateData ->
                 HeartRateItem(viewModel, currentHeartRateData, modifier)
             }
-        } else if (!heartRatePermission.permissionRequested) {
-            item { IchorButton(onClick = { heartRatePermission.launchPermissionRequest() }) }
+        } else if (!permissionRequested) {
+            item { IchorButton(onClick = { heartRatePermissionProvider.launchPermissionRequest() }) }
             item { AboutButton(viewModel = viewModel, modifier = modifier, onClickAbout) }
         } else {
             item { PermissionsInstructions(modifier) }
