@@ -132,8 +132,10 @@ private fun IchorBodyComponents(
             }
         } else if (!heartRatePermission.permissionRequested) {
             item { IchorButton(onClick = { heartRatePermission.launchPermissionRequest() }) }
+            item { AboutButton(viewModel = viewModel, modifier = modifier, onClickAbout) }
         } else {
             item { PermissionsInstructions(modifier) }
+            item { AboutButton(viewModel = viewModel, modifier = modifier, onClickAbout) }
         }
     }
 }

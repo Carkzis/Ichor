@@ -23,7 +23,6 @@ import com.carkzis.ichor.theme.IchorTypography
 
 @Composable
 fun AboutBody(modifier: Modifier = Modifier) {
-    // TODO: May need to change this.
     val listState = rememberScalingLazyListState()
     Scaffold(
         timeText = { if (!listState.isScrollInProgress) TimeText() },
@@ -36,6 +35,7 @@ fun AboutBody(modifier: Modifier = Modifier) {
             autoCentering = AutoCenteringParams(itemIndex = 1),
             state = listState
         ) {
+            // Initial info.
             item { TitleAboutIcon() }
             item {
                 IchorText(stringResourceId = string.about_ichor, modifier = modifier, style = IchorTypography.title1)
@@ -47,6 +47,8 @@ fun AboutBody(modifier: Modifier = Modifier) {
                     stringResourceId = string.about_description
                 )
             }
+
+            // Starting up.
             item {
                 IchorText(stringResourceId = string.about_starting_up, modifier = modifier, style = IchorTypography.title3)
             }
@@ -62,6 +64,8 @@ fun AboutBody(modifier: Modifier = Modifier) {
                     IchorText(stringResourceId = string.about_about, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                 }
             }
+
+            // What you can see.
             item {
                 IchorText(stringResourceId = string.about_what_you_can_see, modifier = modifier, style = IchorTypography.title3)
             }
@@ -97,6 +101,7 @@ fun AboutBody(modifier: Modifier = Modifier) {
             item {
                 IchorText(stringResourceId = string.about_history, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
             }
+
 
         }
     }
