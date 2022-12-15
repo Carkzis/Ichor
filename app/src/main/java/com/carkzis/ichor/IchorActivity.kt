@@ -34,8 +34,7 @@ class IchorActivity : ComponentActivity() {
 @Composable
 fun IchorNavHost(
     navHostController: NavHostController,
-    // TODO: Change this back to ICHOR when done writing AboutBody.
-    startDestination: String = IchorScreens.ABOUT.toString(),
+    startDestination: String = IchorScreens.ICHOR.toString(),
     viewModel: MainViewModel
     ) {
     SwipeDismissableNavHost(navHostController, startDestination = startDestination) {

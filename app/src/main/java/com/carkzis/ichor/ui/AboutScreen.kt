@@ -140,6 +140,14 @@ fun AboutBody(modifier: Modifier = Modifier) {
             item {
                 IchorText(stringResourceId = string.about_delete_one, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
             }
+
+            // Further information.
+            item {
+                IchorText(stringResourceId = string.about_further_information, modifier = modifier, style = IchorTypography.title3)
+            }
+            item {
+                IchorText(stringResourceId = string.about_further_information_details, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
+            }
         }
     }
 }
