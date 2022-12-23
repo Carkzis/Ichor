@@ -59,6 +59,6 @@ class DummyRepository : Repository {
     }
 
     private fun insertValueIntoDatabase(heartRate: DataPoint) {
-
+        // Do nothing.
     }
 }

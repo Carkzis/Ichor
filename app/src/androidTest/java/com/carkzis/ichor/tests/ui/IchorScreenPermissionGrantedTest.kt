@@ -124,7 +124,7 @@ class IchorScreenPermissionGrantedTest {
     }
 
     @Test
-    fun `change of sampling speed is reflected on main screen`() {
+    fun `change of sampling speed to fast is reflected on main screen`() {
         composeTestRule
             .onNodeWithText("Sampling Speed: Default")
             .assertIsDisplayed()
@@ -141,8 +141,25 @@ class IchorScreenPermissionGrantedTest {
             .assertIsDisplayed()
     }
 
-    // TODO: Test change of sampling speed displays to UI (main screen)
-    // TODO: BUG - SLOW to change to SLOW, but not to FAST
+    @Test
+    fun `change of sampling speed to slow is reflected on main screen`() {
+        composeTestRule
+            .onNodeWithText("Sampling Speed: Default")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithContentDescription("Button for slow sampling speed.")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Sampling Speed: Slow")
+            .assertIsDisplayed()
+    }
+
+
     // TODO: Test change of sampling speed displays to UI (dialogue via tick)
     // TODO: Test do not change
 
