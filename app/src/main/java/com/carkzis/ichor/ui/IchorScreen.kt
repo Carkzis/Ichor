@@ -69,10 +69,6 @@ fun IchorScreen(
 
     // TODO: Look into constant recomposing when opening dialog.
 
-    // TODO: Consider making this injectable.
-    // TODO: See if this permission provider causes problems.
-    //val heartRatePermissionFacade: PermissionFacade = DefaultPermissionFacade(rememberPermissionState(Manifest.permission.BODY_SENSORS))
-    //val heartRatePermissionFacade = DummyPermissionFacade
     val listState = rememberScalingLazyListState()
     val heartRates by viewModel.latestHeartRateList.collectAsState()
     val shouldInitiateDataCollection by remember { mutableStateOf(AtomicBoolean(true)) }
@@ -176,7 +172,8 @@ private fun DeleteAllButton(
     IchorButton(
         modifier = modifier.size(24.dp),
         onClick = { deleteAlertRequired = true },
-        iconImage = Icons.Rounded.Delete
+        iconImage = Icons.Rounded.Delete,
+        contentDescription = "Delete All Button"
     )
 
     Dialog(
@@ -228,7 +225,8 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
             .size(24.dp)
             .padding(all = 0.dp),
         onClick = { samplingSpeedAlertRequired = true },
-        iconImage = Icons.Rounded.Speed
+        iconImage = Icons.Rounded.Speed,
+        contentDescription = "Sampling Speed Change Button"
     )
 
     Dialog(

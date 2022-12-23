@@ -23,9 +23,9 @@ class DummyRepository : Repository {
     override suspend fun collectHeartRatesFromDatabase(): Flow<List<DomainHeartRate>> = flow {
         emit(listOf(
             LocalHeartRate(
-            date = "",
-            pk = "",
-            value = ""
+            date = "2022-12-25 12:30:30",
+            pk = "1",
+            value = "100.0"
         )
         ).toDomainHeartRate())
     }

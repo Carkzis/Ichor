@@ -1,12 +1,74 @@
 package com.carkzis.ichor.tests.ui
 
+import androidx.compose.ui.test.*
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.navigation.NavHostController
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.carkzis.ichor.testdoubles.DummyPermissionFacade
+import com.carkzis.ichor.testdoubles.DummyViewModel
+import com.carkzis.ichor.ui.IchorScreen
+import com.carkzis.ichor.utils.PermissionFacade
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+
+@HiltAndroidTest
+@RunWith(AndroidJUnit4::class)
 class IchorScreenPermissionGrantedTest {
-    // Title
-    // Heartbeat Icon
-    // Availability
-    // Sample speed
-    // Speed button
-    // About button
-    // Delete button
-    // Heart rate item with bpm, and date in "YYYY-MM-DD HH:mm:SS" format
+
+    @get:Rule(order = 0)
+    var hiltRule = HiltAndroidRule(this)
+
+    @get:Rule(order = 1)
+    val composeTestRule = createComposeRule()
+    private lateinit var dummyHeartRatePermissionFacade: PermissionFacade
+    private lateinit var navController: NavHostController
+
+    @Before
+    fun setUp() {
+        hiltRule.inject()
+        composeTestRule.apply {
+            setContent {
+                dummyHeartRatePermissionFacade = DummyPermissionFacade(hasPermissionAlready = true)
+                navController = rememberSwipeDismissableNavController()
+                IchorScreen(viewModel = DummyViewModel(), heartRatePermissionFacade = dummyHeartRatePermissionFacade)
+            }
+        }
+    }
+
+    @Test
+    fun `items are displayed as expected`() {
+        composeTestRule
+            .onNodeWithText("Ichor")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Main heartbeat icon for app.")
+
+        composeTestRule
+            .onNodeWithText("Availability: Unknown")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Sampling Speed: Default")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("0.0 bpm")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("About Button")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Delete All Button")
+            .assertIsDisplayed()
+
+        // TODO: Heart rate item with bpm, and date in "YYYY-MM-DD HH:mm:SS" format
+
+    }
 }
