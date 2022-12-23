@@ -56,15 +56,7 @@ class IchorScreenPermissionRequiredTest {
         delayedSetUp()
 
         // Assert on the initial screen.
-        composeTestRule
-            .onNodeWithContentDescription("Permission request button")
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText(permissionNotGrantedText)
-            .assertCountEquals(0)
-        composeTestRule
-            .onAllNodesWithText("bpm", substring = true)
-            .assertCountEquals(0)
+        assertPermissionRequiredAndCanBeRequestedScreenVisible()
 
         // Move to next screen.
         composeTestRule
@@ -72,15 +64,7 @@ class IchorScreenPermissionRequiredTest {
             .performClick()
 
         // Assert the new screen after "denying" permissions.
-        composeTestRule
-            .onNodeWithText(permissionNotGrantedText)
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithContentDescription("Permission request button")
-            .assertCountEquals(0)
-        composeTestRule
-            .onAllNodesWithText("bpm", substring = true)
-            .assertCountEquals(0)
+        assertPermissionRequiredButCannotBeRequestedScreenVisible()
     }
 
     @Test
@@ -89,15 +73,7 @@ class IchorScreenPermissionRequiredTest {
         delayedSetUp()
 
         // Assert on the initial screen.
-        composeTestRule
-            .onNodeWithContentDescription("Permission request button")
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText(permissionNotGrantedText)
-            .assertCountEquals(0)
-        composeTestRule
-            .onAllNodesWithText("bpm", substring = true)
-            .assertCountEquals(0)
+        assertPermissionRequiredAndCanBeRequestedScreenVisible()
 
         // Move to next screen.
         composeTestRule
@@ -105,16 +81,7 @@ class IchorScreenPermissionRequiredTest {
             .performClick()
 
         // Assert the new screen after "accepting" permissions.
-        composeTestRule
-            .onAllNodesWithText("bpm", substring = true)
-            .onFirst()
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithContentDescription("Permission request button")
-            .assertCountEquals(0)
-        composeTestRule
-            .onAllNodesWithText(permissionNotGrantedText)
-            .assertCountEquals(0)
+        assertMainIchorScreenVisible()
     }
 
     @Test
@@ -123,6 +90,43 @@ class IchorScreenPermissionRequiredTest {
         delayedSetUp()
 
         // Assert that we automatically go to the main screen.
+        assertMainIchorScreenVisible()
+    }
+
+    @Test
+    fun `when permission previously denied message provided on screen and permission cannot be requested again within app`() {
+        dummyHeartRatePermissionFacade = DummyPermissionFacade(willGivePermission = true, permissionPreviouslyDenied = true)
+        delayedSetUp()
+
+        // Assert that we automatically get a message advised permission previously denied.
+        assertPermissionRequiredButCannotBeRequestedScreenVisible()
+    }
+
+    fun assertPermissionRequiredAndCanBeRequestedScreenVisible() {
+        composeTestRule
+            .onNodeWithContentDescription("Permission request button")
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(permissionNotGrantedText)
+            .assertCountEquals(0)
+        composeTestRule
+            .onAllNodesWithText("bpm", substring = true)
+            .assertCountEquals(0)
+    }
+
+    fun assertPermissionRequiredButCannotBeRequestedScreenVisible() {
+        composeTestRule
+            .onNodeWithText(permissionNotGrantedText)
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithContentDescription("Permission request button")
+            .assertCountEquals(0)
+        composeTestRule
+            .onAllNodesWithText("bpm", substring = true)
+            .assertCountEquals(0)
+    }
+
+    fun assertMainIchorScreenVisible() {
         composeTestRule
             .onAllNodesWithText("bpm", substring = true)
             .onFirst()
@@ -132,23 +136,6 @@ class IchorScreenPermissionRequiredTest {
             .assertCountEquals(0)
         composeTestRule
             .onAllNodesWithText(permissionNotGrantedText)
-            .assertCountEquals(0)
-    }
-
-    @Test
-    fun `when permission previously denied message provided on screen and permission cannot be requested again within app`() {
-        dummyHeartRatePermissionFacade = DummyPermissionFacade(willGivePermission = true, permissionPreviouslyDenied = true)
-        delayedSetUp()
-
-        // Assert that we automatically get a message advised permission previously denied.
-        composeTestRule
-            .onNodeWithText(permissionNotGrantedText)
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithContentDescription("Permission request button")
-            .assertCountEquals(0)
-        composeTestRule
-            .onAllNodesWithText("bpm", substring = true)
             .assertCountEquals(0)
     }
     
