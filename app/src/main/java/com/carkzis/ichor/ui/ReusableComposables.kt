@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -176,7 +177,7 @@ fun IchorCard(
     content: @Composable () -> Unit,
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.testTag("Heart Rate Item Card"),
         onClick = { /* Do nothing. */ },
         shape = RoundedCornerShape(50.dp),
         backgroundPainter = ColorPainter(color = IchorColorPalette.secondary),

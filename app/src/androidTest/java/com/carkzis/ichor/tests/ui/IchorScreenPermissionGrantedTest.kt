@@ -42,12 +42,21 @@ class IchorScreenPermissionGrantedTest {
 
     @Test
     fun `items are displayed as expected`() {
+        headerDisplayed()
+        liveDataDisplayed()
+        buttonsDisplayed()
+        heartRateItemCardWithExpectedDataDisplayed()
+    }
+
+    private fun headerDisplayed() {
         composeTestRule
             .onNodeWithText("Ichor")
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription("Main heartbeat icon for app.")
+    }
 
+    private fun liveDataDisplayed() {
         composeTestRule
             .onNodeWithText("Availability: Unknown")
             .assertIsDisplayed()
@@ -57,7 +66,9 @@ class IchorScreenPermissionGrantedTest {
         composeTestRule
             .onNodeWithText("0.0 bpm")
             .assertIsDisplayed()
+    }
 
+    private fun buttonsDisplayed() {
         composeTestRule
             .onNodeWithContentDescription("Sampling Speed Change Button")
             .assertIsDisplayed()
@@ -67,8 +78,17 @@ class IchorScreenPermissionGrantedTest {
         composeTestRule
             .onNodeWithContentDescription("Delete All Button")
             .assertIsDisplayed()
+    }
 
-        // TODO: Heart rate item with bpm, and date in "YYYY-MM-DD HH:mm:SS" format
-
+    private fun heartRateItemCardWithExpectedDataDisplayed() {
+        composeTestRule
+            .onNodeWithTag("Heart Rate Item Card")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("2022-12-25 12:30:30")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("100.0 bpm")
+            .assertIsDisplayed()
     }
 }
