@@ -248,12 +248,13 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
                     textAlign = TextAlign.Center,
                     text = "Change sampling speed?"
                 )
-                Spacer(modifier = androidx.compose.ui.Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     Row {
                         IchorButton(
                             iconImage = Icons.Rounded.DirectionsWalk,
-                            modifier = Modifier.size(32.dp)
+                            modifier = Modifier.size(32.dp),
+                            contentDescription = "Button for slow sampling speed."
                         ) {
                             viewModel.changeSampleRate(SamplingSpeed.SLOW)
                             samplingSpeedAlertRequired = false
@@ -265,7 +266,8 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
                     Row {
                         IchorButton(
                             iconImage = Icons.Rounded.DirectionsRun,
-                            modifier = Modifier.size(32.dp)
+                            modifier = Modifier.size(32.dp),
+                            contentDescription = "Button for default medium sampling speed."
                         ) {
                             viewModel.changeSampleRate(SamplingSpeed.DEFAULT)
                             samplingSpeedAlertRequired = false
@@ -277,7 +279,8 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
                     Row {
                         IchorButton(
                             iconImage = Icons.Rounded.DirectionsBike,
-                            modifier = Modifier.size(32.dp)
+                            modifier = Modifier.size(32.dp),
+                            contentDescription = "Button for fast sampling speed."
                         ) {
                             viewModel.changeSampleRate(SamplingSpeed.FAST)
                             samplingSpeedAlertRequired = false

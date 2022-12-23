@@ -97,7 +97,27 @@ class IchorScreenPermissionGrantedTest {
         composeTestRule
             .onNodeWithContentDescription("Sampling Speed Change Button")
             .performClick()
-        
+
+        composeTestRule
+            .onNodeWithContentDescription( "Change heartbeat sampling speed.")
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Change sampling speed?")
+            .assertIsDisplayed()
+
+
+        composeTestRule
+            .onNodeWithContentDescription("Button for slow sampling speed.")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Button for default medium sampling speed.")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Button for fast sampling speed.")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Affirmation icon.")
+            .assertIsDisplayed()
     }
 
     // TODO: Test change of sampling speed displays to UI (main screen)
