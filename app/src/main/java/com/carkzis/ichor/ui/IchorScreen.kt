@@ -1,4 +1,5 @@
-@file:OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterialApi::class,
+@file:OptIn(
+    ExperimentalPermissionsApi::class, ExperimentalMaterialApi::class,
     ExperimentalPermissionsApi::class
 )
 
@@ -37,7 +38,14 @@ import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 @Composable
-fun IchorBody(modifier: Modifier = Modifier, viewModel: MainViewModel, onClickAbout: () -> Unit) {
+fun IchorScreen(
+    modifier: Modifier = Modifier,
+    viewModel: MainViewModel,
+    heartRatePermissionFacade: PermissionFacade = DefaultPermissionFacade(
+        rememberPermissionState(Manifest.permission.BODY_SENSORS)
+    ),
+    onClickAbout: () -> Unit = {}
+) {
     /*
     To allow synthetic providers, use:
         adb shell am broadcast \
@@ -63,7 +71,7 @@ fun IchorBody(modifier: Modifier = Modifier, viewModel: MainViewModel, onClickAb
 
     // TODO: Consider making this injectable.
     // TODO: See if this permission provider causes problems.
-    val heartRatePermissionFacade: PermissionFacade = DefaultPermissionFacade(rememberPermissionState(Manifest.permission.BODY_SENSORS))
+    //val heartRatePermissionFacade: PermissionFacade = DefaultPermissionFacade(rememberPermissionState(Manifest.permission.BODY_SENSORS))
     //val heartRatePermissionFacade = DummyPermissionFacade
     val listState = rememberScalingLazyListState()
     val heartRates by viewModel.latestHeartRateList.collectAsState()
@@ -458,5 +466,5 @@ fun DisplayLatestHeartRate(modifier: Modifier, state: StateFlow<Double>) {
 )
 @Composable
 fun IchorScreenPreview() {
-    IchorBody(viewModel = viewModel()) {}
+    IchorScreen(viewModel = viewModel()) {}
 }

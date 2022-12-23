@@ -37,6 +37,7 @@ class NavHostTest {
         composeTestRule.apply {
             setContent {
                 navController = rememberSwipeDismissableNavController()
+                // TODO: Use DummyPermissionFacade.
                 IchorNavHost(viewModel = DummyViewModel(), navHostController = navController)
             }
         }
