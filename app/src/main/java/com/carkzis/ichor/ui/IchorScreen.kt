@@ -27,60 +27,14 @@ import com.carkzis.ichor.R.*
 import com.carkzis.ichor.data.domain.DomainHeartRate
 import com.carkzis.ichor.theme.IchorColorPalette
 import com.carkzis.ichor.theme.IchorTypography
+import com.carkzis.ichor.utils.DefaultPermissionFacade
+import com.carkzis.ichor.utils.PermissionFacade
 import com.carkzis.ichor.utils.SamplingSpeed
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
-
-interface PermissionFacade {
-    fun getPermission(): MutableStateFlow<Boolean>
-    fun getPermissionRequested(): MutableStateFlow<Boolean>
-    fun launchPermissionRequest()
-}
-
-object DummyPermissionFacade: PermissionFacade {
-    var willGivePermission = false
-    var permissionPreviouslyDenied = false
-    var dummyHasPermission = MutableStateFlow(false)
-    var dummyPermissionRequested = MutableStateFlow(permissionPreviouslyDenied)
-
-    override fun getPermission(): MutableStateFlow<Boolean> = dummyHasPermission
-    override fun getPermissionRequested(): MutableStateFlow<Boolean> = dummyPermissionRequested
-    override fun launchPermissionRequest() {
-        // Cannot give permission if we previously denied permission.
-        willGivePermission = if (permissionPreviouslyDenied) false else willGivePermission
-        dummyHasPermission.value = willGivePermission
-        // If we will give permission, we haven't previously denied permission.
-        permissionPreviouslyDenied = !willGivePermission
-        dummyPermissionRequested.value = permissionPreviouslyDenied
-    }
-}
-
-class DefaultPermissionFacade(private val permissionState: PermissionState) : PermissionFacade {
-
-    private var hasPermission = MutableStateFlow(false)
-    private var permissionRequested = MutableStateFlow(false)
-
-    override fun getPermission(): MutableStateFlow<Boolean> {
-        hasPermission.value = permissionState.hasPermission
-        return hasPermission
-    }
-
-    override fun getPermissionRequested(): MutableStateFlow<Boolean> {
-        permissionRequested.value = permissionState.permissionRequested
-        return permissionRequested
-    }
-
-    override fun launchPermissionRequest() {
-       permissionState.launchPermissionRequest()
-    }
-
-}
-
 
 @Composable
 fun IchorBody(modifier: Modifier = Modifier, viewModel: MainViewModel, onClickAbout: () -> Unit) {
