@@ -60,7 +60,7 @@ class IchorScreenPermissionRequiredTest {
 
         // Move to next screen.
         composeTestRule
-            .onNodeWithContentDescription("Permission request button")
+            .onNodeWithContentDescription("Permission request button.")
             .performClick()
 
         // Assert the new screen after "denying" permissions.
@@ -77,7 +77,7 @@ class IchorScreenPermissionRequiredTest {
 
         // Move to next screen.
         composeTestRule
-            .onNodeWithContentDescription("Permission request button")
+            .onNodeWithContentDescription("Permission request button.")
             .performClick()
 
         // Assert the new screen after "accepting" permissions.
@@ -102,9 +102,11 @@ class IchorScreenPermissionRequiredTest {
         assertPermissionRequiredButCannotBeRequestedScreenVisible()
     }
 
-    fun assertPermissionRequiredAndCanBeRequestedScreenVisible() {
+    private fun assertPermissionRequiredAndCanBeRequestedScreenVisible() {
+        assertStandardThemeItemsDisplayed()
+        
         composeTestRule
-            .onNodeWithContentDescription("Permission request button")
+            .onNodeWithContentDescription("Permission request button.")
             .assertIsDisplayed()
         composeTestRule
             .onAllNodesWithText(permissionNotGrantedText)
@@ -114,29 +116,45 @@ class IchorScreenPermissionRequiredTest {
             .assertCountEquals(0)
     }
 
-    fun assertPermissionRequiredButCannotBeRequestedScreenVisible() {
+    private fun assertPermissionRequiredButCannotBeRequestedScreenVisible() {
+        assertStandardThemeItemsDisplayed()
+
         composeTestRule
             .onNodeWithText(permissionNotGrantedText)
             .assertIsDisplayed()
         composeTestRule
-            .onAllNodesWithContentDescription("Permission request button")
+            .onAllNodesWithContentDescription("Permission request button.")
             .assertCountEquals(0)
         composeTestRule
             .onAllNodesWithText("bpm", substring = true)
             .assertCountEquals(0)
     }
 
-    fun assertMainIchorScreenVisible() {
+    private fun assertMainIchorScreenVisible() {
+        assertStandardThemeItemsDisplayed()
+
         composeTestRule
             .onAllNodesWithText("bpm", substring = true)
             .onFirst()
             .assertIsDisplayed()
         composeTestRule
-            .onAllNodesWithContentDescription("Permission request button")
+            .onAllNodesWithContentDescription("Permission request button.")
             .assertCountEquals(0)
         composeTestRule
             .onAllNodesWithText(permissionNotGrantedText)
             .assertCountEquals(0)
     }
+
+    private fun assertStandardThemeItemsDisplayed() {
+        composeTestRule
+            .onNodeWithText("Ichor")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Main heartbeat icon for app.")
+        composeTestRule
+            .onNodeWithContentDescription("About Button")
+            .assertIsDisplayed()
+    }
+
     
 }

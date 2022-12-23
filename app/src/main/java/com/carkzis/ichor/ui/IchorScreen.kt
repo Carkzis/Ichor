@@ -148,7 +148,7 @@ private fun IchorBodyComponents(
                 HeartRateItem(viewModel, currentHeartRateData, modifier)
             }
         } else if (!permissionRequested) {
-            item { IchorButton(contentDescription = "Permission request button", onClick = { heartRatePermissionProvider.launchPermissionRequest() }) }
+            item { IchorButton(contentDescription = "Permission request button.", onClick = { heartRatePermissionProvider.launchPermissionRequest() }) }
             item { AboutButton(viewModel = viewModel, modifier = modifier, onClickAbout) }
         } else {
             item { PermissionsInstructions(modifier) }
