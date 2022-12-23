@@ -4,7 +4,7 @@ import com.carkzis.ichor.utils.PermissionFacade
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class DummyPermissionFacade(
-    private var hasPermissionAlready: Boolean = false,
+    hasPermissionAlready: Boolean = false,
     private var willGivePermission: Boolean = false,
     private var permissionPreviouslyDenied: Boolean = false
 ) : PermissionFacade {

@@ -11,6 +11,7 @@ import com.carkzis.ichor.ui.IchorScreen
 import com.carkzis.ichor.utils.PermissionFacade
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.delay
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -94,10 +95,12 @@ class IchorScreenPermissionGrantedTest {
 
     @Test
     fun `clicking sampling speed change button results expected items displayed in dialogue`() {
+        // Open sampling speed dialogue.
         composeTestRule
             .onNodeWithContentDescription("Sampling Speed Change Button")
             .performClick()
 
+        // Assert on header.
         composeTestRule
             .onNodeWithContentDescription( "Change heartbeat sampling speed.")
             .performClick()
@@ -105,7 +108,7 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithText("Change sampling speed?")
             .assertIsDisplayed()
 
-
+        // Assert on selection of speeds to choose from.
         composeTestRule
             .onNodeWithContentDescription("Button for slow sampling speed.")
             .assertIsDisplayed()
@@ -120,7 +123,26 @@ class IchorScreenPermissionGrantedTest {
             .assertIsDisplayed()
     }
 
+    @Test
+    fun `change of sampling speed is reflected on main screen`() {
+        composeTestRule
+            .onNodeWithText("Sampling Speed: Default")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithContentDescription("Button for fast sampling speed.")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Sampling Speed: Fast")
+            .assertIsDisplayed()
+    }
+
     // TODO: Test change of sampling speed displays to UI (main screen)
+    // TODO: BUG - SLOW to change to SLOW, but not to FAST
     // TODO: Test change of sampling speed displays to UI (dialogue via tick)
     // TODO: Test do not change
 

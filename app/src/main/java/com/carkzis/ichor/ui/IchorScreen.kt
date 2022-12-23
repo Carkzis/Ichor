@@ -102,6 +102,7 @@ private fun IchorBodyComponents(
 ) {
     val hasPermission by heartRatePermissionProvider.getPermission().collectAsState()
     val permissionRequested by heartRatePermissionProvider.getPermissionRequested().collectAsState()
+
     ScalingLazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxWidth(),

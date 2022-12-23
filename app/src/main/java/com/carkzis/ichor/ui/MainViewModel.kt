@@ -39,14 +39,9 @@ open class MainViewModel @Inject constructor(private val repository: Repository)
     val latestHeartRateList: StateFlow<List<DomainHeartRate>>
         get() = _latestHeartRateList
 
-    private val _currentSampleSpeed = MutableStateFlow(SamplingSpeed.UNKNOWN)
+    private val _currentSampleSpeed = MutableStateFlow("")
     val currentSamplingSpeed: StateFlow<String>
-        get() = when (_currentSampleSpeed.value) {
-            SamplingSpeed.SLOW -> MutableStateFlow("Slow")
-            SamplingSpeed.DEFAULT -> MutableStateFlow("Default")
-            SamplingSpeed.FAST -> MutableStateFlow("Fast")
-            else -> MutableStateFlow("")
-        }
+        get() = _currentSampleSpeed
 
     fun initiateDataCollection(samplingSpeed: SamplingSpeed? = null) {
         val lock = Mutex()
@@ -55,7 +50,7 @@ open class MainViewModel @Inject constructor(private val repository: Repository)
                 samplingSpeed?.let {
                     repository.changeSamplingPreference(samplingSpeed)
                 }
-                _currentSampleSpeed.value = repository.collectSamplingPreference().first()
+                _currentSampleSpeed.value = repository.collectSamplingPreference().first().toString()
                 addAllDataCollectionJobsToJobsList()
             }
         }
@@ -68,7 +63,7 @@ open class MainViewModel @Inject constructor(private val repository: Repository)
                     repository.startSharedFlowForDataCollectionFromHeartRateService()
                 },
                 viewModelScope.launch {
-                    assignLatestHeartRateToUI(chooseSampler(_currentSampleSpeed.value))
+                    assignLatestHeartRateToUI(chooseSampler(SamplingSpeed.forDescriptor(_currentSampleSpeed.value)))
                 },
                 viewModelScope.launch {
                     assignLatestAvailabilityToUI()
@@ -139,7 +134,7 @@ open class MainViewModel @Inject constructor(private val repository: Repository)
     fun changeSampleRate(samplerRate: SamplingSpeed) {
         listOfJobs.forEach { it.cancel() }
         listOfJobs.clear()
-        _currentSampleSpeed.value = samplerRate
+        _currentSampleSpeed.value = samplerRate.toString()
         initiateDataCollection(samplerRate)
     }
 }

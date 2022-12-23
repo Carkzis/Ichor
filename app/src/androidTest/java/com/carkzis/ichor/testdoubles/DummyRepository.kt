@@ -10,11 +10,13 @@ import com.carkzis.ichor.data.local.Repository
 import com.carkzis.ichor.utils.SamplingSpeed
 import com.carkzis.ichor.utils.Sampler
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import java.time.Duration
 import java.util.*
 
 class DummyRepository : Repository {
+    private var dummyHasSamplingSpeed = MutableStateFlow(SamplingSpeed.DEFAULT)
 
     override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> = flow {
         emit(DataTypeAvailability.UNKNOWN)
@@ -45,11 +47,11 @@ class DummyRepository : Repository {
         }
 
     override suspend fun collectSamplingPreference(): Flow<SamplingSpeed> = flow {
-        emit(SamplingSpeed.DEFAULT)
+        emit(dummyHasSamplingSpeed.value)
     }
 
     override suspend fun changeSamplingPreference(samplingSpeed: SamplingSpeed) {
-
+        dummyHasSamplingSpeed.value = samplingSpeed
     }
 
     override suspend fun startSharedFlowForDataCollectionFromHeartRateService() {
