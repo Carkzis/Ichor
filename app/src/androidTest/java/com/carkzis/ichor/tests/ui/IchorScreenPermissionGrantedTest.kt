@@ -159,8 +159,51 @@ class IchorScreenPermissionGrantedTest {
             .assertIsDisplayed()
     }
 
+    @Test
+    fun `change of sampling speed is reflected on sampling speed dialogue when reopened`() {
+        composeTestRule
+            .onNodeWithText("Sampling Speed: Default")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .performClick()
+        composeTestRule
+            .onNodeWithTag("Default sampling with affirmation")
+            .onChildren()
+            .filter(hasContentDescription("Affirmation icon."))
+            .assertCountEquals(1)
 
-    // TODO: Test change of sampling speed displays to UI (dialogue via tick)
+        // Change sampling speed to slow.
+        composeTestRule
+            .onNodeWithContentDescription("Button for slow sampling speed.")
+            .performClick()
+
+        // Reopen dialogue.
+        composeTestRule
+            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .performClick()
+        composeTestRule
+            .onNodeWithTag("Slow sampling with affirmation")
+            .onChildren()
+            .filter(hasContentDescription("Affirmation icon."))
+            .assertCountEquals(1)
+
+        // Change sampling speed to fast.
+        composeTestRule
+            .onNodeWithContentDescription("Button for fast sampling speed.")
+            .performClick()
+
+        // Reopen dialogue.
+        composeTestRule
+            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .performClick()
+        composeTestRule
+            .onNodeWithTag("Fast sampling with affirmation")
+            .onChildren()
+            .filter(hasContentDescription("Affirmation icon."))
+            .assertCountEquals(1)
+    }
+    
     // TODO: Test do not change
 
     // TODO: Test delete all button raises dialogue with expected items

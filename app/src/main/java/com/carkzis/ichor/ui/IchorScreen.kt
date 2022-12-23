@@ -16,6 +16,7 @@ import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -251,7 +252,7 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    Row {
+                    Row(modifier = modifier.testTag("Slow sampling with affirmation")) {
                         IchorButton(
                             iconImage = Icons.Rounded.DirectionsWalk,
                             modifier = Modifier.size(32.dp),
@@ -264,7 +265,7 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
                             TickIcon()
                         }
                     }
-                    Row {
+                    Row(modifier = modifier.testTag("Default sampling with affirmation")) {
                         IchorButton(
                             iconImage = Icons.Rounded.DirectionsRun,
                             modifier = Modifier.size(32.dp),
@@ -277,7 +278,7 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
                             TickIcon()
                         }
                     }
-                    Row {
+                    Row(modifier = modifier.testTag("Fast sampling with affirmation")) {
                         IchorButton(
                             iconImage = Icons.Rounded.DirectionsBike,
                             modifier = Modifier.size(32.dp),
