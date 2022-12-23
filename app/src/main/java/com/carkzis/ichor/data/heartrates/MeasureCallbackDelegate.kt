@@ -5,7 +5,7 @@ import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
 import androidx.health.services.client.data.DataType
 
-interface HeartRateCallbackProxy {
+interface MeasureCallbackDelegate {
     fun invokeOnAvailabilityChanged(dataType: DataType, availability: Availability)
     fun invokeOnData(data: List<DataPoint>)
     fun retrieveMeasureCallback(heartRateService: HeartRateService): MeasureCallback?

@@ -6,7 +6,7 @@ import androidx.health.services.client.data.DataType
 import androidx.test.platform.app.InstrumentationRegistry
 import com.carkzis.ichor.data.heartrates.HeartRateServiceImpl
 import com.carkzis.ichor.data.heartrates.MeasureClientData
-import com.carkzis.ichor.testdoubles.FakeHeartRateCallbackProxy
+import com.carkzis.ichor.testdoubles.FakeHeartRateCallbackDelegate
 import com.carkzis.ichor.testdoubles.listOfAvailabilities
 import com.carkzis.ichor.testdoubles.listOfHeartRateDataPoints
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,8 +24,8 @@ class HeartRateServiceTest {
 
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val healthServices = HealthServices.getClient(context)
-    private val fakeHeartRateCallbackProxy = FakeHeartRateCallbackProxy()
-    private val sut = HeartRateServiceImpl(healthServices, fakeHeartRateCallbackProxy)
+    private val fakeHeartRateCallbackDelegate = FakeHeartRateCallbackDelegate()
+    private val sut = HeartRateServiceImpl(healthServices, fakeHeartRateCallbackDelegate)
 
     @Test
     fun `heart rate service emits availability in given order`() = runTest {
@@ -36,7 +36,7 @@ class HeartRateServiceTest {
         launch {
             for (dataPointIndex in expectedAvailabilities.indices) {
                 delay(100)
-                fakeHeartRateCallbackProxy.invokeOnAvailabilityChanged(
+                fakeHeartRateCallbackDelegate.invokeOnAvailabilityChanged(
                     DataType.HEART_RATE_BPM,
                     expectedAvailabilities[dataPointIndex]
                 )
@@ -77,7 +77,7 @@ class HeartRateServiceTest {
         launch {
             for (dataPointIndex in expectedHeartRateDataPoints.indices) {
                 delay(100)
-                fakeHeartRateCallbackProxy.invokeOnData(expectedHeartRateDataPoints[dataPointIndex])
+                fakeHeartRateCallbackDelegate.invokeOnData(expectedHeartRateDataPoints[dataPointIndex])
             }
         }
 

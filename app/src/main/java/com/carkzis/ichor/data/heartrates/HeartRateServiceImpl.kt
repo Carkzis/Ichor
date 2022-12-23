@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 class HeartRateServiceImpl @Inject constructor(
     healthServicesClient: HealthServicesClient,
-    private val heartRateCallbackProxy: HeartRateCallbackProxy
+    private val heartRateCallbackDelegate: MeasureCallbackDelegate
 ) : HeartRateService {
 
     private val heartRateMeasureClient = healthServicesClient.measureClient
@@ -32,17 +32,17 @@ class HeartRateServiceImpl @Inject constructor(
             }
         }
         Timber.e("Should not change: $heartRateCallback")
-        heartRateCallbackProxy.addCallback(heartRateCallback)
+        heartRateCallbackDelegate.addCallback(heartRateCallback)
 
         heartRateMeasureClient.registerCallback(
             DataType.HEART_RATE_BPM,
-            heartRateCallbackProxy.retrieveMeasureCallback(this@HeartRateServiceImpl) as MeasureCallback
+            heartRateCallbackDelegate.retrieveMeasureCallback(this@HeartRateServiceImpl) as MeasureCallback
         )
 
         awaitClose {
             heartRateMeasureClient.unregisterCallback(
                 DataType.HEART_RATE_BPM,
-                heartRateCallbackProxy.retrieveMeasureCallback(this@HeartRateServiceImpl) as MeasureCallback
+                heartRateCallbackDelegate.retrieveMeasureCallback(this@HeartRateServiceImpl) as MeasureCallback
             )
         }
     }

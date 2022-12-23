@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterialApi::class)
+@file:OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterialApi::class,
+    ExperimentalPermissionsApi::class
+)
 
 package com.carkzis.ichor.ui
 
@@ -34,13 +36,13 @@ import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
-interface PermissionProvider {
+interface PermissionFacade {
     fun getPermission(): MutableStateFlow<Boolean>
     fun getPermissionRequested(): MutableStateFlow<Boolean>
     fun launchPermissionRequest()
 }
 
-object DummyPermissionProvider: PermissionProvider {
+object DummyPermissionFacade: PermissionFacade {
     var willGivePermission = false
     var permissionPreviouslyDenied = false
     var dummyHasPermission = MutableStateFlow(false)
@@ -58,7 +60,7 @@ object DummyPermissionProvider: PermissionProvider {
     }
 }
 
-class DefaultPermissionProvider(private val permissionState: PermissionState) : PermissionProvider {
+class DefaultPermissionFacade(private val permissionState: PermissionState) : PermissionFacade {
 
     private var hasPermission = MutableStateFlow(false)
     private var permissionRequested = MutableStateFlow(false)
@@ -76,7 +78,6 @@ class DefaultPermissionProvider(private val permissionState: PermissionState) : 
     override fun launchPermissionRequest() {
        permissionState.launchPermissionRequest()
     }
-
 
 }
 
@@ -108,8 +109,8 @@ fun IchorBody(modifier: Modifier = Modifier, viewModel: MainViewModel, onClickAb
 
     // TODO: Consider making this injectable.
     // TODO: See if this permission provider causes problems.
-    val heartRatePermissionProvider: PermissionProvider = DefaultPermissionProvider(rememberPermissionState(Manifest.permission.BODY_SENSORS))
-    //val heartRatePermissionProvider = DummyPermissionProvider
+    val heartRatePermissionFacade: PermissionFacade = DefaultPermissionFacade(rememberPermissionState(Manifest.permission.BODY_SENSORS))
+    //val heartRatePermissionFacade = DummyPermissionFacade
     val listState = rememberScalingLazyListState()
     val heartRates by viewModel.latestHeartRateList.collectAsState()
     val shouldInitiateDataCollection by remember { mutableStateOf(AtomicBoolean(true)) }
@@ -123,7 +124,7 @@ fun IchorBody(modifier: Modifier = Modifier, viewModel: MainViewModel, onClickAb
             modifier,
             listState,
             viewModel,
-            heartRatePermissionProvider,
+            heartRatePermissionFacade,
             shouldInitiateDataCollection,
             heartRates,
             onClickAbout
@@ -136,7 +137,7 @@ private fun IchorBodyComponents(
     modifier: Modifier,
     listState: ScalingLazyListState,
     viewModel: MainViewModel,
-    heartRatePermissionProvider: PermissionProvider,
+    heartRatePermissionProvider: PermissionFacade,
     shouldInitiateDataCollection: AtomicBoolean,
     heartRates: List<DomainHeartRate>,
     onClickAbout: () -> Unit

@@ -3,8 +3,8 @@ package com.carkzis.ichor.di
 import android.content.Context
 import androidx.health.services.client.HealthServices
 import androidx.health.services.client.HealthServicesClient
-import com.carkzis.ichor.data.heartrates.HeartRateCallbackProxy
-import com.carkzis.ichor.data.heartrates.HeartRateCallbackProxyImpl
+import com.carkzis.ichor.data.heartrates.MeasureCallbackDelegate
+import com.carkzis.ichor.data.heartrates.HeartRateCallbackDelegate
 import com.carkzis.ichor.data.heartrates.HeartRateService
 import com.carkzis.ichor.data.heartrates.HeartRateServiceImpl
 import dagger.Module
@@ -25,13 +25,13 @@ object HeartRateModule {
 
     @Singleton
     @Provides
-    fun provideHeartRateCallbackProxy() : HeartRateCallbackProxy {
-        return HeartRateCallbackProxyImpl()
+    fun provideHeartRateCallbackDelegate() : MeasureCallbackDelegate {
+        return HeartRateCallbackDelegate()
     }
 
     @Singleton
     @Provides
-    fun provideHeartRateService(healthServicesClient: HealthServicesClient, heartRateCallbackProxy: HeartRateCallbackProxy): HeartRateService {
-        return HeartRateServiceImpl(healthServicesClient, heartRateCallbackProxy)
+    fun provideHeartRateService(healthServicesClient: HealthServicesClient, heartRateCallbackDelegate: MeasureCallbackDelegate): HeartRateService {
+        return HeartRateServiceImpl(healthServicesClient, heartRateCallbackDelegate)
     }
 }

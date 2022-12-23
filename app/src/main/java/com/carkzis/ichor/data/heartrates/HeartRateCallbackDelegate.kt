@@ -1,13 +1,11 @@
-package com.carkzis.ichor.testdoubles
+package com.carkzis.ichor.data.heartrates
 
 import androidx.health.services.client.MeasureCallback
 import androidx.health.services.client.data.Availability
 import androidx.health.services.client.data.DataPoint
 import androidx.health.services.client.data.DataType
-import com.carkzis.ichor.data.heartrates.HeartRateCallbackProxy
-import com.carkzis.ichor.data.heartrates.HeartRateService
 
-class FakeHeartRateCallbackProxy : HeartRateCallbackProxy {
+class HeartRateCallbackDelegate : MeasureCallbackDelegate {
     private var callback: MeasureCallback? = null
 
     override fun invokeOnAvailabilityChanged(dataType: DataType, availability: Availability) {
@@ -19,7 +17,11 @@ class FakeHeartRateCallbackProxy : HeartRateCallbackProxy {
     }
 
     override fun retrieveMeasureCallback(heartRateService: HeartRateService): MeasureCallback? {
-        return callback
+        return if (heartRateService is HeartRateServiceImpl) {
+            callback
+        } else {
+            null
+        }
     }
 
     override fun addCallback(providedCallback: MeasureCallback) {
