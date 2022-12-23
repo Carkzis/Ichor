@@ -11,7 +11,6 @@ import com.carkzis.ichor.ui.IchorScreen
 import com.carkzis.ichor.utils.PermissionFacade
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.delay
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -203,8 +202,28 @@ class IchorScreenPermissionGrantedTest {
             .filter(hasContentDescription("Affirmation icon."))
             .assertCountEquals(1)
     }
-    
-    // TODO: Test do not change
+
+    @Test
+    fun `sample speed does not change when exiting sampling speed dialogue`() {
+        composeTestRule
+            .onNodeWithText("Sampling Speed: Default")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .performClick()
+
+        // Swipe to exit dialogue (this will be the latter root).
+        composeTestRule
+            .onAllNodes(isRoot())
+            .onLast()
+            .performTouchInput {
+                swipeRight()
+            }
+
+        composeTestRule
+            .onNodeWithText("Sampling Speed: Default")
+            .assertIsDisplayed()
+    }
 
     // TODO: Test delete all button raises dialogue with expected items
     // TODO: Test change of delete all
