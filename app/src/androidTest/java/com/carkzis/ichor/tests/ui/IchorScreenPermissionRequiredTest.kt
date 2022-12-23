@@ -6,14 +6,10 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.navigation.NavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
-import com.carkzis.ichor.IchorNavHost
-import com.carkzis.ichor.IchorScreens
 import com.carkzis.ichor.R
 import com.carkzis.ichor.testdoubles.DummyPermissionFacade
 import com.carkzis.ichor.testdoubles.DummyViewModel
 import com.carkzis.ichor.ui.IchorScreen
-import com.carkzis.ichor.utils.DefaultPermissionFacade
-import com.carkzis.ichor.utils.PermissionFacade
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -59,31 +55,71 @@ class IchorScreenPermissionRequiredTest {
             .onNodeWithContentDescription("Permission request button")
             .assertIsDisplayed()
         composeTestRule
+            .onAllNodesWithText(permissionNotGrantedText)
+            .assertCountEquals(0)
+        composeTestRule
+            .onAllNodesWithText("bpm", substring = true)
+            .assertCountEquals(0)
+
+        // Move to next screen.
+        composeTestRule
             .onNodeWithContentDescription("Permission request button")
             .performClick()
 
         // Assert the new screen after "denying" permissions.
         composeTestRule
+            .onNodeWithText(permissionNotGrantedText)
+            .assertIsDisplayed()
+        composeTestRule
             .onAllNodesWithContentDescription("Permission request button")
             .assertCountEquals(0)
         composeTestRule
-            .onNodeWithText(permissionNotGrantedText)
-            .assertIsDisplayed()
+            .onAllNodesWithText("bpm", substring = true)
+            .assertCountEquals(0)
     }
-//
-//    @Test
-//    fun `when no permission previously requested, can get permission dialogue which after acceptance, heart rate data screen visible`() {
-//
-//    }
-//
-//    @Test
-//    fun `when permission previously granted, automatically go to heart rate data screen visible`() {
-//
-//    }
-//
-//    @Test
-//    fun `when permission previously denied, message provided on screen and permission cannot be requested again within app`() {
-//
-//    }
+
+    @Test
+    fun `when no permission previously requested can get permission dialogue which after acceptance heart rate data screen visible`() {
+        heartRatePermissionFacade = DummyPermissionFacade(willGivePermission = true, permissionPreviouslyDenied = false)
+        delayedSetUp()
+
+        // Assert on the initial screen.
+        composeTestRule
+            .onNodeWithContentDescription("Permission request button")
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(permissionNotGrantedText)
+            .assertCountEquals(0)
+        composeTestRule
+            .onAllNodesWithText("bpm", substring = true)
+            .assertCountEquals(0)
+
+        // Move to next screen.
+        composeTestRule
+            .onNodeWithContentDescription("Permission request button")
+            .performClick()
+
+        // Assert the new screen after "accepting" permissions.
+        composeTestRule
+            .onAllNodesWithText("bpm", substring = true)
+            .onFirst()
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithContentDescription("Permission request button")
+            .assertCountEquals(0)
+        composeTestRule
+            .onAllNodesWithText(permissionNotGrantedText)
+            .assertCountEquals(0)
+    }
+
+    @Test
+    fun `when permission previously granted automatically go to heart rate data screen visible`() {
+
+    }
+
+    @Test
+    fun `when permission previously denied message provided on screen and permission cannot be requested again within app`() {
+
+    }
     
 }
