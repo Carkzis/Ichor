@@ -3,8 +3,12 @@ package com.carkzis.ichor.testdoubles
 import com.carkzis.ichor.utils.PermissionFacade
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class DummyPermissionFacade(private var willGivePermission: Boolean = false, private var permissionPreviouslyDenied: Boolean = false): PermissionFacade {
-    private var dummyHasPermission = MutableStateFlow(false)
+class DummyPermissionFacade(
+    private var hasPermissionAlready: Boolean = false,
+    private var willGivePermission: Boolean = false,
+    private var permissionPreviouslyDenied: Boolean = false
+) : PermissionFacade {
+    private var dummyHasPermission = MutableStateFlow(hasPermissionAlready)
     private var dummyPermissionRequested = MutableStateFlow(permissionPreviouslyDenied)
 
     override fun getPermission(): MutableStateFlow<Boolean> = dummyHasPermission
