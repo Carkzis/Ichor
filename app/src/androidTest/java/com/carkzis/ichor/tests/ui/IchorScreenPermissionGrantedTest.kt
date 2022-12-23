@@ -91,4 +91,24 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithText("100.0 bpm")
             .assertIsDisplayed()
     }
+
+    @Test
+    fun `clicking sampling speed change button results expected items displayed in dialogue`() {
+        composeTestRule
+            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .performClick()
+        
+    }
+
+    // TODO: Test change of sampling speed displays to UI (main screen)
+    // TODO: Test change of sampling speed displays to UI (dialogue via tick)
+    // TODO: Test do not change
+
+    // TODO: Test delete all button raises dialogue with expected items
+    // TODO: Test change of delete all
+    // TODO: Test do not delete all
+
+    // TODO: Test delete single item raises dialogue with expected items (HARD?)
+    // TODO: Test delete single item (HARD?)
+    // TODO: Test do not delete
 }
