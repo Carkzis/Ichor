@@ -97,8 +97,22 @@ class AboutScreenTest {
         composeTestRule
             .onNode(hasScrollToKeyAction())
             .performScrollToNode(hasText(AboutScreenStrings.StartingUp.startingUp))
-            .performScrollToNode(hasText(AboutScreenStrings.StartingUp.permissions))
-            .performScrollToNode(hasText(AboutScreenStrings.StartingUp.aboutAbout))
+
+        composeTestRule.onNode(hasScrollToKeyAction())
+            .performScrollToNode(hasTestTag("About permissions row."))
+        composeTestRule.onNodeWithTag("About permissions row.")
+            .onChildren()
+            .filter(hasContentDescription("Learn about the health services permission request.")
+                .or(hasText(AboutScreenStrings.StartingUp.permissions)))
+            .assertCountEquals(2)
+
+        composeTestRule.onNode(hasScrollToKeyAction())
+            .performScrollToNode(hasTestTag("About about row."))
+        composeTestRule.onNodeWithTag("About about row.")
+            .onChildren()
+            .filter(hasContentDescription("Learn more about Ichor.")
+                .or(hasText(AboutScreenStrings.StartingUp.aboutAbout)))
+            .assertCountEquals(2)
     }
 
     private fun whatYouCanSeeItemsDisplayed() {

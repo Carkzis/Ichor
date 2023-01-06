@@ -49,13 +49,13 @@ fun AboutScreen(modifier: Modifier = Modifier) {
                 IchorText(stringResourceId = string.about_starting_up, modifier = modifier, style = IchorTypography.title3)
             }
             item {
-                Row(modifier = modifier.fillMaxWidth()) {
+                Row(modifier = modifier.fillMaxWidth().testTag("About permissions row.")) {
                     AboutPermissionIcon()
                     IchorText(stringResourceId = string.about_permissions, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                 }
             }
             item {
-                Row(modifier = modifier.fillMaxWidth()) {
+                Row(modifier = modifier.fillMaxWidth().testTag("About about row.")) {
                     AboutAboutIcon()
                     IchorText(stringResourceId = string.about_about, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                 }
