@@ -23,6 +23,11 @@ class DummyRepository : Repository {
                 date = "2022-12-25T12:30:30.303",
                 pk = "1",
                 value = "100.0"
+            ),
+            LocalHeartRate(
+                date = "2023-12-25T12:30:30.303",
+                pk = "2",
+                value = "200.0"
             )
         ).toDomainHeartRate())
 
