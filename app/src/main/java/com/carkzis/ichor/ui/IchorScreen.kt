@@ -200,14 +200,16 @@ private fun DeleteAllButton(
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     IchorButton(
                         iconImage = Icons.Rounded.Done,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(32.dp),
+                        contentDescription = "Button for confirming delete all."
                     ) {
                         viewModel.deleteAllHeartRates()
                         deleteAlertRequired = false
                     }
                     IchorButton(
                         iconImage = Icons.Rounded.Close,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(32.dp),
+                        contentDescription = "Button for rejecting delete all."
                     ) {
                         deleteAlertRequired = false
                     }
