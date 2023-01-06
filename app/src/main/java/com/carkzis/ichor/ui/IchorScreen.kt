@@ -353,13 +353,15 @@ private fun HeartRateItem(
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     IchorButton(
                         iconImage = Icons.Rounded.Done,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(32.dp),
+                        contentDescription = "Confirm deletion of single heartrate."
                     ) {
                         viewModel.deleteHeartRate(currentHeartRateData.pk)
                     }
                     IchorButton(
                         iconImage = Icons.Rounded.Close,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(32.dp),
+                        contentDescription = "Reject deletion of single heartrate."
                     ) {
                         deleteAlertRequired = false
                     }

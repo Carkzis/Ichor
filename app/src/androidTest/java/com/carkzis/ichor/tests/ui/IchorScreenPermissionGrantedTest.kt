@@ -251,12 +251,115 @@ class IchorScreenPermissionGrantedTest {
         heartRateItemCardWithExpectedDataDisplayed()
     }
 
-    // TODO: Test do not delete all
+    @Test
+    fun `swiping on single item raises dialogue with expected items`() {
+        heartRateItemCardWithExpectedDataDisplayed()
+        composeTestRule
+            .onAllNodes(isRoot())
+            .onLast()
+            .performTouchInput {
+                swipeUp()
+            }
 
-    // TODO: Test delete single item raises dialogue with expected items (HARD?)
-    // TODO: Test delete single item (HARD?)
-    // TODO: Test do not delete
+        composeTestRule
+            .onAllNodesWithTag("Heart Rate Item Card")
+            .onFirst()
+            .performTouchInput {
+                swipeRight()
+            }
 
+        // Assert on header.
+        composeTestRule
+            .onNodeWithContentDescription( "Delete heartbeat icon for app.")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Delete your heartbeat record of 100.0 bpm dated 2022-12-25 12:30:30?")
+            .assertIsDisplayed()
+
+        // Assert on deletion options.
+        composeTestRule
+            .onNodeWithContentDescription("Confirm deletion of single heartrate.")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Reject deletion of single heartrate.")
+    }
+
+    @Test
+    fun `confirming deletion of single heartrate is reflected on main screen`() {
+        heartRateItemCardWithExpectedDataDisplayed()
+        composeTestRule
+            .onAllNodes(isRoot())
+            .onLast()
+            .performTouchInput {
+                swipeUp()
+            }
+
+        composeTestRule
+            .onAllNodesWithTag("Heart Rate Item Card")
+            .onFirst()
+            .performTouchInput {
+                swipeRight()
+            }
+
+        composeTestRule
+            .onNodeWithContentDescription("Confirm deletion of single heartrate.")
+            .performClick()
+
+        heartRateItemCardWithExpectedDataIsNotDisplayed()
+    }
+
+    @Test
+    fun `rejecting deletion of single heartrate is reflected on main screen`() {
+        heartRateItemCardWithExpectedDataDisplayed()
+        composeTestRule
+            .onAllNodes(isRoot())
+            .onLast()
+            .performTouchInput {
+                swipeUp()
+            }
+
+        composeTestRule
+            .onAllNodesWithTag("Heart Rate Item Card")
+            .onFirst()
+            .performTouchInput {
+                swipeRight()
+            }
+
+        composeTestRule
+            .onNodeWithContentDescription("Reject deletion of single heartrate.")
+            .performClick()
+
+        heartRateItemCardWithExpectedDataDisplayed()
+    }
+
+    @Test
+    fun `heartrates not deleted when exiting delete single heartrate dialogue`() {
+        heartRateItemCardWithExpectedDataDisplayed()
+        composeTestRule
+            .onAllNodes(isRoot())
+            .onLast()
+            .performTouchInput {
+                swipeUp()
+            }
+
+        composeTestRule
+            .onAllNodesWithTag("Heart Rate Item Card")
+            .onFirst()
+            .performTouchInput {
+                swipeRight()
+            }
+
+        // Swipe to exit dialogue (this will be the latter root).
+        composeTestRule
+            .onAllNodes(isRoot())
+            .onLast()
+            .performTouchInput {
+                swipeRight()
+            }
+
+        heartRateItemCardWithExpectedDataDisplayed()
+    }
+    
     // TODO: Changes to current heartrate displayed on screen
 
     private fun headerDisplayed() {

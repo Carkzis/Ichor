@@ -32,7 +32,9 @@ class DummyRepository : Repository {
     override suspend fun collectHeartRatesFromDatabase(): Flow<List<DomainHeartRate>> =
         dummyDatabase
 
-    override suspend fun deleteHeartRateFromDatabase(primaryKey: String) {}
+    override suspend fun deleteHeartRateFromDatabase(primaryKey: String) {
+        dummyDatabase.value = dummyDatabase.value.filter { it.pk != primaryKey }
+    }
 
     override suspend fun deleteAllHeartRatesFromDatabase() {
         dummyDatabase.value = mutableListOf()
