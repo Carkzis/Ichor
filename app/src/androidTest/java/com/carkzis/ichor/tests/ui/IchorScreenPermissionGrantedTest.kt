@@ -216,7 +216,7 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithContentDescription("Button for confirming delete all.")
             .performClick()
 
-        heartRateItemCardWithExpectedDataIsNotDisplayed()
+        heartRateItemCardsAreNotDisplayed()
     }
 
     @Test
@@ -230,7 +230,7 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithContentDescription("Button for rejecting delete all.")
             .performClick()
 
-        heartRateItemCardWithExpectedDataDisplayed()
+        heartRateItemCardsAreNotDisplayed()
     }
 
     @Test
@@ -248,7 +248,7 @@ class IchorScreenPermissionGrantedTest {
                 swipeRight()
             }
 
-        heartRateItemCardWithExpectedDataDisplayed()
+        heartRateItemCardsAreNotDisplayed()
     }
 
     @Test
@@ -425,6 +425,12 @@ class IchorScreenPermissionGrantedTest {
             .assertCountEquals(0)
         composeTestRule
             .onAllNodesWithText("100.0 bpm")
+            .assertCountEquals(0)
+    }
+
+    private fun heartRateItemCardsAreNotDisplayed() {
+        composeTestRule
+            .onAllNodesWithTag("Heart Rate Item Card")
             .assertCountEquals(0)
     }
 }
