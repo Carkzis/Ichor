@@ -1,10 +1,8 @@
 package com.carkzis.ichor.tests.ui
 
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithText
 import androidx.navigation.NavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -30,6 +28,9 @@ class AboutScreenTest {
 
     // TODO: Extract these into a POJO, as string resources must be set in setContent block.
     private lateinit var title: String
+    private lateinit var aboutDescription: String
+    private lateinit var startingUp: String
+    private lateinit var permissions: String
 
     @Before
     fun setUp() {
@@ -37,6 +38,9 @@ class AboutScreenTest {
         composeTestRule.apply {
             setContent {
                 title = stringResource(id = R.string.about_ichor)
+                aboutDescription = stringResource(id = R.string.about_description)
+                startingUp = stringResource(id = R.string.about_starting_up)
+                permissions = stringResource(id = R.string.about_permissions)
                 navController = rememberSwipeDismissableNavController()
                 AboutScreen()
             }
@@ -46,6 +50,15 @@ class AboutScreenTest {
     @Test
     fun `about screen items are displayed as expected`() {
         headerDisplayed()
+
+        composeTestRule
+            .onNodeWithText(aboutDescription)
+            .assertIsDisplayed()
+        composeTestRule
+            .onNode(hasScrollToKeyAction())
+            .performScrollToNode(hasText(startingUp))
+            .performScrollToNode(hasText(aboutDescription))
+            .performScrollToNode(hasText(permissions))
     }
 
     private fun headerDisplayed() {
