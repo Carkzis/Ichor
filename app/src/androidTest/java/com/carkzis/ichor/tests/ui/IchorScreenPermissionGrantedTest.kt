@@ -41,7 +41,7 @@ class IchorScreenPermissionGrantedTest {
     }
 
     @Test
-    fun `items are displayed as expected`() {
+    fun `ichor screen items are displayed as expected`() {
         headerDisplayed()
         liveDataDisplayed()
         buttonsDisplayed()
