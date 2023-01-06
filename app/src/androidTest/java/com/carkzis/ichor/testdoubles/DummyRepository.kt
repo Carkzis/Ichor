@@ -9,6 +9,7 @@ import com.carkzis.ichor.data.local.LocalHeartRate
 import com.carkzis.ichor.data.local.Repository
 import com.carkzis.ichor.utils.SamplingSpeed
 import com.carkzis.ichor.utils.Sampler
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
@@ -45,6 +46,13 @@ class DummyRepository : Repository {
             emit(DataPoint.createSample(
                 DataType.HEART_RATE_BPM,
                 Value.ofDouble(0.0),
+                Duration.ofSeconds(0)
+            ))
+            // Artificial delay for testing new heartrate displayed.
+            delay(500)
+            emit(DataPoint.createSample(
+                DataType.HEART_RATE_BPM,
+                Value.ofDouble(1.0),
                 Duration.ofSeconds(0)
             ))
         }

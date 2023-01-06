@@ -359,8 +359,18 @@ class IchorScreenPermissionGrantedTest {
 
         heartRateItemCardWithExpectedDataDisplayed()
     }
-    
-    // TODO: Changes to current heartrate displayed on screen
+
+    @Test
+    fun `change to current heartrate is displayed on screen`() {
+        composeTestRule
+            .onNodeWithText("0.0 bpm")
+            .assertIsDisplayed()
+        composeTestRule.waitUntil {
+            composeTestRule
+                .onAllNodesWithText("1.0 bpm")
+                .fetchSemanticsNodes().size == 1
+        }
+    }
 
     private fun headerDisplayed() {
         composeTestRule
