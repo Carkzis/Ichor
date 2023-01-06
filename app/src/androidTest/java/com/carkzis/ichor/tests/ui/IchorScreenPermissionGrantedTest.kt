@@ -224,10 +224,10 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithText("Sampling Speed: Default")
             .assertIsDisplayed()
     }
-    
+
     @Test
     fun `clicking delete all button results expected items displayed in dialogue`() {
-        // Open sampling speed dialogue.
+        // Open delete all dialogue.
         composeTestRule
             .onNodeWithContentDescription("Delete All Button")
             .performClick()
@@ -240,7 +240,7 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithText("Delete all your heartbeats? This cannot be undone.")
             .assertIsDisplayed()
 
-        // Assert on selection of speeds to choose from.
+        // Assert on deletion options.
         composeTestRule
             .onNodeWithContentDescription("Button for confirming delete all.")
             .assertIsDisplayed()
@@ -249,10 +249,26 @@ class IchorScreenPermissionGrantedTest {
             .assertIsDisplayed()
     }
 
+    @Test
+    fun `confirming deletion of heartrates is reflected on main screen`() {
+        heartRateItemCardWithExpectedDataDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Delete All Button")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithContentDescription("Button for confirming delete all.")
+            .performClick()
+
+        heartRateItemCardWithExpectedDataDisplayed()
+    }
+
     // TODO: Test change of delete all
     // TODO: Test do not delete all
 
     // TODO: Test delete single item raises dialogue with expected items (HARD?)
     // TODO: Test delete single item (HARD?)
     // TODO: Test do not delete
+
+    // TODO: Changes to current heartrate displayed on screen
 }

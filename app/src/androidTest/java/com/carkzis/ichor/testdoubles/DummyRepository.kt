@@ -16,25 +16,26 @@ import java.time.Duration
 import java.util.*
 
 class DummyRepository : Repository {
-    private var dummyHasSamplingSpeed = MutableStateFlow(SamplingSpeed.DEFAULT)
+    private var dummySamplingSpeed = MutableStateFlow(SamplingSpeed.DEFAULT)
+    private val dummyDatabase = MutableStateFlow(mutableListOf(
+            LocalHeartRate(
+                date = "2022-12-25T12:30:30.303",
+                pk = "1",
+                value = "100.0"
+            )
+        ).toDomainHeartRate())
 
     override suspend fun collectAvailabilityFromHeartRateService(): Flow<Availability> = flow {
         emit(DataTypeAvailability.UNKNOWN)
     }
 
-    override suspend fun collectHeartRatesFromDatabase(): Flow<List<DomainHeartRate>> = flow {
-        emit(listOf(
-            LocalHeartRate(
-            date = "2022-12-25T12:30:30.303",
-            pk = "1",
-            value = "100.0"
-        )
-        ).toDomainHeartRate())
-    }
+    override suspend fun collectHeartRatesFromDatabase(): Flow<List<DomainHeartRate>> =
+        dummyDatabase
 
     override suspend fun deleteHeartRateFromDatabase(primaryKey: String) {}
 
     override suspend fun deleteAllHeartRatesFromDatabase() {
+        dummyDatabase.value = mutableListOf()
     }
 
     override suspend fun collectHeartRateFromHeartRateService(sampler: Sampler): Flow<HeartRateDataPoint> =
@@ -47,18 +48,14 @@ class DummyRepository : Repository {
         }
 
     override suspend fun collectSamplingPreference(): Flow<SamplingSpeed> = flow {
-        emit(dummyHasSamplingSpeed.value)
+        emit(dummySamplingSpeed.value)
     }
 
     override suspend fun changeSamplingPreference(samplingSpeed: SamplingSpeed) {
-        dummyHasSamplingSpeed.value = samplingSpeed
+        dummySamplingSpeed.value = samplingSpeed
     }
 
     override suspend fun startSharedFlowForDataCollectionFromHeartRateService() {
-        // Do nothing.
-    }
-
-    private fun insertValueIntoDatabase(heartRate: DataPoint) {
         // Do nothing.
     }
 }
