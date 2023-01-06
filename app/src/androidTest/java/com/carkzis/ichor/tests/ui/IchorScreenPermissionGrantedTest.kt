@@ -218,7 +218,39 @@ class IchorScreenPermissionGrantedTest {
 
         heartRateItemCardWithExpectedDataIsNotDisplayed()
     }
-    
+
+    @Test
+    fun `rejecting deletion of heartrates is reflected on main screen`() {
+        heartRateItemCardWithExpectedDataDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Delete All Button")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithContentDescription("Button for rejecting delete all.")
+            .performClick()
+
+        heartRateItemCardWithExpectedDataDisplayed()
+    }
+
+    @Test
+    fun `heartrates not deleted when exiting delete all dialogue`() {
+        heartRateItemCardWithExpectedDataDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Delete All Button")
+            .performClick()
+
+        // Swipe to exit dialogue (this will be the latter root).
+        composeTestRule
+            .onAllNodes(isRoot())
+            .onLast()
+            .performTouchInput {
+                swipeRight()
+            }
+
+        heartRateItemCardWithExpectedDataDisplayed()
+    }
+
     // TODO: Test do not delete all
 
     // TODO: Test delete single item raises dialogue with expected items (HARD?)
