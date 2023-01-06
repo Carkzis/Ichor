@@ -48,50 +48,6 @@ class IchorScreenPermissionGrantedTest {
         heartRateItemCardWithExpectedDataDisplayed()
     }
 
-    private fun headerDisplayed() {
-        composeTestRule
-            .onNodeWithText("Ichor")
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithContentDescription("Main heartbeat icon for app.")
-    }
-
-    private fun liveDataDisplayed() {
-        composeTestRule
-            .onNodeWithText("Availability: Unknown")
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithText("Sampling Speed: Default")
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithText("0.0 bpm")
-            .assertIsDisplayed()
-    }
-
-    private fun buttonsDisplayed() {
-        composeTestRule
-            .onNodeWithContentDescription("Sampling Speed Change Button")
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithContentDescription("About Button")
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithContentDescription("Delete All Button")
-            .assertIsDisplayed()
-    }
-
-    private fun heartRateItemCardWithExpectedDataDisplayed() {
-        composeTestRule
-            .onNodeWithTag("Heart Rate Item Card")
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithText("2022-12-25 12:30:30")
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithText("100.0 bpm")
-            .assertIsDisplayed()
-    }
-
     @Test
     fun `clicking sampling speed change button results expected items displayed in dialogue`() {
         // Open sampling speed dialogue.
@@ -260,10 +216,9 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithContentDescription("Button for confirming delete all.")
             .performClick()
 
-        heartRateItemCardWithExpectedDataDisplayed()
+        heartRateItemCardWithExpectedDataIsNotDisplayed()
     }
-
-    // TODO: Test change of delete all
+    
     // TODO: Test do not delete all
 
     // TODO: Test delete single item raises dialogue with expected items (HARD?)
@@ -271,4 +226,60 @@ class IchorScreenPermissionGrantedTest {
     // TODO: Test do not delete
 
     // TODO: Changes to current heartrate displayed on screen
+
+    private fun headerDisplayed() {
+        composeTestRule
+            .onNodeWithText("Ichor")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Main heartbeat icon for app.")
+    }
+
+    private fun liveDataDisplayed() {
+        composeTestRule
+            .onNodeWithText("Availability: Unknown")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Sampling Speed: Default")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("0.0 bpm")
+            .assertIsDisplayed()
+    }
+
+    private fun buttonsDisplayed() {
+        composeTestRule
+            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("About Button")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Delete All Button")
+            .assertIsDisplayed()
+    }
+
+    private fun heartRateItemCardWithExpectedDataDisplayed() {
+        composeTestRule
+            .onNodeWithTag("Heart Rate Item Card")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("2022-12-25 12:30:30")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("100.0 bpm")
+            .assertIsDisplayed()
+    }
+
+    private fun heartRateItemCardWithExpectedDataIsNotDisplayed() {
+        composeTestRule
+            .onAllNodesWithTag("Heart Rate Item Card")
+            .assertCountEquals(0)
+        composeTestRule
+            .onAllNodesWithText("2022-12-25 12:30:30")
+            .assertCountEquals(0)
+        composeTestRule
+            .onAllNodesWithText("100.0 bpm")
+            .assertCountEquals(0)
+    }
 }
