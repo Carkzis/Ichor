@@ -133,10 +133,57 @@ class AboutScreenTest {
         composeTestRule
             .onNode(hasScrollToKeyAction())
             .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanDo.whatYouCanDo))
+
+        composeTestRule
+            .onNode(hasScrollToKeyAction())
+            .performScrollToNode(hasTestTag("About sampling speeds row."))
+        composeTestRule.onNodeWithTag("About sampling speeds row.")
             .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanDo.samplingSpeed))
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanDo.defaultSampling))
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanDo.fastSampling))
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanDo.deleteAll))
+            .onChildren()
+            .filter(hasTestTag("About slow sampling speed row.")
+                .or(hasTestTag("About default sampling speed row."))
+                .or(hasTestTag("About fast sampling speed row.")))
+            .assertCountEquals(3)
+
+        composeTestRule
+            .onNode(hasScrollToKeyAction())
+            .performScrollToNode(hasTestTag("About slow sampling speed row."))
+        composeTestRule.onNodeWithTag("About slow sampling speed row.")
+            .onChildren()
+            .assertCountEquals(2)
+            .filter(hasContentDescription("Learn about the slow sampling speed.")
+                .or(hasText(AboutScreenStrings.WhatYouCanDo.slowSampling)))
+            .assertCountEquals(2)
+
+        composeTestRule
+            .onNode(hasScrollToKeyAction())
+            .performScrollToNode(hasTestTag("About default sampling speed row."))
+        composeTestRule.onNodeWithTag("About default sampling speed row.")
+            .onChildren()
+            .filter(hasContentDescription("Learn about the default sampling speed.")
+                .or(hasText(AboutScreenStrings.WhatYouCanDo.defaultSampling)))
+            .assertCountEquals(2)
+        
+        composeTestRule
+            .onNode(hasScrollToKeyAction())
+            .performScrollToNode(hasTestTag("About fast sampling speed row."))
+        composeTestRule.onNodeWithTag("About fast sampling speed row.")
+            .onChildren()
+            .filter(hasContentDescription("Learn about the fast sampling speed.")
+                .or(hasText(AboutScreenStrings.WhatYouCanDo.fastSampling)))
+            .assertCountEquals(2)
+
+        composeTestRule
+            .onNode(hasScrollToKeyAction())
+            .performScrollToNode(hasTestTag("About delete all row."))
+        composeTestRule.onNodeWithTag("About delete all row.")
+            .onChildren()
+            .filter(hasContentDescription("Learn about the deleting all records.")
+                .or(hasText(AboutScreenStrings.WhatYouCanDo.deleteAll)))
+            .assertCountEquals(2)
+
+        composeTestRule
+            .onNode(hasScrollToKeyAction())
             .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanDo.deleteOneSubtitle))
             .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanDo.deleteOne))
     }

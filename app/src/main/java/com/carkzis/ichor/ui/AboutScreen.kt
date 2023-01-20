@@ -103,22 +103,22 @@ fun AboutScreen(modifier: Modifier = Modifier) {
                 IchorText(stringResourceId = string.about_what_you_can_do, modifier = modifier, style = IchorTypography.title3)
             }
             item {
-                Row(modifier = modifier.fillMaxWidth()) {
+                Row(modifier = modifier.fillMaxWidth().testTag("About sampling speeds row.")) {
                     AboutSamplingSpeedIcon()
                     Column(modifier = modifier.fillMaxWidth()) {
                         IchorText(stringResourceId = string.about_sampling_speed, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                         Spacer(modifier = Modifier.height(8.dp))
-                        Row(modifier = modifier.fillMaxWidth()) {
+                        Row(modifier = modifier.fillMaxWidth().testTag("About slow sampling speed row.")) {
                             AboutSlowSamplingSpeedIcon()
                             IchorText(stringResourceId = string.about_slow_sampling, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                         }
                         Spacer(modifier = Modifier.height(4.dp))
-                        Row(modifier = modifier.fillMaxWidth()) {
+                        Row(modifier = modifier.fillMaxWidth().testTag("About default sampling speed row.")) {
                             AboutDefaultSamplingSpeedIcon()
                             IchorText(stringResourceId = string.about_default_sampling, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                         }
                         Spacer(modifier = Modifier.height(4.dp))
-                        Row(modifier = modifier.fillMaxWidth()) {
+                        Row(modifier = modifier.fillMaxWidth().testTag("About fast sampling speed row.")) {
                             AboutFastSamplingSpeedIcon()
                             IchorText(stringResourceId = string.about_fast_sampling, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                         }
@@ -127,7 +127,7 @@ fun AboutScreen(modifier: Modifier = Modifier) {
                 }
             }
             item {
-                Row(modifier = modifier.fillMaxWidth()) {
+                Row(modifier = modifier.fillMaxWidth().testTag("About delete all row.")) {
                     AboutDeleteAllIcon()
                     IchorText(stringResourceId = string.about_delete_all, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                 }
