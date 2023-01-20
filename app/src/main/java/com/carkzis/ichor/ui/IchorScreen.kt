@@ -69,6 +69,8 @@ fun IchorScreen(
     // Note: Reset permissions on an emulator using the command "adb shell pm reset-permissions".
 
     // TODO: Look into constant recomposing when opening dialog.
+    // TODO: Refactor Compose.
+    // TODO: Convert strings to string resources.
 
     val listState = rememberScalingLazyListState()
     val heartRates by viewModel.latestHeartRateList.collectAsState()
