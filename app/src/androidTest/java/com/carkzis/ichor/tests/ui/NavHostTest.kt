@@ -1,5 +1,6 @@
 package com.carkzis.ichor.tests.ui
 
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.navigation.NavHostController
@@ -15,6 +16,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
+import com.carkzis.ichor.R
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,6 +32,8 @@ class NavHostTest {
     @get:Rule(order = 1)
     val composeTestRule = createComposeRule()
     lateinit var navController: NavHostController
+    lateinit var aboutIchorButtonContentDescription: String
+    lateinit var aboutIchorTextContentDescription: String
 
     @Before
     fun setUp() {
@@ -37,6 +41,8 @@ class NavHostTest {
         composeTestRule.apply {
             setContent {
                 navController = rememberSwipeDismissableNavController()
+                aboutIchorButtonContentDescription = stringResource(id = R.string.ichor_about_button)
+                aboutIchorTextContentDescription = stringResource(id = R.string.about_ichor)
                 IchorNavHost(viewModel = DummyViewModel(), navHostController = navController)
             }
         }
@@ -45,17 +51,17 @@ class NavHostTest {
     @Test
     fun `about button is displayed`() {
         composeTestRule
-            .onNodeWithContentDescription("About Button")
+            .onNodeWithContentDescription(aboutIchorButtonContentDescription)
             .assertIsDisplayed()
     }
 
     @Test
     fun `navigates to about screen using button and title of new screen displayed`() {
         composeTestRule
-            .onNodeWithContentDescription("About Button")
+            .onNodeWithContentDescription(aboutIchorButtonContentDescription)
             .performClick()
         composeTestRule
-            .onNodeWithText("About Ichor")
+            .onNodeWithText(aboutIchorTextContentDescription)
             .assertIsDisplayed()
 
         val route = navController.currentBackStackEntry?.destination?.route
@@ -70,24 +76,24 @@ class NavHostTest {
             }
         }
         composeTestRule
-            .onNodeWithText("About Ichor")
+            .onNodeWithText(aboutIchorTextContentDescription)
             .assertIsDisplayed()
     }
 
     @Test
     fun `navigates back to ichor screen from about screen by swiping`() {
         composeTestRule
-            .onNodeWithContentDescription("About Button")
+            .onNodeWithContentDescription(aboutIchorButtonContentDescription)
             .performClick()
         composeTestRule
-            .onNodeWithText("About Ichor")
+            .onNodeWithText(aboutIchorTextContentDescription)
             .assertIsDisplayed()
         composeTestRule.onRoot().performTouchInput {
             swipeRight()
         }
 
         composeTestRule
-            .onNodeWithContentDescription("About Button")
+            .onNodeWithContentDescription(aboutIchorButtonContentDescription)
             .assertIsDisplayed()
     }
 
@@ -100,8 +106,7 @@ class NavHostTest {
             }
         }
         composeTestRule
-            .onNodeWithContentDescription("About Button")
+            .onNodeWithContentDescription(aboutIchorButtonContentDescription)
             .assertIsDisplayed()
     }
-
 }
