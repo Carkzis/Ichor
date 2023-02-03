@@ -64,7 +64,7 @@
     <string name="about_about_row_tag">About about row.</string>
     <string name="about_ichor_icon">Learn more about Ichor.</string>
     <string name="about_permissions_icon">Learn about the health services permission request.</string>
-    <string name="about_about_icon">Learn more about Ichor.</string>
+    <string name="about_about_icon">About about Ichor.</string>
     <string name="about_sampling_speed_icon">Learn about the sampling speed.</string>
     <string name="about_slow_sampling_icon">Learn about the slow sampling speed.</string>
     <string name="about_default_sampling_icon">Learn about the default sampling speed.</string>

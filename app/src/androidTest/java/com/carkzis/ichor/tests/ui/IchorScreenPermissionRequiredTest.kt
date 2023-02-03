@@ -104,6 +104,12 @@ class IchorScreenPermissionRequiredTest {
 
     @Composable
     private fun obtainStringResourcesForIchorScreenWithoutPermissions() {
+        obtainTextStringResourcesForIchorScreenWithoutPermissions()
+        obtainContentDescriptionStringResourcesForIchorScreenWithoutPermissions()
+    }
+
+    @Composable
+    private fun obtainTextStringResourcesForIchorScreenWithoutPermissions() {
         IchorScreenPermissionRequiredText.Header.title = stringResource(id = R.string.app_name)
 
         IchorScreenPermissionRequiredText.Body.apply {
@@ -111,7 +117,10 @@ class IchorScreenPermissionRequiredTest {
                 stringResource(id = R.string.app_permission_was_denied)
             bpmSubstring = stringResource(id = R.string.ichor_bpm)
         }
+    }
 
+    @Composable
+    private fun obtainContentDescriptionStringResourcesForIchorScreenWithoutPermissions() {
         IchorScreenPermissionRequiredContentDescriptions.Icons.main =
             stringResource(id = R.string.ichor_main_heartbeat_icon)
 

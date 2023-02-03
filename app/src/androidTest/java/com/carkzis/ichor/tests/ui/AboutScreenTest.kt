@@ -1,5 +1,6 @@
 package com.carkzis.ichor.tests.ui
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -31,40 +32,7 @@ class AboutScreenTest {
         hiltRule.inject()
         composeTestRule.apply {
             setContent {
-                AboutScreenText.Header.apply {
-                    title = stringResource(id = R.string.about_ichor)
-                    aboutDescription = stringResource(id = R.string.about_description)
-                }
-                AboutScreenText.StartingUp.apply {
-                    startingUp = stringResource(id = R.string.about_starting_up)
-                    permissions = stringResource(id = R.string.about_permissions)
-                    aboutAbout = stringResource(id = R.string.about_about)
-                }
-                AboutScreenText.WhatYouCanSee.apply {
-                    whatYouCanSee = stringResource(id = R.string.about_what_you_can_see)
-                    availabilitySubtitle = stringResource(id = R.string.about_availability_subtitle)
-                    availability = stringResource(id = R.string.about_availability)
-                    samplingSpeedSubtitle = stringResource(id = R.string.about_sampling_speed_subtitle)
-                    samplingSpeedDisplay = stringResource(id = R.string.about_sampling_speed_display)
-                    bpmSubtitle = stringResource(id = R.string.about_bpm_subtitle)
-                    bpm = stringResource(id = R.string.about_bpm)
-                    historySubtitle = stringResource(id = R.string.about_history_subtitle)
-                    history = stringResource(id = R.string.about_history)
-                }
-                AboutScreenText.WhatYouCanDo.apply {
-                    whatYouCanDo = stringResource(id = R.string.about_what_you_can_do)
-                    samplingSpeed = stringResource(id = R.string.about_sampling_speed)
-                    slowSampling = stringResource(id = R.string.about_slow_sampling)
-                    defaultSampling = stringResource(id = R.string.about_default_sampling)
-                    fastSampling = stringResource(id = R.string.about_fast_sampling)
-                    deleteAll = stringResource(id = R.string.about_delete_all)
-                    deleteOneSubtitle = stringResource(id = R.string.about_delete_one_subtitle)
-                    deleteOne = stringResource(id = R.string.about_delete_one)
-                }
-                AboutScreenText.FurtherInformation.apply {
-                    furtherInformation = stringResource(id = R.string.about_further_information)
-                    furtherInformationDetails = stringResource(id = R.string.about_further_information_details)
-                }
+                obtainStringResourcesForAboutScreen()
 
                 navController = rememberSwipeDismissableNavController()
                 AboutScreen()
@@ -81,9 +49,82 @@ class AboutScreenTest {
         furtherInformationDisplayed()
     }
 
+    @Composable
+    private fun obtainStringResourcesForAboutScreen() {
+        obtainTextStringResourcesForAboutScreen()
+        obtainContentDescriptionStringResourcesForAboutScreen()
+        obtainTestTagStringResourcesForAboutScreen()
+    }
+
+    @Composable
+    private fun obtainTextStringResourcesForAboutScreen() {
+        AboutScreenText.Header.apply {
+            title = stringResource(id = R.string.about_ichor)
+            aboutDescription = stringResource(id = R.string.about_description)
+        }
+        AboutScreenText.StartingUp.apply {
+            startingUp = stringResource(id = R.string.about_starting_up)
+            permissions = stringResource(id = R.string.about_permissions)
+            aboutAbout = stringResource(id = R.string.about_about)
+        }
+        AboutScreenText.WhatYouCanSee.apply {
+            whatYouCanSee = stringResource(id = R.string.about_what_you_can_see)
+            availabilitySubtitle = stringResource(id = R.string.about_availability_subtitle)
+            availability = stringResource(id = R.string.about_availability)
+            samplingSpeedSubtitle = stringResource(id = R.string.about_sampling_speed_subtitle)
+            samplingSpeedDisplay = stringResource(id = R.string.about_sampling_speed_display)
+            bpmSubtitle = stringResource(id = R.string.about_bpm_subtitle)
+            bpm = stringResource(id = R.string.about_bpm)
+            historySubtitle = stringResource(id = R.string.about_history_subtitle)
+            history = stringResource(id = R.string.about_history)
+        }
+        AboutScreenText.WhatYouCanDo.apply {
+            whatYouCanDo = stringResource(id = R.string.about_what_you_can_do)
+            samplingSpeed = stringResource(id = R.string.about_sampling_speed)
+            slowSampling = stringResource(id = R.string.about_slow_sampling)
+            defaultSampling = stringResource(id = R.string.about_default_sampling)
+            fastSampling = stringResource(id = R.string.about_fast_sampling)
+            deleteAll = stringResource(id = R.string.about_delete_all)
+            deleteOneSubtitle = stringResource(id = R.string.about_delete_one_subtitle)
+            deleteOne = stringResource(id = R.string.about_delete_one)
+        }
+        AboutScreenText.FurtherInformation.apply {
+            furtherInformation = stringResource(id = R.string.about_further_information)
+            furtherInformationDetails =
+                stringResource(id = R.string.about_further_information_details)
+        }
+    }
+
+    @Composable
+    private fun obtainContentDescriptionStringResourcesForAboutScreen() {
+        AboutScreenContentDescriptions.Icons.apply {
+            title = stringResource(id = R.string.about_ichor_icon)
+            permissions = stringResource(id = R.string.about_permissions_icon)
+            about = stringResource(id = R.string.about_about_icon)
+            samplingSpeed = stringResource(id = R.string.about_sampling_speed_icon)
+            slowSamplingSpeed = stringResource(id = R.string.about_slow_sampling_icon)
+            defaultSamplingSpeed = stringResource(id = R.string.about_default_sampling_icon)
+            fastSamplingSpeed = stringResource(id = R.string.about_fast_sampling_icon)
+            deleteAll = stringResource(id = R.string.about_delete_all_icon)
+        }
+    }
+
+    @Composable
+    private fun obtainTestTagStringResourcesForAboutScreen() {
+        AboutScreenTags.Rows.apply {
+            permissions = stringResource(id = R.string.about_permissions_row_tag)
+            about = stringResource(id = R.string.about_about_row_tag)
+            samplingSpeed = stringResource(id = R.string.about_sampling_speeds_row_tag)
+            slowSamplingSpeed = stringResource(id = R.string.about_slow_sampling_row_tag)
+            defaultSamplingSpeed = stringResource(id = R.string.about_default_sampling_row_tag)
+            fastSamplingSpeed = stringResource(id = R.string.about_fast_sampling_row_tag)
+            deleteAll = stringResource(id = R.string.about_delete_all_row_tag)
+        }
+    }
+
     private fun headerDisplayed() {
         composeTestRule
-            .onNodeWithContentDescription("Learn more about Ichor.")
+            .onNodeWithContentDescription(AboutScreenContentDescriptions.Icons.title)
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithText(AboutScreenText.Header.title)
@@ -98,13 +139,13 @@ class AboutScreenTest {
             .onNode(hasScrollToKeyAction())
             .performScrollToNode(hasText(AboutScreenText.StartingUp.startingUp))
 
-        rowItemsDisplayed(rowTestTag = "About permissions row.",
-            iconContentDescription = "Learn about the health services permission request.",
+        rowItemsDisplayed(rowTestTag = AboutScreenTags.Rows.permissions,
+            iconContentDescription = AboutScreenContentDescriptions.Icons.permissions,
             bodyText = AboutScreenText.StartingUp.permissions
         )
 
-        rowItemsDisplayed(rowTestTag = "About about row.",
-            iconContentDescription = "Learn more about Ichor.",
+        rowItemsDisplayed(rowTestTag = AboutScreenTags.Rows.about,
+            iconContentDescription = AboutScreenContentDescriptions.Icons.about,
             bodyText = AboutScreenText.StartingUp.aboutAbout
         )
     }
@@ -130,21 +171,21 @@ class AboutScreenTest {
 
         sampleSpeedRowsDisplayed()
 
-        rowItemsDisplayed(rowTestTag = "About slow sampling speed row.",
-            iconContentDescription = "Learn about the slow sampling speed.",
+        rowItemsDisplayed(rowTestTag = AboutScreenTags.Rows.slowSamplingSpeed,
+            iconContentDescription = AboutScreenContentDescriptions.Icons.slowSamplingSpeed,
             bodyText = AboutScreenText.WhatYouCanDo.slowSampling
         )
-        rowItemsDisplayed(rowTestTag = "About default sampling speed row.",
-            iconContentDescription = "Learn about the default sampling speed.",
+        rowItemsDisplayed(rowTestTag = AboutScreenTags.Rows.defaultSamplingSpeed,
+            iconContentDescription = AboutScreenContentDescriptions.Icons.defaultSamplingSpeed,
             bodyText = AboutScreenText.WhatYouCanDo.defaultSampling
         )
-        rowItemsDisplayed(rowTestTag = "About fast sampling speed row.",
-            iconContentDescription = "Learn about the fast sampling speed.",
+        rowItemsDisplayed(rowTestTag = AboutScreenTags.Rows.fastSamplingSpeed,
+            iconContentDescription = AboutScreenContentDescriptions.Icons.fastSamplingSpeed,
             bodyText = AboutScreenText.WhatYouCanDo.fastSampling
         )
 
-        rowItemsDisplayed(rowTestTag = "About delete all row.",
-            iconContentDescription = "Learn about the deleting all records.",
+        rowItemsDisplayed(rowTestTag = AboutScreenTags.Rows.deleteAll,
+            iconContentDescription = AboutScreenContentDescriptions.Icons.deleteAll,
             bodyText = AboutScreenText.WhatYouCanDo.deleteAll
         )
 
@@ -170,13 +211,13 @@ class AboutScreenTest {
     private fun sampleSpeedRowsDisplayed() {
         composeTestRule
             .onNode(hasScrollToKeyAction())
-            .performScrollToNode(hasTestTag("About sampling speeds row."))
-        composeTestRule.onNodeWithTag("About sampling speeds row.")
+            .performScrollToNode(hasTestTag(AboutScreenTags.Rows.samplingSpeed))
+        composeTestRule.onNodeWithTag(AboutScreenTags.Rows.samplingSpeed)
             .performScrollToNode(hasText(AboutScreenText.WhatYouCanDo.samplingSpeed))
             .onChildren()
-            .filter(hasTestTag("About slow sampling speed row.")
-                .or(hasTestTag("About default sampling speed row."))
-                .or(hasTestTag("About fast sampling speed row.")))
+            .filter(hasTestTag(AboutScreenTags.Rows.slowSamplingSpeed)
+                .or(hasTestTag(AboutScreenTags.Rows.defaultSamplingSpeed))
+                .or(hasTestTag(AboutScreenTags.Rows.fastSamplingSpeed)))
             .assertCountEquals(3)
     }
 
@@ -228,8 +269,7 @@ object AboutScreenText {
 }
 
 object AboutScreenTags {
-    object Icons {
-        var title: String = ""
+    object Rows {
         var permissions: String = ""
         var about: String = ""
         var samplingSpeed: String = ""
@@ -238,7 +278,11 @@ object AboutScreenTags {
         var fastSamplingSpeed: String = ""
         var deleteAll: String = ""
     }
-    object Rows {
+}
+
+object AboutScreenContentDescriptions {
+    object Icons {
+        var title: String = ""
         var permissions: String = ""
         var about: String = ""
         var samplingSpeed: String = ""

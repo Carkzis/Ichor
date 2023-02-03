@@ -397,6 +397,32 @@ class IchorScreenPermissionGrantedTest {
 
     @Composable
     private fun obtainStringResourcesForIchorScreenWithPermissionsGranted() {
+        obtainTextStringResourcesForIchorScreenWithPermissionsGranted()
+        obtainContentDescriptionStringResourcesForIchorScreenWithPermissionsGranted()
+        obtainTestTagStringResourcesForIchorScreenWithPermissionsGranted()
+    }
+
+    @Composable
+    private fun obtainTextStringResourcesForIchorScreenWithPermissionsGranted() {
+        IchorScreenPermissionGrantedText.Header.title = stringResource(id = R.string.app_name)
+
+        IchorScreenPermissionGrantedText.Body.apply {
+            bpmSuffix = stringResource(id = R.string.ichor_bpm_suffix)
+            currentSamplingSpeedQuery =
+                stringResource(id = R.string.ichor_change_sampling_speed_question)
+            currentSamplingSpeedPrefix = stringResource(id = R.string.ichor_sample_speed_prefix)
+            currentSamplingSpeedDefault = "${currentSamplingSpeedPrefix}Default"
+            currentSamplingSpeedSlow = "${currentSamplingSpeedPrefix}Slow"
+            currentSamplingSpeedFast = "${currentSamplingSpeedPrefix}Fast"
+            currentAvailabilityPrefix = stringResource(id = R.string.ichor_availability_prefix)
+            deleteAllFinalWarning = stringResource(id = R.string.ichor_delete_all_final)
+            deleteRecordMessagePreBpm = stringResource(id = R.string.ichor_delete_record_part_1)
+            deleteRecordMessagePreDate = stringResource(id = R.string.ichor_delete_record_part_2)
+        }
+    }
+
+    @Composable
+    private fun obtainContentDescriptionStringResourcesForIchorScreenWithPermissionsGranted() {
         IchorScreenPermissionGrantedContentDescriptions.Icons.apply {
             main = stringResource(id = R.string.app_name)
             samplingSpeed = stringResource(id = R.string.ichor_main_heartbeat_icon)
@@ -416,7 +442,10 @@ class IchorScreenPermissionGrantedTest {
             deleteSingleConfirm = stringResource(id = R.string.ichor_delete_single_confirm)
             deleteSingleReject = stringResource(id = R.string.ichor_delete_single_reject)
         }
+    }
 
+    @Composable
+    private fun obtainTestTagStringResourcesForIchorScreenWithPermissionsGranted() {
         IchorScreenPermissionGrantedTags.Cards.heartRateCard =
             stringResource(id = R.string.card_heart_rate_item)
 
@@ -425,22 +454,6 @@ class IchorScreenPermissionGrantedTest {
                 stringResource(id = R.string.ichor_default_sampling_row_tag)
             slowSpeedAffirmationRow = stringResource(id = R.string.ichor_slow_sampling_row_tag)
             fastSpeedAffirmationRow = stringResource(id = R.string.ichor_fast_sampling_row_tag)
-        }
-
-        IchorScreenPermissionGrantedText.Header.title = stringResource(id = R.string.app_name)
-
-        IchorScreenPermissionGrantedText.Body.apply {
-            bpmSuffix = stringResource(id = R.string.ichor_bpm_suffix)
-            currentSamplingSpeedQuery =
-                stringResource(id = R.string.ichor_change_sampling_speed_question)
-            currentSamplingSpeedPrefix = stringResource(id = R.string.ichor_sample_speed_prefix)
-            currentSamplingSpeedDefault = "${currentSamplingSpeedPrefix}Default"
-            currentSamplingSpeedSlow = "${currentSamplingSpeedPrefix}Slow"
-            currentSamplingSpeedFast = "${currentSamplingSpeedPrefix}Fast"
-            currentAvailabilityPrefix = stringResource(id = R.string.ichor_availability_prefix)
-            deleteAllFinalWarning = stringResource(id = R.string.ichor_delete_all_final)
-            deleteRecordMessagePreBpm = stringResource(id = R.string.ichor_delete_record_part_1)
-            deleteRecordMessagePreDate = stringResource(id = R.string.ichor_delete_record_part_2)
         }
     }
 
