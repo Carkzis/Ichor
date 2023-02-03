@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,13 +50,13 @@ fun AboutScreen(modifier: Modifier = Modifier) {
                 IchorText(stringResourceId = string.about_starting_up, modifier = modifier, style = IchorTypography.title3)
             }
             item {
-                Row(modifier = modifier.fillMaxWidth().testTag("About permissions row.")) {
+                Row(modifier = modifier.fillMaxWidth().testTag(stringResource(string.about_permissions_row_tag))) {
                     AboutPermissionIcon()
                     IchorText(stringResourceId = string.about_permissions, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                 }
             }
             item {
-                Row(modifier = modifier.fillMaxWidth().testTag("About about row.")) {
+                Row(modifier = modifier.fillMaxWidth().testTag(stringResource(string.about_about_row_tag))) {
                     AboutAboutIcon()
                     IchorText(stringResourceId = string.about_about, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                 }
@@ -103,22 +104,22 @@ fun AboutScreen(modifier: Modifier = Modifier) {
                 IchorText(stringResourceId = string.about_what_you_can_do, modifier = modifier, style = IchorTypography.title3)
             }
             item {
-                Row(modifier = modifier.fillMaxWidth().testTag("About sampling speeds row.")) {
+                Row(modifier = modifier.fillMaxWidth().testTag(stringResource(string.about_sampling_speeds_row_tag))) {
                     AboutSamplingSpeedIcon()
                     Column(modifier = modifier.fillMaxWidth()) {
                         IchorText(stringResourceId = string.about_sampling_speed, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                         Spacer(modifier = Modifier.height(8.dp))
-                        Row(modifier = modifier.fillMaxWidth().testTag("About slow sampling speed row.")) {
+                        Row(modifier = modifier.fillMaxWidth().testTag(stringResource(string.about_slow_sampling_row_tag))) {
                             AboutSlowSamplingSpeedIcon()
                             IchorText(stringResourceId = string.about_slow_sampling, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                         }
                         Spacer(modifier = Modifier.height(4.dp))
-                        Row(modifier = modifier.fillMaxWidth().testTag("About default sampling speed row.")) {
+                        Row(modifier = modifier.fillMaxWidth().testTag(stringResource(string.about_default_sampling_row_tag))) {
                             AboutDefaultSamplingSpeedIcon()
                             IchorText(stringResourceId = string.about_default_sampling, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                         }
                         Spacer(modifier = Modifier.height(4.dp))
-                        Row(modifier = modifier.fillMaxWidth().testTag("About fast sampling speed row.")) {
+                        Row(modifier = modifier.fillMaxWidth().testTag(stringResource(string.about_fast_sampling_row_tag))) {
                             AboutFastSamplingSpeedIcon()
                             IchorText(stringResourceId = string.about_fast_sampling, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                         }
@@ -127,7 +128,7 @@ fun AboutScreen(modifier: Modifier = Modifier) {
                 }
             }
             item {
-                Row(modifier = modifier.fillMaxWidth().testTag("About delete all row.")) {
+                Row(modifier = modifier.fillMaxWidth().testTag(stringResource(string.about_delete_all_row_tag))) {
                     AboutDeleteAllIcon()
                     IchorText(stringResourceId = string.about_delete_all, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
                 }
@@ -157,7 +158,7 @@ fun AboutTitleIcon() {
     Icon(
         modifier = Modifier.size(48.dp),
         imageVector = Icons.Rounded.QuestionMark,
-        contentDescription = "Learn more about Ichor.",
+        contentDescription = stringResource(string.about_ichor_icon),
         tint = IchorColorPalette.secondary
     )
 }
@@ -167,7 +168,7 @@ fun AboutPermissionIcon() {
     Icon(
         modifier = Modifier.size(24.dp),
         imageVector = Icons.Rounded.LockPerson,
-        contentDescription = "Learn about the health services permission request.",
+        contentDescription = stringResource(string.about_permissions_icon),
         tint = IchorColorPalette.secondary
     )
 }
@@ -177,7 +178,7 @@ fun AboutAboutIcon() {
     Icon(
         modifier = Modifier.size(24.dp),
         imageVector = Icons.Rounded.QuestionMark,
-        contentDescription = "Learn more about Ichor.",
+        contentDescription = stringResource(string.about_about_icon),
         tint = IchorColorPalette.secondary
     )
 }
@@ -187,7 +188,7 @@ fun AboutSamplingSpeedIcon() {
     Icon(
         modifier = Modifier.size(24.dp),
         imageVector = Icons.Rounded.Speed,
-        contentDescription = "Learn about the sampling speed.",
+        contentDescription = stringResource(string.about_sampling_speed_icon),
         tint = IchorColorPalette.secondary
     )
 }
@@ -197,7 +198,7 @@ fun AboutSlowSamplingSpeedIcon() {
     Icon(
         modifier = Modifier.size(18.dp),
         imageVector = Icons.Rounded.DirectionsWalk,
-        contentDescription = "Learn about the slow sampling speed.",
+        contentDescription = stringResource(string.about_slow_sampling_icon),
         tint = IchorColorPalette.secondary
     )
 }
@@ -207,7 +208,7 @@ fun AboutDefaultSamplingSpeedIcon() {
     Icon(
         modifier = Modifier.size(18.dp),
         imageVector = Icons.Rounded.DirectionsRun,
-        contentDescription = "Learn about the default sampling speed.",
+        contentDescription = stringResource(string.about_default_sampling_icon),
         tint = IchorColorPalette.secondary
     )
 }
@@ -217,7 +218,7 @@ fun AboutFastSamplingSpeedIcon() {
     Icon(
         modifier = Modifier.size(18.dp),
         imageVector = Icons.Rounded.DirectionsBike,
-        contentDescription = "Learn about the fast sampling speed.",
+        contentDescription = stringResource(string.about_fast_sampling_icon),
         tint = IchorColorPalette.secondary
     )
 }
@@ -227,7 +228,7 @@ fun AboutDeleteAllIcon() {
     Icon(
         modifier = Modifier.size(24.dp),
         imageVector = Icons.Rounded.Delete,
-        contentDescription = "Learn about the deleting all records.",
+        contentDescription = stringResource(string.about_delete_all_icon),
         tint = IchorColorPalette.secondary
     )
 }

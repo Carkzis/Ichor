@@ -31,16 +31,16 @@ class AboutScreenTest {
         hiltRule.inject()
         composeTestRule.apply {
             setContent {
-                AboutScreenStrings.Header.apply {
+                AboutScreenText.Header.apply {
                     title = stringResource(id = R.string.about_ichor)
                     aboutDescription = stringResource(id = R.string.about_description)
                 }
-                AboutScreenStrings.StartingUp.apply {
+                AboutScreenText.StartingUp.apply {
                     startingUp = stringResource(id = R.string.about_starting_up)
                     permissions = stringResource(id = R.string.about_permissions)
                     aboutAbout = stringResource(id = R.string.about_about)
                 }
-                AboutScreenStrings.WhatYouCanSee.apply {
+                AboutScreenText.WhatYouCanSee.apply {
                     whatYouCanSee = stringResource(id = R.string.about_what_you_can_see)
                     availabilitySubtitle = stringResource(id = R.string.about_availability_subtitle)
                     availability = stringResource(id = R.string.about_availability)
@@ -51,7 +51,7 @@ class AboutScreenTest {
                     historySubtitle = stringResource(id = R.string.about_history_subtitle)
                     history = stringResource(id = R.string.about_history)
                 }
-                AboutScreenStrings.WhatYouCanDo.apply {
+                AboutScreenText.WhatYouCanDo.apply {
                     whatYouCanDo = stringResource(id = R.string.about_what_you_can_do)
                     samplingSpeed = stringResource(id = R.string.about_sampling_speed)
                     slowSampling = stringResource(id = R.string.about_slow_sampling)
@@ -61,7 +61,7 @@ class AboutScreenTest {
                     deleteOneSubtitle = stringResource(id = R.string.about_delete_one_subtitle)
                     deleteOne = stringResource(id = R.string.about_delete_one)
                 }
-                AboutScreenStrings.FurtherInformation.apply {
+                AboutScreenText.FurtherInformation.apply {
                     furtherInformation = stringResource(id = R.string.about_further_information)
                     furtherInformationDetails = stringResource(id = R.string.about_further_information_details)
                 }
@@ -86,72 +86,72 @@ class AboutScreenTest {
             .onNodeWithContentDescription("Learn more about Ichor.")
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText(AboutScreenStrings.Header.title)
+            .onNodeWithText(AboutScreenText.Header.title)
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText(AboutScreenStrings.Header.aboutDescription)
+            .onNodeWithText(AboutScreenText.Header.aboutDescription)
             .assertIsDisplayed()
     }
 
     private fun startingUpItemsDisplayed() {
         composeTestRule
             .onNode(hasScrollToKeyAction())
-            .performScrollToNode(hasText(AboutScreenStrings.StartingUp.startingUp))
+            .performScrollToNode(hasText(AboutScreenText.StartingUp.startingUp))
 
         rowItemsDisplayed(rowTestTag = "About permissions row.",
             iconContentDescription = "Learn about the health services permission request.",
-            bodyText = AboutScreenStrings.StartingUp.permissions
+            bodyText = AboutScreenText.StartingUp.permissions
         )
 
         rowItemsDisplayed(rowTestTag = "About about row.",
             iconContentDescription = "Learn more about Ichor.",
-            bodyText = AboutScreenStrings.StartingUp.aboutAbout
+            bodyText = AboutScreenText.StartingUp.aboutAbout
         )
     }
 
     private fun whatYouCanSeeItemsDisplayed() {
         composeTestRule
             .onNode(hasScrollToKeyAction())
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanSee.whatYouCanSee))
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanSee.availabilitySubtitle))
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanSee.availability))
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanSee.samplingSpeedSubtitle))
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanSee.samplingSpeedDisplay))
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanSee.bpmSubtitle))
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanSee.bpm))
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanSee.historySubtitle))
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanSee.history))
+            .performScrollToNode(hasText(AboutScreenText.WhatYouCanSee.whatYouCanSee))
+            .performScrollToNode(hasText(AboutScreenText.WhatYouCanSee.availabilitySubtitle))
+            .performScrollToNode(hasText(AboutScreenText.WhatYouCanSee.availability))
+            .performScrollToNode(hasText(AboutScreenText.WhatYouCanSee.samplingSpeedSubtitle))
+            .performScrollToNode(hasText(AboutScreenText.WhatYouCanSee.samplingSpeedDisplay))
+            .performScrollToNode(hasText(AboutScreenText.WhatYouCanSee.bpmSubtitle))
+            .performScrollToNode(hasText(AboutScreenText.WhatYouCanSee.bpm))
+            .performScrollToNode(hasText(AboutScreenText.WhatYouCanSee.historySubtitle))
+            .performScrollToNode(hasText(AboutScreenText.WhatYouCanSee.history))
     }
 
     private fun whatYouCanDoItemsDisplayed() {
         composeTestRule
             .onNode(hasScrollToKeyAction())
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanDo.whatYouCanDo))
+            .performScrollToNode(hasText(AboutScreenText.WhatYouCanDo.whatYouCanDo))
 
         sampleSpeedRowsDisplayed()
 
         rowItemsDisplayed(rowTestTag = "About slow sampling speed row.",
             iconContentDescription = "Learn about the slow sampling speed.",
-            bodyText = AboutScreenStrings.WhatYouCanDo.slowSampling
+            bodyText = AboutScreenText.WhatYouCanDo.slowSampling
         )
         rowItemsDisplayed(rowTestTag = "About default sampling speed row.",
             iconContentDescription = "Learn about the default sampling speed.",
-            bodyText = AboutScreenStrings.WhatYouCanDo.defaultSampling
+            bodyText = AboutScreenText.WhatYouCanDo.defaultSampling
         )
         rowItemsDisplayed(rowTestTag = "About fast sampling speed row.",
             iconContentDescription = "Learn about the fast sampling speed.",
-            bodyText = AboutScreenStrings.WhatYouCanDo.fastSampling
+            bodyText = AboutScreenText.WhatYouCanDo.fastSampling
         )
 
         rowItemsDisplayed(rowTestTag = "About delete all row.",
             iconContentDescription = "Learn about the deleting all records.",
-            bodyText = AboutScreenStrings.WhatYouCanDo.deleteAll
+            bodyText = AboutScreenText.WhatYouCanDo.deleteAll
         )
 
         composeTestRule
             .onNode(hasScrollToKeyAction())
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanDo.deleteOneSubtitle))
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanDo.deleteOne))
+            .performScrollToNode(hasText(AboutScreenText.WhatYouCanDo.deleteOneSubtitle))
+            .performScrollToNode(hasText(AboutScreenText.WhatYouCanDo.deleteOne))
     }
 
     private fun rowItemsDisplayed(rowTestTag: String, iconContentDescription: String, bodyText: String) {
@@ -172,7 +172,7 @@ class AboutScreenTest {
             .onNode(hasScrollToKeyAction())
             .performScrollToNode(hasTestTag("About sampling speeds row."))
         composeTestRule.onNodeWithTag("About sampling speeds row.")
-            .performScrollToNode(hasText(AboutScreenStrings.WhatYouCanDo.samplingSpeed))
+            .performScrollToNode(hasText(AboutScreenText.WhatYouCanDo.samplingSpeed))
             .onChildren()
             .filter(hasTestTag("About slow sampling speed row.")
                 .or(hasTestTag("About default sampling speed row."))
@@ -184,44 +184,67 @@ class AboutScreenTest {
     private fun furtherInformationDisplayed() {
         composeTestRule
             .onNode(hasScrollToKeyAction())
-            .performScrollToNode(hasText(AboutScreenStrings.FurtherInformation.furtherInformation))
-            .performScrollToNode(hasText(AboutScreenStrings.FurtherInformation.furtherInformationDetails))
+            .performScrollToNode(hasText(AboutScreenText.FurtherInformation.furtherInformation))
+            .performScrollToNode(hasText(AboutScreenText.FurtherInformation.furtherInformationDetails))
     }
 
-    object AboutScreenStrings {
-        object Header {
-            var title: String = ""
-            var aboutDescription: String = ""
-        }
-        object StartingUp {
-            var startingUp: String = ""
-            var permissions: String = ""
-            var aboutAbout: String = ""
-        }
-        object WhatYouCanSee {
-            var whatYouCanSee: String = ""
-            var availabilitySubtitle: String = ""
-            var availability: String = ""
-            var samplingSpeedSubtitle: String = ""
-            var samplingSpeedDisplay: String = ""
-            var bpmSubtitle: String = ""
-            var bpm: String = ""
-            var historySubtitle: String = ""
-            var history: String = ""
-        }
-        object WhatYouCanDo {
-            var whatYouCanDo: String = ""
-            var samplingSpeed: String = ""
-            var slowSampling: String = ""
-            var defaultSampling: String = ""
-            var fastSampling: String = ""
-            var deleteAll: String = ""
-            var deleteOneSubtitle: String = ""
-            var deleteOne: String = ""
-        }
-        object FurtherInformation {
-            var furtherInformation: String = ""
-            var furtherInformationDetails: String = ""
-        }
+}
+
+object AboutScreenText {
+    object Header {
+        var title: String = ""
+        var aboutDescription: String = ""
+    }
+    object StartingUp {
+        var startingUp: String = ""
+        var permissions: String = ""
+        var aboutAbout: String = ""
+    }
+    object WhatYouCanSee {
+        var whatYouCanSee: String = ""
+        var availabilitySubtitle: String = ""
+        var availability: String = ""
+        var samplingSpeedSubtitle: String = ""
+        var samplingSpeedDisplay: String = ""
+        var bpmSubtitle: String = ""
+        var bpm: String = ""
+        var historySubtitle: String = ""
+        var history: String = ""
+    }
+    object WhatYouCanDo {
+        var whatYouCanDo: String = ""
+        var samplingSpeed: String = ""
+        var slowSampling: String = ""
+        var defaultSampling: String = ""
+        var fastSampling: String = ""
+        var deleteAll: String = ""
+        var deleteOneSubtitle: String = ""
+        var deleteOne: String = ""
+    }
+    object FurtherInformation {
+        var furtherInformation: String = ""
+        var furtherInformationDetails: String = ""
+    }
+}
+
+object AboutScreenTags {
+    object Icons {
+        var title: String = ""
+        var permissions: String = ""
+        var about: String = ""
+        var samplingSpeed: String = ""
+        var slowSamplingSpeed: String = ""
+        var defaultSamplingSpeed: String = ""
+        var fastSamplingSpeed: String = ""
+        var deleteAll: String = ""
+    }
+    object Rows {
+        var permissions: String = ""
+        var about: String = ""
+        var samplingSpeed: String = ""
+        var slowSamplingSpeed: String = ""
+        var defaultSamplingSpeed: String = ""
+        var fastSamplingSpeed: String = ""
+        var deleteAll: String = ""
     }
 }
