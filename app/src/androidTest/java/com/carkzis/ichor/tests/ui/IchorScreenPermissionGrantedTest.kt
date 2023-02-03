@@ -37,6 +37,12 @@ class IchorScreenPermissionGrantedTest {
             setContent {
                 dummyHeartRatePermissionFacade = DummyPermissionFacade(hasPermissionAlready = true)
                 navController = rememberSwipeDismissableNavController()
+                IchorScreenPermissionGrantedContentDescriptions.Icons.apply {
+                    main = stringResource(id = R.string.app_name)
+                    samplingSpeed = stringResource(id = R.string.ichor_main_heartbeat_icon)
+                    speedAffirmation = stringResource(id = R.string.ichor_affirmation_icon)
+                    delete = stringResource(id = R.string.ichor_delete_heartbeat_icon)
+                }
                 IchorScreenPermissionGrantedContentDescriptions.Buttons.apply {
                     about = stringResource(id = R.string.ichor_about_button)
                     speedChange = stringResource(id = R.string.ichor_sampling_speed_change)
@@ -71,7 +77,7 @@ class IchorScreenPermissionGrantedTest {
 
         // Assert on header.
         composeTestRule
-            .onNodeWithContentDescription( "Change heartbeat sampling speed.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Icons.samplingSpeed)
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithText("Change sampling speed?")
@@ -88,7 +94,7 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.fastSpeed)
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Affirmation icon.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Icons.speedAffirmation)
             .assertIsDisplayed()
     }
 
@@ -139,7 +145,7 @@ class IchorScreenPermissionGrantedTest {
         composeTestRule
             .onNodeWithTag("Default sampling with affirmation")
             .onChildren()
-            .filter(hasContentDescription("Affirmation icon."))
+            .filter(hasContentDescription(IchorScreenPermissionGrantedContentDescriptions.Icons.speedAffirmation))
             .assertCountEquals(1)
 
         // Change sampling speed to slow.
@@ -154,7 +160,7 @@ class IchorScreenPermissionGrantedTest {
         composeTestRule
             .onNodeWithTag("Slow sampling with affirmation")
             .onChildren()
-            .filter(hasContentDescription("Affirmation icon."))
+            .filter(hasContentDescription(IchorScreenPermissionGrantedContentDescriptions.Icons.speedAffirmation))
             .assertCountEquals(1)
 
         // Change sampling speed to fast.
@@ -169,7 +175,7 @@ class IchorScreenPermissionGrantedTest {
         composeTestRule
             .onNodeWithTag("Fast sampling with affirmation")
             .onChildren()
-            .filter(hasContentDescription("Affirmation icon."))
+            .filter(hasContentDescription(IchorScreenPermissionGrantedContentDescriptions.Icons.speedAffirmation))
             .assertCountEquals(1)
     }
 
@@ -204,7 +210,7 @@ class IchorScreenPermissionGrantedTest {
 
         // Assert on header.
         composeTestRule
-            .onNodeWithContentDescription( "Delete heartbeat icon for app.")
+            .onNodeWithContentDescription( IchorScreenPermissionGrantedContentDescriptions.Icons.delete)
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithText("Delete all your heartbeats? This cannot be undone.")
@@ -284,7 +290,7 @@ class IchorScreenPermissionGrantedTest {
 
         // Assert on header.
         composeTestRule
-            .onNodeWithContentDescription( "Delete heartbeat icon for app.")
+            .onNodeWithContentDescription( IchorScreenPermissionGrantedContentDescriptions.Icons.delete)
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithText("Delete your heartbeat record of 100.0 bpm dated 2022-12-25 12:30:30?")
@@ -391,7 +397,7 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithText("Ichor")
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Main heartbeat icon for app.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Icons.main)
     }
 
     private fun liveDataDisplayed() {
@@ -461,6 +467,9 @@ object IchorScreenPermissionGrantedText {
 object IchorScreenPermissionGrantedContentDescriptions {
     object Icons {
         var main: String = ""
+        var samplingSpeed: String = ""
+        var speedAffirmation: String = ""
+        var delete: String = ""
     }
 
     object Buttons {
