@@ -55,6 +55,12 @@ class IchorScreenPermissionGrantedTest {
                     deleteSingleConfirm = stringResource(id = R.string.ichor_delete_single_confirm)
                     deleteSingleReject = stringResource(id = R.string.ichor_delete_single_reject)
                 }
+                IchorScreenPermissionGrantedTags.Cards.heartRateCard = stringResource(id = R.string.card_heart_rate_item)
+                IchorScreenPermissionGrantedTags.Rows.apply {
+                    defaultSpeedAffirmationRow = stringResource(id = R.string.ichor_default_sampling_row_tag)
+                    slowSpeedAffirmationRow = stringResource(id = R.string.ichor_slow_sampling_row_tag)
+                    fastSpeedAffirmationRow = stringResource(id = R.string.ichor_fast_sampling_row_tag)
+                }
                 IchorScreen(viewModel = DummyViewModel(), heartRatePermissionFacade = dummyHeartRatePermissionFacade)
             }
         }
@@ -143,7 +149,7 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .performClick()
         composeTestRule
-            .onNodeWithTag("Default sampling with affirmation")
+            .onNodeWithTag(IchorScreenPermissionGrantedTags.Rows.defaultSpeedAffirmationRow)
             .onChildren()
             .filter(hasContentDescription(IchorScreenPermissionGrantedContentDescriptions.Icons.speedAffirmation))
             .assertCountEquals(1)
@@ -158,7 +164,7 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .performClick()
         composeTestRule
-            .onNodeWithTag("Slow sampling with affirmation")
+            .onNodeWithTag(IchorScreenPermissionGrantedTags.Rows.slowSpeedAffirmationRow)
             .onChildren()
             .filter(hasContentDescription(IchorScreenPermissionGrantedContentDescriptions.Icons.speedAffirmation))
             .assertCountEquals(1)
@@ -173,7 +179,7 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .performClick()
         composeTestRule
-            .onNodeWithTag("Fast sampling with affirmation")
+            .onNodeWithTag(IchorScreenPermissionGrantedTags.Rows.fastSpeedAffirmationRow)
             .onChildren()
             .filter(hasContentDescription(IchorScreenPermissionGrantedContentDescriptions.Icons.speedAffirmation))
             .assertCountEquals(1)
@@ -282,7 +288,7 @@ class IchorScreenPermissionGrantedTest {
             }
 
         composeTestRule
-            .onAllNodesWithTag("Heart Rate Item Card")
+            .onAllNodesWithTag(IchorScreenPermissionGrantedTags.Cards.heartRateCard)
             .onFirst()
             .performTouchInput {
                 swipeRight()
@@ -315,7 +321,7 @@ class IchorScreenPermissionGrantedTest {
             }
 
         composeTestRule
-            .onAllNodesWithTag("Heart Rate Item Card")
+            .onAllNodesWithTag(IchorScreenPermissionGrantedTags.Cards.heartRateCard)
             .onFirst()
             .performTouchInput {
                 swipeRight()
@@ -339,7 +345,7 @@ class IchorScreenPermissionGrantedTest {
             }
 
         composeTestRule
-            .onAllNodesWithTag("Heart Rate Item Card")
+            .onAllNodesWithTag(IchorScreenPermissionGrantedTags.Cards.heartRateCard)
             .onFirst()
             .performTouchInput {
                 swipeRight()
@@ -363,7 +369,7 @@ class IchorScreenPermissionGrantedTest {
             }
 
         composeTestRule
-            .onAllNodesWithTag("Heart Rate Item Card")
+            .onAllNodesWithTag(IchorScreenPermissionGrantedTags.Cards.heartRateCard)
             .onFirst()
             .performTouchInput {
                 swipeRight()
@@ -426,7 +432,7 @@ class IchorScreenPermissionGrantedTest {
 
     private fun heartRateItemCardWithExpectedDataDisplayed() {
         composeTestRule
-            .onAllNodesWithTag("Heart Rate Item Card")
+            .onAllNodesWithTag(IchorScreenPermissionGrantedTags.Cards.heartRateCard)
             .onFirst()
             .assertIsDisplayed()
         composeTestRule
@@ -448,7 +454,7 @@ class IchorScreenPermissionGrantedTest {
 
     private fun heartRateItemCardsAreNotDisplayed() {
         composeTestRule
-            .onAllNodesWithTag("Heart Rate Item Card")
+            .onAllNodesWithTag(IchorScreenPermissionGrantedTags.Cards.heartRateCard)
             .assertCountEquals(0)
     }
 }
@@ -483,5 +489,17 @@ object IchorScreenPermissionGrantedContentDescriptions {
         var deleteAllReject: String = ""
         var deleteSingleConfirm: String = ""
         var deleteSingleReject: String = ""
+    }
+}
+
+object IchorScreenPermissionGrantedTags {
+    object Rows {
+        var defaultSpeedAffirmationRow: String = ""
+        var slowSpeedAffirmationRow: String = ""
+        var fastSpeedAffirmationRow: String = ""
+    }
+
+    object Cards {
+        var heartRateCard: String = ""
     }
 }

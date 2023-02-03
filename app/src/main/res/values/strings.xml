@@ -55,4 +55,7 @@
     <string name="about_delete_one">You can delete a single record by swiping the record all the way left or right and confirming with the prompt. Note that this cannot be undone!</string>
     <string name="about_further_information">Further Information</string>
     <string name="about_further_information_details">Please check out https://github.com/Carkzis/ for more information on any planned updates on the app, or any other apps currently under development!</string>
+
+    <!-- Reusables -->
+    <string name="card_heart_rate_item">Heart Rate Item Card</string>
 </resources>

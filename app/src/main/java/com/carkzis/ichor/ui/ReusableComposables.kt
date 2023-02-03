@@ -1,4 +1,4 @@
-package com.carkzis.ichor
+package com.carkzis.ichor.ui
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.health.services.client.data.DataTypeAvailability
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Card
+import com.carkzis.ichor.*
 import com.carkzis.ichor.theme.IchorColorPalette
 import com.carkzis.ichor.theme.IchorTheme
 import com.carkzis.ichor.theme.IchorTypography
@@ -177,7 +178,7 @@ fun IchorCard(
     content: @Composable () -> Unit,
 ) {
     Card(
-        modifier = modifier.testTag("Heart Rate Item Card"),
+        modifier = modifier.testTag(stringResource(R.string.card_heart_rate_item)),
         onClick = { /* Do nothing. */ },
         shape = RoundedCornerShape(50.dp),
         backgroundPainter = ColorPainter(color = IchorColorPalette.secondary),
