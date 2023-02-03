@@ -58,4 +58,5 @@
 
     <!-- Reusables -->
     <string name="card_heart_rate_item">Heart Rate Item Card</string>
+    <string name="no_content_description_available">No content description available.</string>
 </resources>

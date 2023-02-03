@@ -133,7 +133,7 @@ fun IchorButton(
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier,
     iconImage: ImageVector = Icons.Rounded.LockPerson,
-    contentDescription: String = "No content description available.",
+    contentDescription: String = stringResource(R.string.no_content_description_available),
     onClick: () -> Unit = {}
 ) {
     Button(modifier = modifier.padding(4.dp), onClick = { onClick() }) {
@@ -194,7 +194,7 @@ fun IchorCard(
 }
 
 @Preview(
-    group = "Button",
+    group = "Card",
     widthDp = WEAR_PREVIEW_ROW_WIDTH_DP,
     heightDp = WEAR_PREVIEW_ROW_HEIGHT_DP,
     apiLevel = WEAR_PREVIEW_API_LEVEL,
