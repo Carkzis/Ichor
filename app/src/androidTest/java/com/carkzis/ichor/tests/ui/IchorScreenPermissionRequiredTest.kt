@@ -60,7 +60,7 @@ class IchorScreenPermissionRequiredTest {
 
         // Move to next screen.
         composeTestRule
-            .onNodeWithContentDescription(IchorScreenPermissionContentDescriptions.Buttons.permissionRequest)
+            .onNodeWithContentDescription(IchorScreenPermissionRequiredContentDescriptions.Buttons.permissionRequest)
             .performClick()
 
         // Assert the new screen after "denying" permissions.
@@ -77,7 +77,7 @@ class IchorScreenPermissionRequiredTest {
 
         // Move to next screen.
         composeTestRule
-            .onNodeWithContentDescription(IchorScreenPermissionContentDescriptions.Buttons.permissionRequest)
+            .onNodeWithContentDescription(IchorScreenPermissionRequiredContentDescriptions.Buttons.permissionRequest)
             .performClick()
 
         // Assert the new screen after "accepting" permissions.
@@ -104,15 +104,18 @@ class IchorScreenPermissionRequiredTest {
 
     @Composable
     private fun obtainStringResourcesForIchorScreenWithoutPermissions() {
-        IchorScreenPermissionText.Header.title = stringResource(id = R.string.app_name)
-        IchorScreenPermissionText.Body.apply {
+        IchorScreenPermissionRequiredText.Header.title = stringResource(id = R.string.app_name)
+
+        IchorScreenPermissionRequiredText.Body.apply {
             permissionNotGranted =
                 stringResource(id = R.string.app_permission_was_denied)
             bpmSubstring = stringResource(id = R.string.ichor_bpm)
         }
-        IchorScreenPermissionContentDescriptions.Icons.main =
+
+        IchorScreenPermissionRequiredContentDescriptions.Icons.main =
             stringResource(id = R.string.ichor_main_heartbeat_icon)
-        IchorScreenPermissionContentDescriptions.Buttons.apply {
+
+        IchorScreenPermissionRequiredContentDescriptions.Buttons.apply {
             permissionRequest = stringResource(id = R.string.ichor_permission_button)
             about = stringResource(id = R.string.ichor_about_button)
         }
@@ -122,15 +125,15 @@ class IchorScreenPermissionRequiredTest {
         // Is displayed.
         assertStandardThemeItemsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription(IchorScreenPermissionContentDescriptions.Buttons.permissionRequest)
+            .onNodeWithContentDescription(IchorScreenPermissionRequiredContentDescriptions.Buttons.permissionRequest)
             .assertIsDisplayed()
 
         // Is not displayed.
         composeTestRule
-            .onAllNodesWithText(IchorScreenPermissionText.Body.permissionNotGranted)
+            .onAllNodesWithText(IchorScreenPermissionRequiredText.Body.permissionNotGranted)
             .assertCountEquals(0)
         composeTestRule
-            .onAllNodesWithText(IchorScreenPermissionText.Body.bpmSubstring, substring = true)
+            .onAllNodesWithText(IchorScreenPermissionRequiredText.Body.bpmSubstring, substring = true)
             .assertCountEquals(0)
     }
 
@@ -138,15 +141,15 @@ class IchorScreenPermissionRequiredTest {
         // Is displayed.
         assertStandardThemeItemsDisplayed()
         composeTestRule
-            .onNodeWithText(IchorScreenPermissionText.Body.permissionNotGranted)
+            .onNodeWithText(IchorScreenPermissionRequiredText.Body.permissionNotGranted)
             .assertIsDisplayed()
 
         // Is not displayed.
         composeTestRule
-            .onAllNodesWithContentDescription(IchorScreenPermissionContentDescriptions.Buttons.permissionRequest)
+            .onAllNodesWithContentDescription(IchorScreenPermissionRequiredContentDescriptions.Buttons.permissionRequest)
             .assertCountEquals(0)
         composeTestRule
-            .onAllNodesWithText(IchorScreenPermissionText.Body.bpmSubstring, substring = true)
+            .onAllNodesWithText(IchorScreenPermissionRequiredText.Body.bpmSubstring, substring = true)
             .assertCountEquals(0)
     }
 
@@ -154,34 +157,34 @@ class IchorScreenPermissionRequiredTest {
         // Is displayed.
         assertStandardThemeItemsDisplayed()
         composeTestRule
-            .onAllNodesWithText(IchorScreenPermissionText.Body.bpmSubstring, substring = true)
+            .onAllNodesWithText(IchorScreenPermissionRequiredText.Body.bpmSubstring, substring = true)
             .onFirst()
             .assertIsDisplayed()
 
         // Is not displayed.
         composeTestRule
-            .onAllNodesWithContentDescription(IchorScreenPermissionContentDescriptions.Buttons.permissionRequest)
+            .onAllNodesWithContentDescription(IchorScreenPermissionRequiredContentDescriptions.Buttons.permissionRequest)
             .assertCountEquals(0)
         composeTestRule
-            .onAllNodesWithText(IchorScreenPermissionText.Body.permissionNotGranted)
+            .onAllNodesWithText(IchorScreenPermissionRequiredText.Body.permissionNotGranted)
             .assertCountEquals(0)
     }
 
     private fun assertStandardThemeItemsDisplayed() {
         composeTestRule
-            .onNodeWithText(IchorScreenPermissionText.Header.title)
+            .onNodeWithText(IchorScreenPermissionRequiredText.Header.title)
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription(IchorScreenPermissionContentDescriptions.Icons.main)
+            .onNodeWithContentDescription(IchorScreenPermissionRequiredContentDescriptions.Icons.main)
         composeTestRule
-            .onNodeWithContentDescription(IchorScreenPermissionContentDescriptions.Buttons.about)
+            .onNodeWithContentDescription(IchorScreenPermissionRequiredContentDescriptions.Buttons.about)
             .assertIsDisplayed()
     }
 
 }
 
 
-object IchorScreenPermissionText {
+object IchorScreenPermissionRequiredText {
     object Header {
         var title: String = ""
     }
@@ -192,7 +195,7 @@ object IchorScreenPermissionText {
     }
 }
 
-object IchorScreenPermissionContentDescriptions {
+object IchorScreenPermissionRequiredContentDescriptions {
     object Icons {
         var main: String = ""
     }

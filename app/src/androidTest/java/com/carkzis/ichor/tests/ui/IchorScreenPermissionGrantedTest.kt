@@ -1,5 +1,6 @@
 package com.carkzis.ichor.tests.ui
 
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.navigation.NavHostController
@@ -11,6 +12,7 @@ import com.carkzis.ichor.ui.IchorScreen
 import com.carkzis.ichor.utils.PermissionFacade
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import com.carkzis.ichor.R
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -35,6 +37,18 @@ class IchorScreenPermissionGrantedTest {
             setContent {
                 dummyHeartRatePermissionFacade = DummyPermissionFacade(hasPermissionAlready = true)
                 navController = rememberSwipeDismissableNavController()
+                IchorScreenPermissionGrantedContentDescriptions.Buttons.apply {
+                    about = stringResource(id = R.string.ichor_about_button)
+                    speedChange = stringResource(id = R.string.ichor_sampling_speed_change)
+                    slowSpeed = stringResource(id = R.string.ichor_slow_sampling_speed)
+                    defaultSpeed = stringResource(id = R.string.ichor_default_sampling_speed)
+                    fastSpeed = stringResource(id = R.string.ichor_fast_sampling_speed)
+                    deleteAll = stringResource(id = R.string.ichor_delete_all_button)
+                    deleteAllConfirm = stringResource(id = R.string.ichor_delete_all_confirm)
+                    deleteAllReject = stringResource(id = R.string.ichor_delete_all_reject)
+                    deleteSingleConfirm = stringResource(id = R.string.ichor_delete_single_confirm)
+                    deleteSingleReject = stringResource(id = R.string.ichor_delete_single_reject)
+                }
                 IchorScreen(viewModel = DummyViewModel(), heartRatePermissionFacade = dummyHeartRatePermissionFacade)
             }
         }
@@ -52,7 +66,7 @@ class IchorScreenPermissionGrantedTest {
     fun `clicking sampling speed change button results expected items displayed in dialogue`() {
         // Open sampling speed dialogue.
         composeTestRule
-            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .performClick()
 
         // Assert on header.
@@ -65,13 +79,13 @@ class IchorScreenPermissionGrantedTest {
 
         // Assert on selection of speeds to choose from.
         composeTestRule
-            .onNodeWithContentDescription("Button for slow sampling speed.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.slowSpeed)
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Button for default medium sampling speed.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.defaultSpeed)
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Button for fast sampling speed.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.fastSpeed)
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription("Affirmation icon.")
@@ -84,11 +98,11 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithText("Sampling Speed: Default")
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("Button for fast sampling speed.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.fastSpeed)
             .performClick()
 
         composeTestRule
@@ -102,11 +116,11 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithText("Sampling Speed: Default")
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("Button for slow sampling speed.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.slowSpeed)
             .performClick()
 
         composeTestRule
@@ -120,7 +134,7 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithText("Sampling Speed: Default")
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .performClick()
         composeTestRule
             .onNodeWithTag("Default sampling with affirmation")
@@ -130,12 +144,12 @@ class IchorScreenPermissionGrantedTest {
 
         // Change sampling speed to slow.
         composeTestRule
-            .onNodeWithContentDescription("Button for slow sampling speed.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.slowSpeed)
             .performClick()
 
         // Reopen dialogue.
         composeTestRule
-            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .performClick()
         composeTestRule
             .onNodeWithTag("Slow sampling with affirmation")
@@ -145,12 +159,12 @@ class IchorScreenPermissionGrantedTest {
 
         // Change sampling speed to fast.
         composeTestRule
-            .onNodeWithContentDescription("Button for fast sampling speed.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.fastSpeed)
             .performClick()
 
         // Reopen dialogue.
         composeTestRule
-            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .performClick()
         composeTestRule
             .onNodeWithTag("Fast sampling with affirmation")
@@ -165,7 +179,7 @@ class IchorScreenPermissionGrantedTest {
             .onNodeWithText("Sampling Speed: Default")
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .performClick()
 
         // Swipe to exit dialogue (this will be the latter root).
@@ -185,7 +199,7 @@ class IchorScreenPermissionGrantedTest {
     fun `clicking delete all button results expected items displayed in dialogue`() {
         // Open delete all dialogue.
         composeTestRule
-            .onNodeWithContentDescription("Delete All Button")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteAll)
             .performClick()
 
         // Assert on header.
@@ -198,10 +212,10 @@ class IchorScreenPermissionGrantedTest {
 
         // Assert on deletion options.
         composeTestRule
-            .onNodeWithContentDescription("Button for confirming delete all.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteAllConfirm)
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Button for rejecting delete all.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteAllReject)
             .assertIsDisplayed()
     }
 
@@ -209,11 +223,11 @@ class IchorScreenPermissionGrantedTest {
     fun `confirming deletion of heartrates is reflected on main screen`() {
         heartRateItemCardWithExpectedDataDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Delete All Button")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteAll)
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("Button for confirming delete all.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteAllConfirm)
             .performClick()
 
         heartRateItemCardsAreNotDisplayed()
@@ -223,11 +237,11 @@ class IchorScreenPermissionGrantedTest {
     fun `rejecting deletion of heartrates is reflected on main screen`() {
         heartRateItemCardWithExpectedDataDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Delete All Button")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteAll)
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("Button for rejecting delete all.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteAllReject)
             .performClick()
 
         heartRateItemCardWithExpectedDataDisplayed()
@@ -237,7 +251,7 @@ class IchorScreenPermissionGrantedTest {
     fun `heartrates not deleted when exiting delete all dialogue`() {
         heartRateItemCardWithExpectedDataDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Delete All Button")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteAll)
             .performClick()
 
         // Swipe to exit dialogue (this will be the latter root).
@@ -278,10 +292,10 @@ class IchorScreenPermissionGrantedTest {
 
         // Assert on deletion options.
         composeTestRule
-            .onNodeWithContentDescription("Confirm deletion of single heartrate.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteSingleConfirm)
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Reject deletion of single heartrate.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteSingleReject)
     }
 
     @Test
@@ -302,7 +316,7 @@ class IchorScreenPermissionGrantedTest {
             }
 
         composeTestRule
-            .onNodeWithContentDescription("Confirm deletion of single heartrate.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteSingleConfirm)
             .performClick()
 
         heartRateItemCardWithExpectedDataIsNotDisplayed()
@@ -326,7 +340,7 @@ class IchorScreenPermissionGrantedTest {
             }
 
         composeTestRule
-            .onNodeWithContentDescription("Reject deletion of single heartrate.")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteSingleReject)
             .performClick()
 
         heartRateItemCardWithExpectedDataDisplayed()
@@ -394,13 +408,13 @@ class IchorScreenPermissionGrantedTest {
 
     private fun buttonsDisplayed() {
         composeTestRule
-            .onNodeWithContentDescription("Sampling Speed Change Button")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("About Button")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.about)
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Delete All Button")
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteAll)
             .assertIsDisplayed()
     }
 
@@ -430,5 +444,35 @@ class IchorScreenPermissionGrantedTest {
         composeTestRule
             .onAllNodesWithTag("Heart Rate Item Card")
             .assertCountEquals(0)
+    }
+}
+
+object IchorScreenPermissionGrantedText {
+    object Header {
+        var title: String = ""
+    }
+
+    object Body {
+        var bpmSubstring: String = ""
+        var permissionNotGranted: String = ""
+    }
+}
+
+object IchorScreenPermissionGrantedContentDescriptions {
+    object Icons {
+        var main: String = ""
+    }
+
+    object Buttons {
+        var about: String = ""
+        var speedChange: String = ""
+        var slowSpeed: String = ""
+        var defaultSpeed: String = ""
+        var fastSpeed: String = ""
+        var deleteAll: String = ""
+        var deleteAllConfirm: String = ""
+        var deleteAllReject: String = ""
+        var deleteSingleConfirm: String = ""
+        var deleteSingleReject: String = ""
     }
 }
