@@ -21,8 +21,8 @@
     <string name="ichor_delete_single_confirm">Confirm deletion of single heartrate.</string>
     <string name="ichor_delete_single_reject">Reject deletion of single heartrate.</string>
     <string name="ichor_bpm">bpm</string>
-    <string name="ichor_delete_record_part_1">Delete your heartbeat record of</string>
-    <string name="ichor_delete_record_part_2">bpm dated</string>
+    <string name="ichor_delete_record_part_1">Delete your heartbeat record of\u0020</string>
+    <string name="ichor_delete_record_part_2">\u0020bpm dated\u0020</string>
     <string name="ichor_main_heartbeat_icon">Main heartbeat icon for app.</string>
     <string name="ichor_delete_heartbeat_icon">Delete heartbeat icon for app.</string>
     <string name="ichor_change_sampling_speed_icon">Change heartbeat sampling speed.</string>

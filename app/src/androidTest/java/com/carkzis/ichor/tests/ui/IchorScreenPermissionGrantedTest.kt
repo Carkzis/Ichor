@@ -1,5 +1,6 @@
 package com.carkzis.ichor.tests.ui
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -37,30 +38,7 @@ class IchorScreenPermissionGrantedTest {
             setContent {
                 dummyHeartRatePermissionFacade = DummyPermissionFacade(hasPermissionAlready = true)
                 navController = rememberSwipeDismissableNavController()
-                IchorScreenPermissionGrantedContentDescriptions.Icons.apply {
-                    main = stringResource(id = R.string.app_name)
-                    samplingSpeed = stringResource(id = R.string.ichor_main_heartbeat_icon)
-                    speedAffirmation = stringResource(id = R.string.ichor_affirmation_icon)
-                    delete = stringResource(id = R.string.ichor_delete_heartbeat_icon)
-                }
-                IchorScreenPermissionGrantedContentDescriptions.Buttons.apply {
-                    about = stringResource(id = R.string.ichor_about_button)
-                    speedChange = stringResource(id = R.string.ichor_sampling_speed_change)
-                    slowSpeed = stringResource(id = R.string.ichor_slow_sampling_speed)
-                    defaultSpeed = stringResource(id = R.string.ichor_default_sampling_speed)
-                    fastSpeed = stringResource(id = R.string.ichor_fast_sampling_speed)
-                    deleteAll = stringResource(id = R.string.ichor_delete_all_button)
-                    deleteAllConfirm = stringResource(id = R.string.ichor_delete_all_confirm)
-                    deleteAllReject = stringResource(id = R.string.ichor_delete_all_reject)
-                    deleteSingleConfirm = stringResource(id = R.string.ichor_delete_single_confirm)
-                    deleteSingleReject = stringResource(id = R.string.ichor_delete_single_reject)
-                }
-                IchorScreenPermissionGrantedTags.Cards.heartRateCard = stringResource(id = R.string.card_heart_rate_item)
-                IchorScreenPermissionGrantedTags.Rows.apply {
-                    defaultSpeedAffirmationRow = stringResource(id = R.string.ichor_default_sampling_row_tag)
-                    slowSpeedAffirmationRow = stringResource(id = R.string.ichor_slow_sampling_row_tag)
-                    fastSpeedAffirmationRow = stringResource(id = R.string.ichor_fast_sampling_row_tag)
-                }
+                obtainStringResourcesForIchorScreenWithPermissionsGranted()
                 IchorScreen(viewModel = DummyViewModel(), heartRatePermissionFacade = dummyHeartRatePermissionFacade)
             }
         }
@@ -85,20 +63,24 @@ class IchorScreenPermissionGrantedTest {
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Icons.samplingSpeed)
             .assertIsDisplayed()
+
         composeTestRule
-            .onNodeWithText("Change sampling speed?")
+            .onNodeWithText(IchorScreenPermissionGrantedText.Body.currentSamplingSpeedQuery)
             .assertIsDisplayed()
 
         // Assert on selection of speeds to choose from.
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.slowSpeed)
             .assertIsDisplayed()
+
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.defaultSpeed)
             .assertIsDisplayed()
+
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.fastSpeed)
             .assertIsDisplayed()
+
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Icons.speedAffirmation)
             .assertIsDisplayed()
@@ -107,7 +89,7 @@ class IchorScreenPermissionGrantedTest {
     @Test
     fun `change of sampling speed to fast is reflected on main screen`() {
         composeTestRule
-            .onNodeWithText("Sampling Speed: Default")
+            .onNodeWithText(IchorScreenPermissionGrantedText.Body.currentSamplingSpeedDefault)
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
@@ -118,15 +100,16 @@ class IchorScreenPermissionGrantedTest {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Sampling Speed: Fast")
+            .onNodeWithText(IchorScreenPermissionGrantedText.Body.currentSamplingSpeedFast)
             .assertIsDisplayed()
     }
 
     @Test
     fun `change of sampling speed to slow is reflected on main screen`() {
         composeTestRule
-            .onNodeWithText("Sampling Speed: Default")
+            .onNodeWithText(IchorScreenPermissionGrantedText.Body.currentSamplingSpeedDefault)
             .assertIsDisplayed()
+
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .performClick()
@@ -136,18 +119,20 @@ class IchorScreenPermissionGrantedTest {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Sampling Speed: Slow")
+            .onNodeWithText(IchorScreenPermissionGrantedText.Body.currentSamplingSpeedSlow)
             .assertIsDisplayed()
     }
 
     @Test
     fun `change of sampling speed is reflected on sampling speed dialogue when reopened`() {
         composeTestRule
-            .onNodeWithText("Sampling Speed: Default")
+            .onNodeWithText(IchorScreenPermissionGrantedText.Body.currentSamplingSpeedDefault)
             .assertIsDisplayed()
+
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .performClick()
+
         composeTestRule
             .onNodeWithTag(IchorScreenPermissionGrantedTags.Rows.defaultSpeedAffirmationRow)
             .onChildren()
@@ -163,6 +148,7 @@ class IchorScreenPermissionGrantedTest {
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .performClick()
+
         composeTestRule
             .onNodeWithTag(IchorScreenPermissionGrantedTags.Rows.slowSpeedAffirmationRow)
             .onChildren()
@@ -178,6 +164,7 @@ class IchorScreenPermissionGrantedTest {
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .performClick()
+
         composeTestRule
             .onNodeWithTag(IchorScreenPermissionGrantedTags.Rows.fastSpeedAffirmationRow)
             .onChildren()
@@ -188,7 +175,7 @@ class IchorScreenPermissionGrantedTest {
     @Test
     fun `sample speed does not change when exiting sampling speed dialogue`() {
         composeTestRule
-            .onNodeWithText("Sampling Speed: Default")
+            .onNodeWithText(IchorScreenPermissionGrantedText.Body.currentSamplingSpeedDefault)
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
@@ -203,7 +190,7 @@ class IchorScreenPermissionGrantedTest {
             }
 
         composeTestRule
-            .onNodeWithText("Sampling Speed: Default")
+            .onNodeWithText(IchorScreenPermissionGrantedText.Body.currentSamplingSpeedDefault)
             .assertIsDisplayed()
     }
 
@@ -218,14 +205,16 @@ class IchorScreenPermissionGrantedTest {
         composeTestRule
             .onNodeWithContentDescription( IchorScreenPermissionGrantedContentDescriptions.Icons.delete)
             .assertIsDisplayed()
+
         composeTestRule
-            .onNodeWithText("Delete all your heartbeats? This cannot be undone.")
+            .onNodeWithText(IchorScreenPermissionGrantedText.Body.deleteAllFinalWarning)
             .assertIsDisplayed()
 
         // Assert on deletion options.
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteAllConfirm)
             .assertIsDisplayed()
+
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteAllReject)
             .assertIsDisplayed()
@@ -295,17 +284,22 @@ class IchorScreenPermissionGrantedTest {
             }
 
         // Assert on header.
+        val dummyBpm = "100.0"
+        val dummyDate = "2022-12-25 12:30:30"
+        val constructedDeletionQueryMessage = "${IchorScreenPermissionGrantedText.Body.deleteRecordMessagePreBpm}$dummyBpm${IchorScreenPermissionGrantedText.Body.deleteRecordMessagePreDate}$dummyDate?"
         composeTestRule
-            .onNodeWithContentDescription( IchorScreenPermissionGrantedContentDescriptions.Icons.delete)
+            .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Icons.delete)
             .assertIsDisplayed()
+
         composeTestRule
-            .onNodeWithText("Delete your heartbeat record of 100.0 bpm dated 2022-12-25 12:30:30?")
+            .onNodeWithText(constructedDeletionQueryMessage)
             .assertIsDisplayed()
 
         // Assert on deletion options.
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteSingleConfirm)
             .assertIsDisplayed()
+
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteSingleReject)
     }
@@ -388,33 +382,88 @@ class IchorScreenPermissionGrantedTest {
 
     @Test
     fun `change to current heartrate is displayed on screen`() {
+        val initialBpmText = "0.0${IchorScreenPermissionGrantedText.Body.bpmSuffix}"
+        val finalBpmText = "1.0${IchorScreenPermissionGrantedText.Body.bpmSuffix}"
         composeTestRule
-            .onNodeWithText("0.0 bpm")
+            .onNodeWithText(initialBpmText)
             .assertIsDisplayed()
+
         composeTestRule.waitUntil {
             composeTestRule
-                .onAllNodesWithText("1.0 bpm")
+                .onAllNodesWithText(finalBpmText)
                 .fetchSemanticsNodes().size == 1
+        }
+    }
+
+    @Composable
+    private fun obtainStringResourcesForIchorScreenWithPermissionsGranted() {
+        IchorScreenPermissionGrantedContentDescriptions.Icons.apply {
+            main = stringResource(id = R.string.app_name)
+            samplingSpeed = stringResource(id = R.string.ichor_main_heartbeat_icon)
+            speedAffirmation = stringResource(id = R.string.ichor_affirmation_icon)
+            delete = stringResource(id = R.string.ichor_delete_heartbeat_icon)
+        }
+
+        IchorScreenPermissionGrantedContentDescriptions.Buttons.apply {
+            about = stringResource(id = R.string.ichor_about_button)
+            speedChange = stringResource(id = R.string.ichor_sampling_speed_change)
+            slowSpeed = stringResource(id = R.string.ichor_slow_sampling_speed)
+            defaultSpeed = stringResource(id = R.string.ichor_default_sampling_speed)
+            fastSpeed = stringResource(id = R.string.ichor_fast_sampling_speed)
+            deleteAll = stringResource(id = R.string.ichor_delete_all_button)
+            deleteAllConfirm = stringResource(id = R.string.ichor_delete_all_confirm)
+            deleteAllReject = stringResource(id = R.string.ichor_delete_all_reject)
+            deleteSingleConfirm = stringResource(id = R.string.ichor_delete_single_confirm)
+            deleteSingleReject = stringResource(id = R.string.ichor_delete_single_reject)
+        }
+
+        IchorScreenPermissionGrantedTags.Cards.heartRateCard =
+            stringResource(id = R.string.card_heart_rate_item)
+
+        IchorScreenPermissionGrantedTags.Rows.apply {
+            defaultSpeedAffirmationRow =
+                stringResource(id = R.string.ichor_default_sampling_row_tag)
+            slowSpeedAffirmationRow = stringResource(id = R.string.ichor_slow_sampling_row_tag)
+            fastSpeedAffirmationRow = stringResource(id = R.string.ichor_fast_sampling_row_tag)
+        }
+
+        IchorScreenPermissionGrantedText.Header.title = stringResource(id = R.string.app_name)
+
+        IchorScreenPermissionGrantedText.Body.apply {
+            bpmSuffix = stringResource(id = R.string.ichor_bpm_suffix)
+            currentSamplingSpeedQuery =
+                stringResource(id = R.string.ichor_change_sampling_speed_question)
+            currentSamplingSpeedPrefix = stringResource(id = R.string.ichor_sample_speed_prefix)
+            currentSamplingSpeedDefault = "${currentSamplingSpeedPrefix}Default"
+            currentSamplingSpeedSlow = "${currentSamplingSpeedPrefix}Slow"
+            currentSamplingSpeedFast = "${currentSamplingSpeedPrefix}Fast"
+            currentAvailabilityPrefix = stringResource(id = R.string.ichor_availability_prefix)
+            deleteAllFinalWarning = stringResource(id = R.string.ichor_delete_all_final)
+            deleteRecordMessagePreBpm = stringResource(id = R.string.ichor_delete_record_part_1)
+            deleteRecordMessagePreDate = stringResource(id = R.string.ichor_delete_record_part_2)
         }
     }
 
     private fun headerDisplayed() {
         composeTestRule
-            .onNodeWithText("Ichor")
+            .onNodeWithText(IchorScreenPermissionGrantedText.Header.title)
             .assertIsDisplayed()
+
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Icons.main)
     }
 
     private fun liveDataDisplayed() {
         composeTestRule
-            .onNodeWithText("Availability: Unknown")
+            .onNodeWithText("${IchorScreenPermissionGrantedText.Body.currentAvailabilityPrefix}Unknown")
             .assertIsDisplayed()
+
         composeTestRule
-            .onNodeWithText("Sampling Speed: Default")
+            .onNodeWithText(IchorScreenPermissionGrantedText.Body.currentSamplingSpeedDefault)
             .assertIsDisplayed()
+
         composeTestRule
-            .onNodeWithText("0.0 bpm")
+            .onNodeWithText("0.0${IchorScreenPermissionGrantedText.Body.bpmSuffix}")
             .assertIsDisplayed()
     }
 
@@ -422,9 +471,11 @@ class IchorScreenPermissionGrantedTest {
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.speedChange)
             .assertIsDisplayed()
+
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.about)
             .assertIsDisplayed()
+
         composeTestRule
             .onNodeWithContentDescription(IchorScreenPermissionGrantedContentDescriptions.Buttons.deleteAll)
             .assertIsDisplayed()
@@ -435,20 +486,25 @@ class IchorScreenPermissionGrantedTest {
             .onAllNodesWithTag(IchorScreenPermissionGrantedTags.Cards.heartRateCard)
             .onFirst()
             .assertIsDisplayed()
+
+        val dummyDate = "2022-12-25 12:30:30"
         composeTestRule
-            .onNodeWithText("2022-12-25 12:30:30")
+            .onNodeWithText(dummyDate)
             .assertIsDisplayed()
+
         composeTestRule
-            .onNodeWithText("100.0 bpm")
+            .onNodeWithText("100.0${IchorScreenPermissionGrantedText.Body.bpmSuffix}")
             .assertIsDisplayed()
     }
 
     private fun heartRateItemCardWithExpectedDataIsNotDisplayed() {
+        val dummyDate = "2022-12-25 12:30:30"
         composeTestRule
-            .onAllNodesWithText("2022-12-25 12:30:30")
+            .onAllNodesWithText(dummyDate)
             .assertCountEquals(0)
+
         composeTestRule
-            .onAllNodesWithText("100.0 bpm")
+            .onAllNodesWithText("100.0${IchorScreenPermissionGrantedText.Body.bpmSuffix}")
             .assertCountEquals(0)
     }
 
@@ -465,8 +521,16 @@ object IchorScreenPermissionGrantedText {
     }
 
     object Body {
-        var bpmSubstring: String = ""
-        var permissionNotGranted: String = ""
+        var bpmSuffix: String = ""
+        var currentSamplingSpeedPrefix: String = ""
+        var currentSamplingSpeedQuery: String = ""
+        var currentSamplingSpeedSlow: String = ""
+        var currentSamplingSpeedDefault: String = ""
+        var currentSamplingSpeedFast: String = ""
+        var currentAvailabilityPrefix: String = ""
+        var deleteAllFinalWarning: String = ""
+        var deleteRecordMessagePreBpm: String = ""
+        var deleteRecordMessagePreDate: String = ""
     }
 }
 

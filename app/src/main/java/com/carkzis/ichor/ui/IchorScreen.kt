@@ -350,7 +350,7 @@ private fun HeartRateItem(
                 Text(
                     style = IchorTypography.body2,
                     modifier = Modifier.padding(start = 36.dp, end = 36.dp),
-                    text = "${stringResource(string.ichor_delete_record_part_1)} ${currentHeartRateData.value} ${stringResource(string.ichor_delete_record_part_2)} ${currentHeartRateData.date}?",
+                    text = "${stringResource(string.ichor_delete_record_part_1)}${currentHeartRateData.value}${stringResource(string.ichor_delete_record_part_2)}${currentHeartRateData.date}?",
                     textAlign = TextAlign.Center
                 )
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
