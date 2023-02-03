@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -125,7 +126,7 @@ private fun IchorBodyComponents(
                         modifier = modifier,
                         style = IchorTypography.body2,
                         state = viewModel.currentSamplingSpeed,
-                        prefix = "Sampling Speed: "
+                        prefix = stringResource(string.ichor_sample_speed_prefix)
                     )
                 }
             }
@@ -136,7 +137,7 @@ private fun IchorBodyComponents(
                 Row {
                     SamplingSpeedChangeButton(viewModel = viewModel, modifier = modifier)
                     Spacer(modifier = Modifier.width(8.dp))
-                    AboutButton(viewModel = viewModel, modifier = modifier, onClickAbout)
+                    AboutButton(modifier = modifier, onClickAbout)
                     Spacer(modifier = Modifier.width(8.dp))
                     DeleteAllButton(viewModel = viewModel, modifier = modifier)
                 }
@@ -148,11 +149,11 @@ private fun IchorBodyComponents(
                 HeartRateItem(viewModel, currentHeartRateData, modifier)
             }
         } else if (!permissionRequested) {
-            item { IchorButton(contentDescription = "Permission request button.", onClick = { heartRatePermissionProvider.launchPermissionRequest() }) }
-            item { AboutButton(viewModel = viewModel, modifier = modifier, onClickAbout) }
+            item { IchorButton(contentDescription = stringResource(string.ichor_permission_button), onClick = { heartRatePermissionProvider.launchPermissionRequest() }) }
+            item { AboutButton(modifier = modifier, onClickAbout) }
         } else {
             item { PermissionsInstructions(modifier) }
-            item { AboutButton(viewModel = viewModel, modifier = modifier, onClickAbout) }
+            item { AboutButton(modifier = modifier, onClickAbout) }
         }
     }
 }
@@ -177,7 +178,7 @@ private fun DeleteAllButton(
         modifier = modifier.size(24.dp),
         onClick = { deleteAlertRequired = true },
         iconImage = Icons.Rounded.Delete,
-        contentDescription = "Delete All Button"
+        contentDescription = stringResource(string.ichor_delete_all_button)
     )
 
     Dialog(
@@ -197,13 +198,13 @@ private fun DeleteAllButton(
                     style = IchorTypography.body2,
                     modifier = modifier.padding(start = 36.dp, end = 36.dp),
                     textAlign = TextAlign.Center,
-                    text = "Delete all your heartbeats? This cannot be undone."
+                    text = stringResource(string.ichor_delete_all_final)
                 )
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     IchorButton(
                         iconImage = Icons.Rounded.Done,
                         modifier = Modifier.size(32.dp),
-                        contentDescription = "Button for confirming delete all."
+                        contentDescription = stringResource(string.ichor_delete_all_confirm)
                     ) {
                         viewModel.deleteAllHeartRates()
                         deleteAlertRequired = false
@@ -211,7 +212,7 @@ private fun DeleteAllButton(
                     IchorButton(
                         iconImage = Icons.Rounded.Close,
                         modifier = Modifier.size(32.dp),
-                        contentDescription = "Button for rejecting delete all."
+                        contentDescription = stringResource(string.ichor_delete_all_reject)
                     ) {
                         deleteAlertRequired = false
                     }
@@ -232,7 +233,7 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
             .padding(all = 0.dp),
         onClick = { samplingSpeedAlertRequired = true },
         iconImage = Icons.Rounded.Speed,
-        contentDescription = "Sampling Speed Change Button"
+        contentDescription = stringResource(string.ichor_sampling_speed_change)
     )
 
     Dialog(
@@ -252,15 +253,15 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
                     style = IchorTypography.body2,
                     modifier = modifier.padding(start = 36.dp, end = 36.dp),
                     textAlign = TextAlign.Center,
-                    text = "Change sampling speed?"
+                    text = stringResource(string.ichor_change_sampling_speed_question)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    Row(modifier = modifier.testTag("Slow sampling with affirmation")) {
+                    Row(modifier = modifier.testTag(stringResource(string.ichor_slow_sampling_row_tag))) {
                         IchorButton(
                             iconImage = Icons.Rounded.DirectionsWalk,
                             modifier = Modifier.size(32.dp),
-                            contentDescription = "Button for slow sampling speed."
+                            contentDescription = stringResource(string.ichor_slow_sampling_speed)
                         ) {
                             viewModel.changeSampleRate(SamplingSpeed.SLOW)
                             samplingSpeedAlertRequired = false
@@ -269,11 +270,11 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
                             TickIcon()
                         }
                     }
-                    Row(modifier = modifier.testTag("Default sampling with affirmation")) {
+                    Row(modifier = modifier.testTag(stringResource(string.ichor_default_sampling_row_tag))) {
                         IchorButton(
                             iconImage = Icons.Rounded.DirectionsRun,
                             modifier = Modifier.size(32.dp),
-                            contentDescription = "Button for default medium sampling speed."
+                            contentDescription = stringResource(string.ichor_default_sampling_speed)
                         ) {
                             viewModel.changeSampleRate(SamplingSpeed.DEFAULT)
                             samplingSpeedAlertRequired = false
@@ -282,11 +283,11 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
                             TickIcon()
                         }
                     }
-                    Row(modifier = modifier.testTag("Fast sampling with affirmation")) {
+                    Row(modifier = modifier.testTag(stringResource(string.ichor_fast_sampling_row_tag))) {
                         IchorButton(
                             iconImage = Icons.Rounded.DirectionsBike,
                             modifier = Modifier.size(32.dp),
-                            contentDescription = "Button for fast sampling speed."
+                            contentDescription = stringResource(string.ichor_fast_sampling_speed)
                         ) {
                             viewModel.changeSampleRate(SamplingSpeed.FAST)
                             samplingSpeedAlertRequired = false
@@ -302,14 +303,14 @@ fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
 }
 
 @Composable
-private fun AboutButton(viewModel: MainViewModel, modifier: Modifier, onClickAbout: () -> Unit) {
+private fun AboutButton(modifier: Modifier, onClickAbout: () -> Unit) {
     IchorButton(
         modifier = modifier
             .size(24.dp)
             .padding(all = 0.dp),
         onClick = onClickAbout,
         iconImage = Icons.Rounded.QuestionMark,
-        contentDescription = "About Button"
+        contentDescription = stringResource(string.ichor_about_button)
     )
 }
 
@@ -349,21 +350,21 @@ private fun HeartRateItem(
                 Text(
                     style = IchorTypography.body2,
                     modifier = Modifier.padding(start = 36.dp, end = 36.dp),
-                    text = "Delete your heartbeat record of ${currentHeartRateData.value} bpm dated ${currentHeartRateData.date}?",
+                    text = "${stringResource(string.ichor_delete_record_part_1)} ${currentHeartRateData.value} ${stringResource(string.ichor_delete_record_part_2)} ${currentHeartRateData.date}?",
                     textAlign = TextAlign.Center
                 )
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     IchorButton(
                         iconImage = Icons.Rounded.Done,
                         modifier = Modifier.size(32.dp),
-                        contentDescription = "Confirm deletion of single heartrate."
+                        contentDescription = stringResource(string.ichor_delete_single_confirm)
                     ) {
                         viewModel.deleteHeartRate(currentHeartRateData.pk)
                     }
                     IchorButton(
                         iconImage = Icons.Rounded.Close,
                         modifier = Modifier.size(32.dp),
-                        contentDescription = "Reject deletion of single heartrate."
+                        contentDescription = stringResource(string.ichor_delete_single_reject)
                     ) {
                         deleteAlertRequired = false
                     }
@@ -380,7 +381,7 @@ private fun HeartRateItem(
                 time = currentHeartRateData.date,
                 content = {
                     Text(
-                        "${currentHeartRateData.value} bpm",
+                        "${currentHeartRateData.value} ${stringResource(string.ichor_bpm)}",
                         color = IchorColorPalette.onSecondary
                     )
                 }
@@ -402,7 +403,7 @@ private fun initiateDataCollectionOnce(
 fun MainIcon() {
     Icon(
         imageVector = Icons.Rounded.MonitorHeart,
-        contentDescription = "Main heartbeat icon for app.",
+        contentDescription = stringResource(string.ichor_main_heartbeat_icon),
         tint = IchorColorPalette.secondary
     )
 }
@@ -412,7 +413,7 @@ fun DeleteHeartbeatIcon() {
     Icon(
         modifier = Modifier.size(48.dp),
         imageVector = Icons.Rounded.Delete,
-        contentDescription = "Delete heartbeat icon for app.",
+        contentDescription = stringResource(string.ichor_delete_heartbeat_icon),
         tint = IchorColorPalette.secondary
     )
 }
@@ -422,7 +423,7 @@ fun ChangeSamplingSpeedIcon() {
     Icon(
         modifier = Modifier.size(48.dp),
         imageVector = Icons.Rounded.Speed,
-        contentDescription = "Change heartbeat sampling speed.",
+        contentDescription = stringResource(string.ichor_change_sampling_speed_icon),
         tint = IchorColorPalette.secondary
     )
 }
@@ -432,7 +433,7 @@ fun TickIcon() {
     Icon(
         modifier = Modifier.size(32.dp),
         imageVector = Icons.Rounded.Done,
-        contentDescription = "Affirmation icon.",
+        contentDescription = stringResource(string.ichor_affirmation_icon),
         tint = IchorColorPalette.secondary
     )
 }
@@ -452,7 +453,7 @@ fun DisplayAvailability(modifier: Modifier, state: StateFlow<Availability>) {
         state = state,
         modifier = modifier,
         style = IchorTypography.body2,
-        prefix = "Availability: "
+        prefix = stringResource(string.ichor_availability_prefix)
     )
 }
 
@@ -461,7 +462,7 @@ fun DisplayLatestHeartRate(modifier: Modifier, state: StateFlow<Double>) {
     IchorStatefulText(
         state = state,
         modifier = modifier,
-        suffix = " bpm"
+        suffix = stringResource(string.ichor_bpm_suffix)
     )
 }
 

@@ -1,10 +1,5 @@
 <resources>
     <string name="app_name">"Ichor"</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
-    <string name="hello_world">Hello Square World!</string>
     <string name="app_permission_was_denied">"You previously denied the app permission to access the heart rate sensor.\nThis can be changed in your watch settings."</string>
     <string name="about_ichor">"About Ichor"</string>
     <string name="about_description">"Welcome to Ichor, where you can log your heartbeat with your watch!\n\nYou can view your current heart rate, record your heart rate into a local database to be stored on your watch using various sampling speeds,and view your heart rate history.\n\nYou can also delete your heart rate history if you so choose!"</string>
@@ -30,4 +25,30 @@
     <string name="about_delete_one">You can delete a single record by swiping the record all the way left or right and confirming with the prompt. Note that this cannot be undone!</string>
     <string name="about_further_information">Further Information</string>
     <string name="about_further_information_details">Please check out https://github.com/Carkzis/ for more information on any planned updates on the app, or any other apps currently under development!</string>
+    <string name="ichor_sample_speed_prefix">Sampling Speed:\u0020</string>
+    <string name="ichor_permission_button">Permission request button.</string>
+    <string name="ichor_delete_all_button">Delete All Button</string>
+    <string name="ichor_delete_all_final">Delete all your heartbeats? This cannot be undone.</string>
+    <string name="ichor_delete_all_confirm">Button for confirming delete all.</string>
+    <string name="ichor_delete_all_reject">Button for rejecting delete all.</string>
+    <string name="ichor_sampling_speed_change">Sampling Speed Change Button</string>
+    <string name="ichor_change_sampling_speed_question">Change sampling speed?</string>
+    <string name="ichor_slow_sampling_row_tag">Slow sampling with affirmation</string>
+    <string name="ichor_slow_sampling_speed">Button for slow sampling speed.</string>
+    <string name="ichor_default_sampling_row_tag">Default sampling with affirmation</string>
+    <string name="ichor_default_sampling_speed">Button for default medium sampling speed.</string>
+    <string name="ichor_fast_sampling_row_tag">Fast sampling with affirmation</string>
+    <string name="ichor_fast_sampling_speed">Button for fast sampling speed.</string>
+    <string name="ichor_about_button">About Button</string>
+    <string name="ichor_delete_single_confirm">Confirm deletion of single heartrate.</string>
+    <string name="ichor_delete_single_reject">Reject deletion of single heartrate.</string>
+    <string name="ichor_bpm">bpm</string>
+    <string name="ichor_delete_record_part_1">Delete your heartbeat record of</string>
+    <string name="ichor_delete_record_part_2">bpm dated</string>
+    <string name="ichor_main_heartbeat_icon">Main heartbeat icon for app.</string>
+    <string name="ichor_delete_heartbeat_icon">Delete heartbeat icon for app.</string>
+    <string name="ichor_change_sampling_speed_icon">Change heartbeat sampling speed.</string>
+    <string name="ichor_affirmation_icon">Affirmation icon.</string>
+    <string name="ichor_availability_prefix">Availability:\u0020</string>
+    <string name="ichor_bpm_suffix">\u0020bpm</string>
 </resources>
