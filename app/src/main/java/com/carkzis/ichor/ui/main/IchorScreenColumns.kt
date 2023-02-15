@@ -5,13 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.ScalingLazyListScope
 import androidx.wear.compose.material.items
-import com.carkzis.ichor.R
 import com.carkzis.ichor.data.domain.DomainHeartRate
-import com.carkzis.ichor.ui.IchorButton
 import com.carkzis.ichor.ui.MainViewModel
 import com.carkzis.ichor.utils.PermissionFacade
 import java.util.concurrent.atomic.AtomicBoolean

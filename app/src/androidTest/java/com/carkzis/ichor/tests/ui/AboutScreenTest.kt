@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.carkzis.ichor.R
-import com.carkzis.ichor.ui.AboutScreen
+import com.carkzis.ichor.ui.about.AboutScreen
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
