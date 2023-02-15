@@ -49,7 +49,7 @@ fun IchorScreen(
     onClickAbout: () -> Unit = {}
 ) {
     /*
-    To allow synthetic providers, use:
+    To allow synthetic providers (emulator must be in developer mode), use:
         adb shell am broadcast \
         -a "whs.USE_SYNTHETIC_PROVIDERS" \
         com.google.android.wearable.healthservices
@@ -71,7 +71,6 @@ fun IchorScreen(
 
     // TODO: Look into constant recomposing when opening dialog.
     // TODO: Refactor Compose.
-    // TODO: Convert strings to string resources.
 
     val listState = rememberScalingLazyListState()
     val heartRates by viewModel.latestHeartRateList.collectAsState()
@@ -113,48 +112,116 @@ private fun IchorBodyComponents(
         autoCentering = AutoCenteringParams(itemIndex = 0),
         state = listState
     ) {
-        item { MainIcon() }
-        item { TitleText(modifier = modifier) }
-        item {
-            DisplayAvailability(modifier = modifier, state = viewModel.latestAvailability)
+        IchorInvariantColumnComponents(modifier, viewModel)
+        IchorVariantColumnComponents(
+            hasPermission,
+            shouldInitiateDataCollection,
+            viewModel,
+            modifier,
+            onClickAbout,
+            heartRates,
+            permissionRequested,
+            heartRatePermissionProvider
+        )
+    }
+}
+
+private fun ScalingLazyListScope.IchorVariantColumnComponents(
+    hasPermission: Boolean,
+    shouldInitiateDataCollection: AtomicBoolean,
+    viewModel: MainViewModel,
+    modifier: Modifier,
+    onClickAbout: () -> Unit,
+    heartRates: List<DomainHeartRate>,
+    permissionRequested: Boolean,
+    heartRatePermissionProvider: PermissionFacade
+) {
+    if (hasPermission) {
+        IchorBodyColumnComponentsWherePermissionGranted(
+            shouldInitiateDataCollection,
+            viewModel,
+            modifier,
+            onClickAbout,
+            heartRates
+        )
+    } else if (!permissionRequested) {
+        IchorBodyColumnComponentsWherePermissionsNeedRequesting(
+            heartRatePermissionProvider,
+            modifier,
+            onClickAbout
+        )
+    } else {
+        IchorBodyColumnComponentsWherePermissionsDenied(modifier, onClickAbout)
+    }
+}
+
+private fun ScalingLazyListScope.IchorBodyColumnComponentsWherePermissionsDenied(
+    modifier: Modifier,
+    onClickAbout: () -> Unit
+) {
+    item { PermissionsInstructions(modifier) }
+    item { AboutButton(modifier = modifier, onClickAbout) }
+}
+
+private fun ScalingLazyListScope.IchorBodyColumnComponentsWherePermissionsNeedRequesting(
+    heartRatePermissionProvider: PermissionFacade,
+    modifier: Modifier,
+    onClickAbout: () -> Unit
+) {
+    item {
+        IchorButton(
+            contentDescription = stringResource(string.ichor_permission_button),
+            onClick = { heartRatePermissionProvider.launchPermissionRequest() })
+    }
+    item { AboutButton(modifier = modifier, onClickAbout) }
+}
+
+private fun ScalingLazyListScope.IchorBodyColumnComponentsWherePermissionGranted(
+    shouldInitiateDataCollection: AtomicBoolean,
+    viewModel: MainViewModel,
+    modifier: Modifier,
+    onClickAbout: () -> Unit,
+    heartRates: List<DomainHeartRate>
+) {
+    initiateDataCollectionOnce(shouldInitiateDataCollection, viewModel)
+    item {
+        Row {
+            IchorStatefulText(
+                modifier = modifier,
+                style = IchorTypography.body2,
+                state = viewModel.currentSamplingSpeed,
+                prefix = stringResource(string.ichor_sample_speed_prefix)
+            )
         }
-        if (hasPermission) {
-            initiateDataCollectionOnce(shouldInitiateDataCollection, viewModel)
-            item {
-                Row {
-                    IchorStatefulText(
-                        modifier = modifier,
-                        style = IchorTypography.body2,
-                        state = viewModel.currentSamplingSpeed,
-                        prefix = stringResource(string.ichor_sample_speed_prefix)
-                    )
-                }
-            }
-            item {
-                DisplayLatestHeartRate(modifier = modifier, state = viewModel.latestHeartRate)
-            }
-            item {
-                Row {
-                    SamplingSpeedChangeButton(viewModel = viewModel, modifier = modifier)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    AboutButton(modifier = modifier, onClickAbout)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    DeleteAllButton(viewModel = viewModel, modifier = modifier)
-                }
-            }
-            items(
-                items = heartRates,
-                key = { it.pk }
-            ) { currentHeartRateData ->
-                HeartRateItem(viewModel, currentHeartRateData, modifier)
-            }
-        } else if (!permissionRequested) {
-            item { IchorButton(contentDescription = stringResource(string.ichor_permission_button), onClick = { heartRatePermissionProvider.launchPermissionRequest() }) }
-            item { AboutButton(modifier = modifier, onClickAbout) }
-        } else {
-            item { PermissionsInstructions(modifier) }
-            item { AboutButton(modifier = modifier, onClickAbout) }
+    }
+    item {
+        DisplayLatestHeartRate(modifier = modifier, state = viewModel.latestHeartRate)
+    }
+    item {
+        Row {
+            SamplingSpeedChangeButton(viewModel = viewModel, modifier = modifier)
+            Spacer(modifier = Modifier.width(8.dp))
+            AboutButton(modifier = modifier, onClickAbout)
+            Spacer(modifier = Modifier.width(8.dp))
+            DeleteAllButton(viewModel = viewModel, modifier = modifier)
         }
+    }
+    items(
+        items = heartRates,
+        key = { it.pk }
+    ) { currentHeartRateData ->
+        HeartRateItem(viewModel, currentHeartRateData, modifier)
+    }
+}
+
+private fun ScalingLazyListScope.IchorInvariantColumnComponents(
+    modifier: Modifier,
+    viewModel: MainViewModel
+) {
+    item { MainIcon() }
+    item { TitleText(modifier = modifier) }
+    item {
+        DisplayAvailability(modifier = modifier, state = viewModel.latestAvailability)
     }
 }
 
