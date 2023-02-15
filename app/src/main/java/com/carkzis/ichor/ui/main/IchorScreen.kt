@@ -1,9 +1,10 @@
 @file:OptIn(
     ExperimentalPermissionsApi::class, ExperimentalMaterialApi::class,
+    ExperimentalPermissionsApi::class, ExperimentalPermissionsApi::class,
     ExperimentalPermissionsApi::class
 )
 
-package com.carkzis.ichor.ui
+package com.carkzis.ichor.ui.main
 
 import android.Manifest
 import androidx.compose.foundation.layout.*
@@ -29,6 +30,7 @@ import com.carkzis.ichor.R.*
 import com.carkzis.ichor.data.domain.DomainHeartRate
 import com.carkzis.ichor.theme.IchorColorPalette
 import com.carkzis.ichor.theme.IchorTypography
+import com.carkzis.ichor.ui.*
 import com.carkzis.ichor.utils.DefaultPermissionFacade
 import com.carkzis.ichor.utils.PermissionFacade
 import com.carkzis.ichor.utils.SamplingSpeed
@@ -103,130 +105,8 @@ private fun IchorBodyComponents(
     }
 }
 
-private fun ScalingLazyListScope.IchorVariantColumnComponents(
-    hasPermission: Boolean,
-    shouldInitiateDataCollection: AtomicBoolean,
-    viewModel: MainViewModel,
-    modifier: Modifier,
-    onClickAbout: () -> Unit,
-    heartRates: List<DomainHeartRate>,
-    permissionRequested: Boolean,
-    heartRatePermissionProvider: PermissionFacade
-) {
-    if (hasPermission) {
-        ColumnComponentsWherePermissionGranted(
-            shouldInitiateDataCollection,
-            viewModel,
-            modifier,
-            onClickAbout,
-            heartRates
-        )
-    } else if (!permissionRequested) {
-        ColumnComponentsWherePermissionsNeedRequesting(
-            heartRatePermissionProvider,
-            modifier,
-            onClickAbout
-        )
-    } else {
-       ColumnComponentsWherePermissionsDenied(modifier, onClickAbout)
-    }
-}
-
-private fun ScalingLazyListScope.ColumnComponentsWherePermissionsDenied(
-    modifier: Modifier,
-    onClickAbout: () -> Unit
-) {
-    item { PermissionsInstructions(modifier) }
-    item { AboutButton(modifier = modifier, onClickAbout) }
-}
-
-private fun ScalingLazyListScope.ColumnComponentsWherePermissionsNeedRequesting(
-    heartRatePermissionProvider: PermissionFacade,
-    modifier: Modifier,
-    onClickAbout: () -> Unit
-) {
-    item {
-        IchorButton(
-            contentDescription = stringResource(string.ichor_permission_button),
-            onClick = { heartRatePermissionProvider.launchPermissionRequest() })
-    }
-    item { AboutButton(modifier = modifier, onClickAbout) }
-}
-
-private fun ScalingLazyListScope.ColumnComponentsWherePermissionGranted(
-    shouldInitiateDataCollection: AtomicBoolean,
-    viewModel: MainViewModel,
-    modifier: Modifier,
-    onClickAbout: () -> Unit,
-    heartRates: List<DomainHeartRate>
-) {
-    initiateDataCollectionOnce(shouldInitiateDataCollection, viewModel)
-    SamplingSpeedRow(modifier, viewModel)
-    item {
-        LatestHeartRateText(modifier = modifier, state = viewModel.latestHeartRate)
-    }
-    ButtonsRow(viewModel, modifier, onClickAbout)
-    HeartRateHistoryList(heartRates, viewModel, modifier)
-}
-
-private fun ScalingLazyListScope.HeartRateHistoryList(
-    heartRates: List<DomainHeartRate>,
-    viewModel: MainViewModel,
-    modifier: Modifier
-) {
-    items(
-        items = heartRates,
-        key = { it.pk }
-    ) { currentHeartRateData ->
-        HeartRateItem(viewModel, currentHeartRateData, modifier)
-    }
-}
-
-private fun ScalingLazyListScope.ButtonsRow(
-    viewModel: MainViewModel,
-    modifier: Modifier,
-    onClickAbout: () -> Unit
-) {
-    item {
-        Row {
-            SamplingSpeedChangeButton(viewModel = viewModel, modifier = modifier)
-            Spacer(modifier = Modifier.width(8.dp))
-            AboutButton(modifier = modifier, onClickAbout)
-            Spacer(modifier = Modifier.width(8.dp))
-            DeleteAllButton(viewModel = viewModel, modifier = modifier)
-        }
-    }
-}
-
-private fun ScalingLazyListScope.SamplingSpeedRow(
-    modifier: Modifier,
-    viewModel: MainViewModel
-) {
-    item {
-        Row {
-            IchorStatefulText(
-                modifier = modifier,
-                style = IchorTypography.body2,
-                state = viewModel.currentSamplingSpeed,
-                prefix = stringResource(string.ichor_sample_speed_prefix)
-            )
-        }
-    }
-}
-
-private fun ScalingLazyListScope.InvariantColumnComponents(
-    modifier: Modifier,
-    viewModel: MainViewModel
-) {
-    item { MainIcon() }
-    item { TitleText(modifier = modifier) }
-    item {
-        AvailabilityText(modifier = modifier, state = viewModel.latestAvailability)
-    }
-}
-
 @Composable
-private fun PermissionsInstructions(modifier: Modifier) {
+internal fun PermissionsInstructions(modifier: Modifier) {
     IchorText(
         modifier = modifier,
         style = IchorTypography.body2,
@@ -235,7 +115,7 @@ private fun PermissionsInstructions(modifier: Modifier) {
 }
 
 @Composable
-private fun DeleteAllButton(
+internal fun DeleteAllButton(
     viewModel: MainViewModel,
     modifier: Modifier
 ) {
@@ -394,7 +274,7 @@ private fun SamplingSpeedChangeDialogContent(
 }
 
 @Composable
-private fun AboutButton(modifier: Modifier, onClickAbout: () -> Unit) {
+internal fun AboutButton(modifier: Modifier, onClickAbout: () -> Unit) {
     IchorButton(
         modifier = modifier
             .size(24.dp)
@@ -406,7 +286,7 @@ private fun AboutButton(modifier: Modifier, onClickAbout: () -> Unit) {
 }
 
 @Composable
-private fun HeartRateItem(
+internal fun HeartRateItem(
     viewModel: MainViewModel,
     currentHeartRateData: DomainHeartRate,
     modifier: Modifier
@@ -506,7 +386,7 @@ private fun DeleteOneDialogContent(
     }
 }
 
-private fun initiateDataCollectionOnce(
+internal fun initiateDataCollectionOnce(
     shouldInitiateDataCollection: AtomicBoolean,
     viewModel: MainViewModel
 ) {

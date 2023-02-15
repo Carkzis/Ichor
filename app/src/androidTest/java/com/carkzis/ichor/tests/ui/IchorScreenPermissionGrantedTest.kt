@@ -9,7 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.carkzis.ichor.testdoubles.DummyPermissionFacade
 import com.carkzis.ichor.testdoubles.DummyViewModel
-import com.carkzis.ichor.ui.IchorScreen
+import com.carkzis.ichor.ui.main.IchorScreen
 import com.carkzis.ichor.utils.PermissionFacade
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
