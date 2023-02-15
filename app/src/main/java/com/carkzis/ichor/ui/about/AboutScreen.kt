@@ -46,109 +46,11 @@ internal fun ScalingLazyListScope.StartingUp(modifier: Modifier) {
 }
 
 private fun ScalingLazyListScope.WhatYouCanDo(modifier: Modifier) {
-    item {
-        IchorText(
-            stringResourceId = string.about_what_you_can_do,
-            modifier = modifier,
-            style = IchorTypography.title3
-        )
-    }
-    item {
-        AboutSamplingSpeedsRow(modifier)
-    }
-    item {
-        DeleteAllRow(modifier)
-    }
-    item {
-        IchorText(
-            stringResourceId = string.about_delete_one_subtitle,
-            modifier = modifier,
-            style = IchorTypography.body2.plus(
-                TextStyle(fontWeight = FontWeight.Bold)
-            )
-        )
-    }
-    item {
-        IchorText(
-            stringResourceId = string.about_delete_one,
-            modifier = modifier.padding(start = 8.dp),
-            style = IchorTypography.body2
-        )
-    }
-}
-
-@Composable
-private fun DeleteAllRow(modifier: Modifier) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .testTag(stringResource(string.about_delete_all_row_tag))
-    ) {
-        AboutDeleteAllIcon()
-        IchorText(
-            stringResourceId = string.about_delete_all,
-            modifier = modifier.padding(start = 8.dp),
-            style = IchorTypography.body2
-        )
-    }
-}
-
-@Composable
-private fun AboutSamplingSpeedsRow(modifier: Modifier) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .testTag(stringResource(string.about_sampling_speeds_row_tag))
-    ) {
-        AboutSamplingSpeedIcon()
-        Column(modifier = modifier.fillMaxWidth()) {
-            IchorText(
-                stringResourceId = string.about_sampling_speed,
-                modifier = modifier.padding(start = 8.dp),
-                style = IchorTypography.body2
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .testTag(stringResource(string.about_slow_sampling_row_tag))
-            ) {
-                AboutSlowSamplingSpeedIcon()
-                IchorText(
-                    stringResourceId = string.about_slow_sampling,
-                    modifier = modifier.padding(start = 8.dp),
-                    style = IchorTypography.body2
-                )
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .testTag(stringResource(string.about_default_sampling_row_tag))
-            ) {
-                AboutDefaultSamplingSpeedIcon()
-                IchorText(
-                    stringResourceId = string.about_default_sampling,
-                    modifier = modifier.padding(start = 8.dp),
-                    style = IchorTypography.body2
-                )
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .testTag(stringResource(string.about_fast_sampling_row_tag))
-            ) {
-                AboutFastSamplingSpeedIcon()
-                IchorText(
-                    stringResourceId = string.about_fast_sampling,
-                    modifier = modifier.padding(start = 8.dp),
-                    style = IchorTypography.body2
-                )
-            }
-        }
-
-    }
+    item { AboutScreenWhatYouCanDoText(modifier) }
+    item { AboutSamplingSpeedsRow(modifier) }
+    item { DeleteAllRow(modifier) }
+    item { AboutScreenDeleteSingleRecordSubtitleText(modifier) }
+    item { AboutScreenDeleteSingleRecordText(modifier) }
 }
 
 private fun ScalingLazyListScope.WhatYouCanSee(modifier: Modifier) {
