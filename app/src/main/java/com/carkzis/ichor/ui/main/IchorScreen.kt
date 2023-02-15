@@ -105,5 +105,6 @@ internal fun initiateDataCollectionOnce(
 )
 @Composable
 fun IchorScreenPreview() {
+    // Previews are not currently supported for this screen due to use of a ViewModel.
     IchorScreen(viewModel = viewModel()) {}
 }
