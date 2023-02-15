@@ -30,7 +30,7 @@ internal fun HeartRateItem(
         }
     }
 
-    DismissableHeartRateItemCard(dismissState, modifier, currentHeartRateData)
+    DismissibleHeartRateItemCard(dismissState, modifier, currentHeartRateData)
 
     Dialog(
         showDialog = deleteAlertRequired.value,
@@ -44,7 +44,7 @@ internal fun HeartRateItem(
 }
 
 @Composable
-private fun DismissableHeartRateItemCard(
+private fun DismissibleHeartRateItemCard(
     dismissState: DismissState,
     modifier: Modifier,
     currentHeartRateData: DomainHeartRate

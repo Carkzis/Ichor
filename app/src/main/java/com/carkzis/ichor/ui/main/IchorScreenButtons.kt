@@ -3,9 +3,7 @@ package com.carkzis.ichor.ui.main
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.QuestionMark
-import androidx.compose.material.icons.rounded.Speed
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -14,6 +12,14 @@ import androidx.wear.compose.material.dialog.Dialog
 import com.carkzis.ichor.R
 import com.carkzis.ichor.ui.IchorButton
 import com.carkzis.ichor.ui.MainViewModel
+import com.carkzis.ichor.utils.PermissionFacade
+
+@Composable
+internal fun PermissionButton(heartRatePermissionProvider: PermissionFacade) {
+    IchorButton(
+        contentDescription = stringResource(R.string.ichor_permission_button),
+        onClick = { heartRatePermissionProvider.launchPermissionRequest() })
+}
 
 @Composable
 internal fun DeleteAllButton(
@@ -80,4 +86,30 @@ internal fun AboutButton(modifier: Modifier, onClickAbout: () -> Unit) {
         iconImage = Icons.Rounded.QuestionMark,
         contentDescription = stringResource(R.string.ichor_about_button)
     )
+}
+
+@Composable
+internal fun DeleteAllRejectButton(deleteAlertRequired: MutableState<Boolean>) {
+    IchorButton(
+        iconImage = Icons.Rounded.Close,
+        modifier = Modifier.size(32.dp),
+        contentDescription = stringResource(R.string.ichor_delete_all_reject)
+    ) {
+        deleteAlertRequired.value = false
+    }
+}
+
+@Composable
+internal fun DeleteAllConfirmButton(
+    viewModel: MainViewModel,
+    deleteAlertRequired: MutableState<Boolean>
+) {
+    IchorButton(
+        iconImage = Icons.Rounded.Done,
+        modifier = Modifier.size(32.dp),
+        contentDescription = stringResource(R.string.ichor_delete_all_confirm)
+    ) {
+        viewModel.deleteAllHeartRates()
+        deleteAlertRequired.value = false
+    }
 }

@@ -27,38 +27,8 @@ internal fun IchorDeleteAllDialogContent(
     viewModel: MainViewModel
 ) {
     Timber.e("Dialog for deleting all items raised: $deleteAlertRequired")
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        DeleteHeartbeatIcon()
-        Text(
-            style = IchorTypography.body2,
-            modifier = modifier.padding(start = 36.dp, end = 36.dp),
-            textAlign = TextAlign.Center,
-            text = stringResource(R.string.ichor_delete_all_final)
-        )
-        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            IchorButton(
-                iconImage = Icons.Rounded.Done,
-                modifier = Modifier.size(32.dp),
-                contentDescription = stringResource(R.string.ichor_delete_all_confirm)
-            ) {
-                viewModel.deleteAllHeartRates()
-                deleteAlertRequired.value = false
-            }
-            IchorButton(
-                iconImage = Icons.Rounded.Close,
-                modifier = Modifier.size(32.dp),
-                contentDescription = stringResource(R.string.ichor_delete_all_reject)
-            ) {
-                deleteAlertRequired.value = false
-            }
-        }
-    }
+    DeleteAllDialogContentColumn(modifier, viewModel, deleteAlertRequired)
 }
-
 
 @Composable
 internal fun SamplingSpeedChangeDialogContent(

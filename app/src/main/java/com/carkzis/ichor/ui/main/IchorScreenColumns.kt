@@ -1,5 +1,11 @@
 package com.carkzis.ichor.ui.main
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.material.ScalingLazyListScope
@@ -65,9 +71,7 @@ internal fun ScalingLazyListScope.ColumnComponentsWherePermissionsNeedRequesting
     onClickAbout: () -> Unit
 ) {
     item {
-        IchorButton(
-            contentDescription = stringResource(R.string.ichor_permission_button),
-            onClick = { heartRatePermissionProvider.launchPermissionRequest() })
+        PermissionButton(heartRatePermissionProvider)
     }
     item { AboutButton(modifier = modifier, onClickAbout) }
 }
@@ -90,5 +94,22 @@ internal fun ScalingLazyListScope.ColumnComponentsWherePermissionGranted(
         key = { it.pk }
     ) { currentHeartRateData ->
         HeartRateItem(viewModel, currentHeartRateData, modifier)
+    }
+}
+
+@Composable
+internal fun DeleteAllDialogContentColumn(
+    modifier: Modifier,
+    viewModel: MainViewModel,
+    deleteAlertRequired: MutableState<Boolean>
+) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        DeleteHeartbeatIcon()
+        DeleteAllFinalChanceText(modifier)
+        DeleteAllDialogButtonsRow(viewModel, deleteAlertRequired)
     }
 }
