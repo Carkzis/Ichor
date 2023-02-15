@@ -17,20 +17,20 @@ internal fun ScalingLazyListScope.AboutAboutRow(modifier: Modifier) {
                 .testTag(stringResource(R.string.about_about_row_tag))
         ) {
             AboutAboutIcon()
-            AboutScreenAboutText(modifier)
+            AboutAboutText(modifier)
         }
     }
 }
 
-internal fun ScalingLazyListScope.AboutPermissionsRow(modifier: Modifier) {
+internal fun ScalingLazyListScope.PermissionsRow(modifier: Modifier) {
     item {
         Row(
             modifier = modifier
                 .fillMaxWidth()
                 .testTag(stringResource(R.string.about_permissions_row_tag))
         ) {
-            AboutPermissionIcon()
-            AboutScreenPermissionsText(modifier)
+            PermissionIcon()
+            PermissionsText(modifier)
         }
     }
 }
@@ -42,8 +42,8 @@ internal fun DeleteAllRow(modifier: Modifier) {
             .fillMaxWidth()
             .testTag(stringResource(R.string.about_delete_all_row_tag))
     ) {
-        AboutDeleteAllIcon()
-        AboutScreenDeleteAllText(modifier)
+        DeleteAllIcon()
+        DeleteAllText(modifier)
     }
 }
 
@@ -54,43 +54,43 @@ internal fun AboutSamplingSpeedsRow(modifier: Modifier) {
             .fillMaxWidth()
             .testTag(stringResource(R.string.about_sampling_speeds_row_tag))
     ) {
-        AboutSamplingSpeedIcon()
+        SamplingSpeedIcon()
         AboutScreenSamplingSpeedsColumn(modifier)
     }
 }
 
 @Composable
-internal fun AboutScreenSlowSamplingRow(modifier: Modifier) {
+internal fun SlowSamplingRow(modifier: Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .testTag(stringResource(R.string.about_slow_sampling_row_tag))
     ) {
-        AboutSlowSamplingSpeedIcon()
-        AboutScreenSlowSamplingDescriptionText(modifier)
+        SlowSamplingSpeedIcon()
+        SlowSamplingDescriptionText(modifier)
     }
 }
 
 @Composable
-internal fun AboutScreenDefaultSamplingRow(modifier: Modifier) {
+internal fun DefaultSamplingRow(modifier: Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .testTag(stringResource(R.string.about_default_sampling_row_tag))
     ) {
-        AboutDefaultSamplingSpeedIcon()
-        AboutScreenDefaultSamplingDescriptionText(modifier)
+        DefaultSamplingSpeedIcon()
+        DefaultSamplingDescriptionText(modifier)
     }
 }
 
 @Composable
-internal fun AboutScreenFastSamplingRow(modifier: Modifier) {
+internal fun FastSamplingRow(modifier: Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .testTag(stringResource(R.string.about_fast_sampling_row_tag))
     ) {
-        AboutFastSamplingSpeedIcon()
-        AboutScreenFastSamplingDescriptionText(modifier)
+        FastSamplingSpeedIcon()
+        FastSamplingDescriptionText(modifier)
     }
 }

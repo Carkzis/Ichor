@@ -12,7 +12,7 @@ import com.carkzis.ichor.theme.IchorTypography
 import com.carkzis.ichor.ui.IchorText
 
 @Composable
-internal fun AboutScreenDescriptionText(modifier: Modifier) {
+internal fun AboutDescriptionText(modifier: Modifier) {
     IchorText(
         modifier = modifier,
         style = IchorTypography.body2,
@@ -30,7 +30,7 @@ internal fun AboutIchorText(modifier: Modifier) {
 }
 
 @Composable
-internal fun AboutScreenStartingUpText(modifier: Modifier) {
+internal fun StartingUpText(modifier: Modifier) {
     IchorText(
         stringResourceId = R.string.about_starting_up,
         modifier = modifier,
@@ -39,7 +39,7 @@ internal fun AboutScreenStartingUpText(modifier: Modifier) {
 }
 
 @Composable
-internal fun AboutScreenAboutText(modifier: Modifier) {
+internal fun AboutAboutText(modifier: Modifier) {
     IchorText(
         stringResourceId = R.string.about_about,
         modifier = modifier.padding(start = 8.dp),
@@ -48,7 +48,7 @@ internal fun AboutScreenAboutText(modifier: Modifier) {
 }
 
 @Composable
-internal fun AboutScreenPermissionsText(modifier: Modifier) {
+internal fun PermissionsText(modifier: Modifier) {
     IchorText(
         stringResourceId = R.string.about_permissions,
         modifier = modifier.padding(start = 8.dp),
@@ -57,7 +57,7 @@ internal fun AboutScreenPermissionsText(modifier: Modifier) {
 }
 
 @Composable
-internal fun AboutScreenDeleteSingleRecordText(modifier: Modifier) {
+internal fun DeleteSingleRecordText(modifier: Modifier) {
     IchorText(
         stringResourceId = R.string.about_delete_one,
         modifier = modifier.padding(start = 8.dp),
@@ -66,7 +66,7 @@ internal fun AboutScreenDeleteSingleRecordText(modifier: Modifier) {
 }
 
 @Composable
-internal fun AboutScreenDeleteSingleRecordSubtitleText(modifier: Modifier) {
+internal fun DeleteSingleRecordSubtitleText(modifier: Modifier) {
     IchorText(
         stringResourceId = R.string.about_delete_one_subtitle,
         modifier = modifier,
@@ -77,7 +77,7 @@ internal fun AboutScreenDeleteSingleRecordSubtitleText(modifier: Modifier) {
 }
 
 @Composable
-internal fun AboutScreenWhatYouCanDoText(modifier: Modifier) {
+internal fun WhatYouCanDoText(modifier: Modifier) {
     IchorText(
         stringResourceId = R.string.about_what_you_can_do,
         modifier = modifier,
@@ -104,7 +104,7 @@ internal fun FurtherInformationText(modifier: Modifier) {
 }
 
 @Composable
-internal fun AboutScreenSamplingSpeedText(modifier: Modifier) {
+internal fun SamplingSpeedText(modifier: Modifier) {
     IchorText(
         stringResourceId = R.string.about_sampling_speed,
         modifier = modifier.padding(start = 8.dp),
@@ -113,7 +113,7 @@ internal fun AboutScreenSamplingSpeedText(modifier: Modifier) {
 }
 
 @Composable
-internal fun AboutScreenDeleteAllText(modifier: Modifier) {
+internal fun DeleteAllText(modifier: Modifier) {
     IchorText(
         stringResourceId = R.string.about_delete_all,
         modifier = modifier.padding(start = 8.dp),
@@ -122,7 +122,7 @@ internal fun AboutScreenDeleteAllText(modifier: Modifier) {
 }
 
 @Composable
-internal fun AboutScreenSlowSamplingDescriptionText(modifier: Modifier) {
+internal fun SlowSamplingDescriptionText(modifier: Modifier) {
     IchorText(
         stringResourceId = R.string.about_slow_sampling,
         modifier = modifier.padding(start = 8.dp),
@@ -131,7 +131,7 @@ internal fun AboutScreenSlowSamplingDescriptionText(modifier: Modifier) {
 }
 
 @Composable
-internal fun AboutScreenFastSamplingDescriptionText(modifier: Modifier) {
+internal fun FastSamplingDescriptionText(modifier: Modifier) {
     IchorText(
         stringResourceId = R.string.about_fast_sampling,
         modifier = modifier.padding(start = 8.dp),
@@ -140,10 +140,100 @@ internal fun AboutScreenFastSamplingDescriptionText(modifier: Modifier) {
 }
 
 @Composable
-internal fun AboutScreenDefaultSamplingDescriptionText(modifier: Modifier) {
+internal fun DefaultSamplingDescriptionText(modifier: Modifier) {
     IchorText(
         stringResourceId = R.string.about_default_sampling,
         modifier = modifier.padding(start = 8.dp),
         style = IchorTypography.body2
     )
 }
+
+@Composable
+internal fun HeartrateHistoryText(modifier: Modifier) {
+    IchorText(
+        stringResourceId = R.string.about_history,
+        modifier = modifier.padding(start = 8.dp),
+        style = IchorTypography.body2
+    )
+}
+
+@Composable
+internal fun HeartrateHistorySubtitleText(modifier: Modifier) {
+    IchorText(
+        stringResourceId = R.string.about_history_subtitle,
+        modifier = modifier,
+        style = IchorTypography.body2.plus(
+            TextStyle(fontWeight = FontWeight.Bold)
+        )
+    )
+}
+
+@Composable
+internal fun BPMText(modifier: Modifier) {
+    IchorText(
+        stringResourceId = R.string.about_bpm,
+        modifier = modifier.padding(start = 8.dp),
+        style = IchorTypography.body2
+    )
+}
+
+@Composable
+internal fun BPMSubtitleText(modifier: Modifier) {
+    IchorText(
+        stringResourceId = R.string.about_bpm_subtitle,
+        modifier = modifier,
+        style = IchorTypography.body2.plus(
+            TextStyle(fontWeight = FontWeight.Bold)
+        )
+    )
+}
+
+@Composable
+internal fun AboutSamplingSpeedText(modifier: Modifier) {
+    IchorText(
+        stringResourceId = R.string.about_sampling_speed_display,
+        modifier = modifier.padding(start = 8.dp),
+        style = IchorTypography.body2
+    )
+}
+
+@Composable
+internal fun SamplingSpeedSubtitleText(modifier: Modifier) {
+    IchorText(
+        stringResourceId = R.string.about_sampling_speed_subtitle,
+        modifier = modifier,
+        style = IchorTypography.body2.plus(
+            TextStyle(fontWeight = FontWeight.Bold)
+        )
+    )
+}
+
+@Composable
+internal fun AvailabilityText(modifier: Modifier) {
+    IchorText(
+        stringResourceId = R.string.about_availability,
+        modifier = modifier.padding(start = 8.dp),
+        style = IchorTypography.body2
+    )
+}
+
+@Composable
+internal fun AvailabilitySubtitleText(modifier: Modifier) {
+    IchorText(
+        stringResourceId = R.string.about_availability_subtitle,
+        modifier = modifier,
+        style = IchorTypography.body2.plus(
+            TextStyle(fontWeight = FontWeight.Bold)
+        )
+    )
+}
+
+@Composable
+internal fun WhatYouCanSeeText(modifier: Modifier) {
+    IchorText(
+        stringResourceId = R.string.about_what_you_can_see,
+        modifier = modifier,
+        style = IchorTypography.title3
+    )
+}
+

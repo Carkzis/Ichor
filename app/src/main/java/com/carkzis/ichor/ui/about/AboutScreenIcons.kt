@@ -22,7 +22,7 @@ internal fun AboutTitleIcon() {
 }
 
 @Composable
-internal fun AboutPermissionIcon() {
+internal fun PermissionIcon() {
     Icon(
         modifier = Modifier.size(24.dp),
         imageVector = Icons.Rounded.LockPerson,
@@ -42,7 +42,7 @@ internal fun AboutAboutIcon() {
 }
 
 @Composable
-internal fun AboutSamplingSpeedIcon() {
+internal fun SamplingSpeedIcon() {
     Icon(
         modifier = Modifier.size(24.dp),
         imageVector = Icons.Rounded.Speed,
@@ -52,7 +52,7 @@ internal fun AboutSamplingSpeedIcon() {
 }
 
 @Composable
-internal fun AboutSlowSamplingSpeedIcon() {
+internal fun SlowSamplingSpeedIcon() {
     Icon(
         modifier = Modifier.size(18.dp),
         imageVector = Icons.Rounded.DirectionsWalk,
@@ -62,7 +62,7 @@ internal fun AboutSlowSamplingSpeedIcon() {
 }
 
 @Composable
-internal fun AboutDefaultSamplingSpeedIcon() {
+internal fun DefaultSamplingSpeedIcon() {
     Icon(
         modifier = Modifier.size(18.dp),
         imageVector = Icons.Rounded.DirectionsRun,
@@ -72,7 +72,7 @@ internal fun AboutDefaultSamplingSpeedIcon() {
 }
 
 @Composable
-internal fun AboutFastSamplingSpeedIcon() {
+internal fun FastSamplingSpeedIcon() {
     Icon(
         modifier = Modifier.size(18.dp),
         imageVector = Icons.Rounded.DirectionsBike,
@@ -82,7 +82,7 @@ internal fun AboutFastSamplingSpeedIcon() {
 }
 
 @Composable
-internal fun AboutDeleteAllIcon() {
+internal fun DeleteAllIcon() {
     Icon(
         modifier = Modifier.size(24.dp),
         imageVector = Icons.Rounded.Delete,
