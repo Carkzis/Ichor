@@ -1,13 +1,12 @@
 package com.carkzis.ichor.ui.main
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.ScalingLazyListScope
 import androidx.wear.compose.material.items
 import com.carkzis.ichor.R
@@ -111,5 +110,48 @@ internal fun DeleteAllDialogContentColumn(
         DeleteHeartbeatIcon()
         DeleteAllFinalChanceText(modifier)
         DeleteAllDialogButtonsRow(viewModel, deleteAlertRequired)
+    }
+}
+
+@Composable
+internal fun SamplingSpeedChangeDialogContentColumn(
+    modifier: Modifier,
+    viewModel: MainViewModel,
+    samplingSpeedAlertRequired: MutableState<Boolean>,
+    currentSamplingSpeed: String
+) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ChangeSamplingSpeedIcon()
+        SamplingSpeedChangeQuestionText(modifier)
+        Spacer(modifier = Modifier.height(8.dp))
+        SamplingSpeedChangeChoicesColumn(
+            modifier,
+            viewModel,
+            samplingSpeedAlertRequired,
+            currentSamplingSpeed
+        )
+    }
+}
+
+@Composable
+internal fun ColumnScope.SamplingSpeedChangeChoicesColumn(
+    modifier: Modifier,
+    viewModel: MainViewModel,
+    samplingSpeedAlertRequired: MutableState<Boolean>,
+    currentSamplingSpeed: String
+) {
+    Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+        SlowSamplingChoiceRow(modifier, viewModel, samplingSpeedAlertRequired, currentSamplingSpeed)
+        DefaultSamplingChoiceRow(
+            modifier,
+            viewModel,
+            samplingSpeedAlertRequired,
+            currentSamplingSpeed
+        )
+        FastSamplingChoiceRow(modifier, viewModel, samplingSpeedAlertRequired, currentSamplingSpeed)
     }
 }

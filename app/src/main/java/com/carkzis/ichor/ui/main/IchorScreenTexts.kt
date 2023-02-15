@@ -74,3 +74,13 @@ internal fun DeleteAllFinalChanceText(modifier: Modifier) {
         text = stringResource(R.string.ichor_delete_all_final)
     )
 }
+
+@Composable
+internal fun SamplingSpeedChangeQuestionText(modifier: Modifier) {
+    Text(
+        style = IchorTypography.body2,
+        modifier = modifier.padding(start = 36.dp, end = 36.dp),
+        textAlign = TextAlign.Center,
+        text = stringResource(R.string.ichor_change_sampling_speed_question)
+    )
+}

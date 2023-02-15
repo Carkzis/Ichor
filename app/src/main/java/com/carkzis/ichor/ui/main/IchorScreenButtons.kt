@@ -13,6 +13,7 @@ import com.carkzis.ichor.R
 import com.carkzis.ichor.ui.IchorButton
 import com.carkzis.ichor.ui.MainViewModel
 import com.carkzis.ichor.utils.PermissionFacade
+import com.carkzis.ichor.utils.SamplingSpeed
 
 @Composable
 internal fun PermissionButton(heartRatePermissionProvider: PermissionFacade) {
@@ -41,7 +42,7 @@ internal fun DeleteAllButton(
             deleteAlertRequired.value = false
         },
         content = {
-            IchorDeleteAllDialogContent(deleteAlertRequired, modifier, viewModel)
+            DeleteAllDialogContent(deleteAlertRequired, modifier, viewModel)
         }
     )
 }
@@ -111,5 +112,50 @@ internal fun DeleteAllConfirmButton(
     ) {
         viewModel.deleteAllHeartRates()
         deleteAlertRequired.value = false
+    }
+}
+
+@Composable
+internal fun FastSamplingSpeedButton(
+    viewModel: MainViewModel,
+    samplingSpeedAlertRequired: MutableState<Boolean>
+) {
+    IchorButton(
+        iconImage = Icons.Rounded.DirectionsBike,
+        modifier = Modifier.size(32.dp),
+        contentDescription = stringResource(R.string.ichor_fast_sampling_speed)
+    ) {
+        viewModel.changeSampleRate(SamplingSpeed.FAST)
+        samplingSpeedAlertRequired.value = false
+    }
+}
+
+@Composable
+internal fun DefaultSamplingSpeedButton(
+    viewModel: MainViewModel,
+    samplingSpeedAlertRequired: MutableState<Boolean>
+) {
+    IchorButton(
+        iconImage = Icons.Rounded.DirectionsRun,
+        modifier = Modifier.size(32.dp),
+        contentDescription = stringResource(R.string.ichor_default_sampling_speed)
+    ) {
+        viewModel.changeSampleRate(SamplingSpeed.DEFAULT)
+        samplingSpeedAlertRequired.value = false
+    }
+}
+
+@Composable
+internal fun SlowSamplingSpeedButton(
+    viewModel: MainViewModel,
+    samplingSpeedAlertRequired: MutableState<Boolean>
+) {
+    IchorButton(
+        iconImage = Icons.Rounded.DirectionsWalk,
+        modifier = Modifier.size(32.dp),
+        contentDescription = stringResource(R.string.ichor_slow_sampling_speed)
+    ) {
+        viewModel.changeSampleRate(SamplingSpeed.SLOW)
+        samplingSpeedAlertRequired.value = false
     }
 }
