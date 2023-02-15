@@ -48,27 +48,6 @@ fun IchorScreen(
     ),
     onClickAbout: () -> Unit = {}
 ) {
-    /*
-    To allow synthetic providers (emulator must be in developer mode), use:
-        adb shell am broadcast \
-        -a "whs.USE_SYNTHETIC_PROVIDERS" \
-        com.google.android.wearable.healthservices
-    You can disable them with:
-        adb shell am broadcast \
-        -a "whs.USE_SENSOR_PROVIDERS" \
-        com.google.android.wearable.healthservices
-    For walking, try:
-        adb shell am broadcast \
-        -a "whs.synthetic.user.START_WALKING" \
-        com.google.android.wearable.healthservices
-    There are many other speeds on https://developer.android.com/training/wearables/health-services/synthetic-data.
-    Stop activity with:
-        adb shell am broadcast \
-        -a "whs.synthetic.user.STOP_EXERCISE" \
-        com.google.android.wearable.healthservices
-     */
-    // Note: Reset permissions on an emulator using the command "adb shell pm reset-permissions".
-
     // TODO: Look into constant recomposing when opening dialog.
     // TODO: Refactor Compose.
 
@@ -184,19 +163,32 @@ private fun ScalingLazyListScope.IchorBodyColumnComponentsWherePermissionGranted
     heartRates: List<DomainHeartRate>
 ) {
     initiateDataCollectionOnce(shouldInitiateDataCollection, viewModel)
-    item {
-        Row {
-            IchorStatefulText(
-                modifier = modifier,
-                style = IchorTypography.body2,
-                state = viewModel.currentSamplingSpeed,
-                prefix = stringResource(string.ichor_sample_speed_prefix)
-            )
-        }
-    }
+    IchorSamplingSpeedRow(modifier, viewModel)
     item {
         DisplayLatestHeartRate(modifier = modifier, state = viewModel.latestHeartRate)
     }
+    IchorButtonsRow(viewModel, modifier, onClickAbout)
+    IchorHeartRateHistoryList(heartRates, viewModel, modifier)
+}
+
+private fun ScalingLazyListScope.IchorHeartRateHistoryList(
+    heartRates: List<DomainHeartRate>,
+    viewModel: MainViewModel,
+    modifier: Modifier
+) {
+    items(
+        items = heartRates,
+        key = { it.pk }
+    ) { currentHeartRateData ->
+        HeartRateItem(viewModel, currentHeartRateData, modifier)
+    }
+}
+
+private fun ScalingLazyListScope.IchorButtonsRow(
+    viewModel: MainViewModel,
+    modifier: Modifier,
+    onClickAbout: () -> Unit
+) {
     item {
         Row {
             SamplingSpeedChangeButton(viewModel = viewModel, modifier = modifier)
@@ -206,11 +198,21 @@ private fun ScalingLazyListScope.IchorBodyColumnComponentsWherePermissionGranted
             DeleteAllButton(viewModel = viewModel, modifier = modifier)
         }
     }
-    items(
-        items = heartRates,
-        key = { it.pk }
-    ) { currentHeartRateData ->
-        HeartRateItem(viewModel, currentHeartRateData, modifier)
+}
+
+private fun ScalingLazyListScope.IchorSamplingSpeedRow(
+    modifier: Modifier,
+    viewModel: MainViewModel
+) {
+    item {
+        Row {
+            IchorStatefulText(
+                modifier = modifier,
+                style = IchorTypography.body2,
+                state = viewModel.currentSamplingSpeed,
+                prefix = stringResource(string.ichor_sample_speed_prefix)
+            )
+        }
     }
 }
 
@@ -239,54 +241,63 @@ private fun DeleteAllButton(
     viewModel: MainViewModel,
     modifier: Modifier
 ) {
-    var deleteAlertRequired by remember { mutableStateOf(false) }
+    val deleteAlertRequired = remember { mutableStateOf(false) }
 
     IchorButton(
         modifier = modifier.size(24.dp),
-        onClick = { deleteAlertRequired = true },
+        onClick = { deleteAlertRequired.value = true },
         iconImage = Icons.Rounded.Delete,
         contentDescription = stringResource(string.ichor_delete_all_button)
     )
 
     Dialog(
-        showDialog = deleteAlertRequired,
+        showDialog = deleteAlertRequired.value,
         onDismissRequest = {
-            deleteAlertRequired = false
+            deleteAlertRequired.value = false
         },
         content = {
-            Timber.e("Dialog for deleting all items raised: $deleteAlertRequired")
-            Column(
-                modifier = modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                DeleteHeartbeatIcon()
-                Text(
-                    style = IchorTypography.body2,
-                    modifier = modifier.padding(start = 36.dp, end = 36.dp),
-                    textAlign = TextAlign.Center,
-                    text = stringResource(string.ichor_delete_all_final)
-                )
-                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    IchorButton(
-                        iconImage = Icons.Rounded.Done,
-                        modifier = Modifier.size(32.dp),
-                        contentDescription = stringResource(string.ichor_delete_all_confirm)
-                    ) {
-                        viewModel.deleteAllHeartRates()
-                        deleteAlertRequired = false
-                    }
-                    IchorButton(
-                        iconImage = Icons.Rounded.Close,
-                        modifier = Modifier.size(32.dp),
-                        contentDescription = stringResource(string.ichor_delete_all_reject)
-                    ) {
-                        deleteAlertRequired = false
-                    }
-                }
-            }
+            IchorDeleteAllDialogContent(deleteAlertRequired, modifier, viewModel)
         }
     )
+}
+
+@Composable
+private fun IchorDeleteAllDialogContent(
+    deleteAlertRequired: MutableState<Boolean>,
+    modifier: Modifier,
+    viewModel: MainViewModel
+) {
+    Timber.e("Dialog for deleting all items raised: $deleteAlertRequired")
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        DeleteHeartbeatIcon()
+        Text(
+            style = IchorTypography.body2,
+            modifier = modifier.padding(start = 36.dp, end = 36.dp),
+            textAlign = TextAlign.Center,
+            text = stringResource(string.ichor_delete_all_final)
+        )
+        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            IchorButton(
+                iconImage = Icons.Rounded.Done,
+                modifier = Modifier.size(32.dp),
+                contentDescription = stringResource(string.ichor_delete_all_confirm)
+            ) {
+                viewModel.deleteAllHeartRates()
+                deleteAlertRequired.value = false
+            }
+            IchorButton(
+                iconImage = Icons.Rounded.Close,
+                modifier = Modifier.size(32.dp),
+                contentDescription = stringResource(string.ichor_delete_all_reject)
+            ) {
+                deleteAlertRequired.value = false
+            }
+        }
+    }
 }
 
 @Composable
