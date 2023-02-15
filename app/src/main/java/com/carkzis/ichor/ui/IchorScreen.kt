@@ -151,7 +151,7 @@ private fun ScalingLazyListScope.IchorVariantColumnComponents(
             onClickAbout
         )
     } else {
-        IchorBodyColumnComponentsWherePermissionsDenied(modifier, onClickAbout)
+       IchorBodyColumnComponentsWherePermissionsDenied(modifier, onClickAbout)
     }
 }
 

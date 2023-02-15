@@ -9,6 +9,5 @@ interface MeasureCallbackDelegate {
     fun invokeOnAvailabilityChanged(dataType: DataType, availability: Availability)
     fun invokeOnData(data: List<DataPoint>)
     fun retrieveMeasureCallback(heartRateService: HeartRateService): MeasureCallback?
-    fun addCallback(providedCallback: MeasureCallback) {
-    }
+    fun addCallback(providedCallback: MeasureCallback) {}
 }
