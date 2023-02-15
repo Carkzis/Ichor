@@ -163,7 +163,7 @@ private fun ScalingLazyListScope.ColumnComponentsWherePermissionGranted(
     initiateDataCollectionOnce(shouldInitiateDataCollection, viewModel)
     SamplingSpeedRow(modifier, viewModel)
     item {
-        DisplayLatestHeartRate(modifier = modifier, state = viewModel.latestHeartRate)
+        LatestHeartRateText(modifier = modifier, state = viewModel.latestHeartRate)
     }
     ButtonsRow(viewModel, modifier, onClickAbout)
     HeartRateHistoryList(heartRates, viewModel, modifier)
@@ -221,7 +221,7 @@ private fun ScalingLazyListScope.InvariantColumnComponents(
     item { MainIcon() }
     item { TitleText(modifier = modifier) }
     item {
-        DisplayAvailability(modifier = modifier, state = viewModel.latestAvailability)
+        AvailabilityText(modifier = modifier, state = viewModel.latestAvailability)
     }
 }
 
@@ -565,7 +565,7 @@ fun TitleText(modifier: Modifier) {
 }
 
 @Composable
-fun DisplayAvailability(modifier: Modifier, state: StateFlow<Availability>) {
+fun AvailabilityText(modifier: Modifier, state: StateFlow<Availability>) {
     IchorStatefulText(
         state = state,
         modifier = modifier,
@@ -575,7 +575,7 @@ fun DisplayAvailability(modifier: Modifier, state: StateFlow<Availability>) {
 }
 
 @Composable
-fun DisplayLatestHeartRate(modifier: Modifier, state: StateFlow<Double>) {
+fun LatestHeartRateText(modifier: Modifier, state: StateFlow<Double>) {
     IchorStatefulText(
         state = state,
         modifier = modifier,

@@ -32,124 +32,273 @@ fun AboutScreen(modifier: Modifier = Modifier) {
             autoCentering = AutoCenteringParams(itemIndex = 0),
             state = listState,
         ) {
-            // Initial info.
-            item { AboutTitleIcon() }
-            item {
-                IchorText(stringResourceId = string.about_ichor, modifier = modifier, style = IchorTypography.title1)
-            }
-            item {
+            InitialInfo(modifier)
+            StartingUp(modifier)
+            WhatYouCanSee(modifier)
+            WhatYouCanDo(modifier)
+            FurtherInformation(modifier)
+        }
+    }
+}
+
+private fun ScalingLazyListScope.FurtherInformation(modifier: Modifier) {
+    item {
+        IchorText(
+            stringResourceId = string.about_further_information,
+            modifier = modifier,
+            style = IchorTypography.title3
+        )
+    }
+    item {
+        IchorText(
+            stringResourceId = string.about_further_information_details,
+            modifier = modifier.padding(start = 8.dp),
+            style = IchorTypography.body2
+        )
+    }
+}
+
+private fun ScalingLazyListScope.WhatYouCanDo(modifier: Modifier) {
+    item {
+        IchorText(
+            stringResourceId = string.about_what_you_can_do,
+            modifier = modifier,
+            style = IchorTypography.title3
+        )
+    }
+    item {
+        AboutSamplingSpeedsRow(modifier)
+    }
+    item {
+        DeleteAllRow(modifier)
+    }
+    item {
+        IchorText(
+            stringResourceId = string.about_delete_one_subtitle,
+            modifier = modifier,
+            style = IchorTypography.body2.plus(
+                TextStyle(fontWeight = FontWeight.Bold)
+            )
+        )
+    }
+    item {
+        IchorText(
+            stringResourceId = string.about_delete_one,
+            modifier = modifier.padding(start = 8.dp),
+            style = IchorTypography.body2
+        )
+    }
+}
+
+@Composable
+private fun DeleteAllRow(modifier: Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .testTag(stringResource(string.about_delete_all_row_tag))
+    ) {
+        AboutDeleteAllIcon()
+        IchorText(
+            stringResourceId = string.about_delete_all,
+            modifier = modifier.padding(start = 8.dp),
+            style = IchorTypography.body2
+        )
+    }
+}
+
+@Composable
+private fun AboutSamplingSpeedsRow(modifier: Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .testTag(stringResource(string.about_sampling_speeds_row_tag))
+    ) {
+        AboutSamplingSpeedIcon()
+        Column(modifier = modifier.fillMaxWidth()) {
+            IchorText(
+                stringResourceId = string.about_sampling_speed,
+                modifier = modifier.padding(start = 8.dp),
+                style = IchorTypography.body2
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .testTag(stringResource(string.about_slow_sampling_row_tag))
+            ) {
+                AboutSlowSamplingSpeedIcon()
                 IchorText(
-                    modifier = modifier,
-                    style = IchorTypography.body2,
-                    stringResourceId = string.about_description
+                    stringResourceId = string.about_slow_sampling,
+                    modifier = modifier.padding(start = 8.dp),
+                    style = IchorTypography.body2
                 )
             }
-
-            // Starting up.
-            item {
-                IchorText(stringResourceId = string.about_starting_up, modifier = modifier, style = IchorTypography.title3)
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .testTag(stringResource(string.about_default_sampling_row_tag))
+            ) {
+                AboutDefaultSamplingSpeedIcon()
+                IchorText(
+                    stringResourceId = string.about_default_sampling,
+                    modifier = modifier.padding(start = 8.dp),
+                    style = IchorTypography.body2
+                )
             }
-            item {
-                Row(modifier = modifier.fillMaxWidth().testTag(stringResource(string.about_permissions_row_tag))) {
-                    AboutPermissionIcon()
-                    IchorText(stringResourceId = string.about_permissions, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
-                }
-            }
-            item {
-                Row(modifier = modifier.fillMaxWidth().testTag(stringResource(string.about_about_row_tag))) {
-                    AboutAboutIcon()
-                    IchorText(stringResourceId = string.about_about, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
-                }
-            }
-
-            // What you can see.
-            item {
-                IchorText(stringResourceId = string.about_what_you_can_see, modifier = modifier, style = IchorTypography.title3)
-            }
-            item {
-                IchorText(stringResourceId = string.about_availability_subtitle, modifier = modifier, style = IchorTypography.body2.plus(
-                    TextStyle(fontWeight = FontWeight.Bold)
-                ))
-            }
-            item {
-                IchorText(stringResourceId = string.about_availability, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
-            }
-            item {
-                IchorText(stringResourceId = string.about_sampling_speed_subtitle, modifier = modifier, style = IchorTypography.body2.plus(
-                    TextStyle(fontWeight = FontWeight.Bold)
-                ))
-            }
-            item {
-                IchorText(stringResourceId = string.about_sampling_speed_display, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
-            }
-            item {
-                IchorText(stringResourceId = string.about_bpm_subtitle, modifier = modifier, style = IchorTypography.body2.plus(
-                    TextStyle(fontWeight = FontWeight.Bold)
-                ))
-            }
-            item {
-                IchorText(stringResourceId = string.about_bpm, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
-            }
-            item {
-                IchorText(stringResourceId = string.about_history_subtitle, modifier = modifier, style = IchorTypography.body2.plus(
-                    TextStyle(fontWeight = FontWeight.Bold)
-                ))
-            }
-            item {
-                IchorText(stringResourceId = string.about_history, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
-            }
-
-            // What you can do.
-            item {
-                IchorText(stringResourceId = string.about_what_you_can_do, modifier = modifier, style = IchorTypography.title3)
-            }
-            item {
-                Row(modifier = modifier.fillMaxWidth().testTag(stringResource(string.about_sampling_speeds_row_tag))) {
-                    AboutSamplingSpeedIcon()
-                    Column(modifier = modifier.fillMaxWidth()) {
-                        IchorText(stringResourceId = string.about_sampling_speed, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row(modifier = modifier.fillMaxWidth().testTag(stringResource(string.about_slow_sampling_row_tag))) {
-                            AboutSlowSamplingSpeedIcon()
-                            IchorText(stringResourceId = string.about_slow_sampling, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
-                        }
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Row(modifier = modifier.fillMaxWidth().testTag(stringResource(string.about_default_sampling_row_tag))) {
-                            AboutDefaultSamplingSpeedIcon()
-                            IchorText(stringResourceId = string.about_default_sampling, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
-                        }
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Row(modifier = modifier.fillMaxWidth().testTag(stringResource(string.about_fast_sampling_row_tag))) {
-                            AboutFastSamplingSpeedIcon()
-                            IchorText(stringResourceId = string.about_fast_sampling, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
-                        }
-                    }
-
-                }
-            }
-            item {
-                Row(modifier = modifier.fillMaxWidth().testTag(stringResource(string.about_delete_all_row_tag))) {
-                    AboutDeleteAllIcon()
-                    IchorText(stringResourceId = string.about_delete_all, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
-                }
-            }
-            item {
-                IchorText(stringResourceId = string.about_delete_one_subtitle, modifier = modifier, style = IchorTypography.body2.plus(
-                    TextStyle(fontWeight = FontWeight.Bold)
-                ))
-            }
-            item {
-                IchorText(stringResourceId = string.about_delete_one, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
-            }
-
-            // Further information.
-            item {
-                IchorText(stringResourceId = string.about_further_information, modifier = modifier, style = IchorTypography.title3)
-            }
-            item {
-                IchorText(stringResourceId = string.about_further_information_details, modifier = modifier.padding(start = 8.dp), style = IchorTypography.body2)
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .testTag(stringResource(string.about_fast_sampling_row_tag))
+            ) {
+                AboutFastSamplingSpeedIcon()
+                IchorText(
+                    stringResourceId = string.about_fast_sampling,
+                    modifier = modifier.padding(start = 8.dp),
+                    style = IchorTypography.body2
+                )
             }
         }
+
+    }
+}
+
+private fun ScalingLazyListScope.WhatYouCanSee(modifier: Modifier) {
+    item {
+        IchorText(
+            stringResourceId = string.about_what_you_can_see,
+            modifier = modifier,
+            style = IchorTypography.title3
+        )
+    }
+    item {
+        IchorText(
+            stringResourceId = string.about_availability_subtitle,
+            modifier = modifier,
+            style = IchorTypography.body2.plus(
+                TextStyle(fontWeight = FontWeight.Bold)
+            )
+        )
+    }
+    item {
+        IchorText(
+            stringResourceId = string.about_availability,
+            modifier = modifier.padding(start = 8.dp),
+            style = IchorTypography.body2
+        )
+    }
+    item {
+        IchorText(
+            stringResourceId = string.about_sampling_speed_subtitle,
+            modifier = modifier,
+            style = IchorTypography.body2.plus(
+                TextStyle(fontWeight = FontWeight.Bold)
+            )
+        )
+    }
+    item {
+        IchorText(
+            stringResourceId = string.about_sampling_speed_display,
+            modifier = modifier.padding(start = 8.dp),
+            style = IchorTypography.body2
+        )
+    }
+    item {
+        IchorText(
+            stringResourceId = string.about_bpm_subtitle,
+            modifier = modifier,
+            style = IchorTypography.body2.plus(
+                TextStyle(fontWeight = FontWeight.Bold)
+            )
+        )
+    }
+    item {
+        IchorText(
+            stringResourceId = string.about_bpm,
+            modifier = modifier.padding(start = 8.dp),
+            style = IchorTypography.body2
+        )
+    }
+    item {
+        IchorText(
+            stringResourceId = string.about_history_subtitle,
+            modifier = modifier,
+            style = IchorTypography.body2.plus(
+                TextStyle(fontWeight = FontWeight.Bold)
+            )
+        )
+    }
+    item {
+        IchorText(
+            stringResourceId = string.about_history,
+            modifier = modifier.padding(start = 8.dp),
+            style = IchorTypography.body2
+        )
+    }
+}
+
+private fun ScalingLazyListScope.StartingUp(modifier: Modifier) {
+    item {
+        IchorText(
+            stringResourceId = string.about_starting_up,
+            modifier = modifier,
+            style = IchorTypography.title3
+        )
+    }
+    AboutPermissionsRow(modifier)
+    AboutAboutRow(modifier)
+}
+
+private fun ScalingLazyListScope.AboutAboutRow(modifier: Modifier) {
+    item {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .testTag(stringResource(string.about_about_row_tag))
+        ) {
+            AboutAboutIcon()
+            IchorText(
+                stringResourceId = string.about_about,
+                modifier = modifier.padding(start = 8.dp),
+                style = IchorTypography.body2
+            )
+        }
+    }
+}
+
+private fun ScalingLazyListScope.AboutPermissionsRow(modifier: Modifier) {
+    item {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .testTag(stringResource(string.about_permissions_row_tag))
+        ) {
+            AboutPermissionIcon()
+            IchorText(
+                stringResourceId = string.about_permissions,
+                modifier = modifier.padding(start = 8.dp),
+                style = IchorTypography.body2
+            )
+        }
+    }
+}
+
+private fun ScalingLazyListScope.InitialInfo(modifier: Modifier) {
+    item { AboutTitleIcon() }
+    item {
+        IchorText(
+            stringResourceId = string.about_ichor,
+            modifier = modifier,
+            style = IchorTypography.title1
+        )
+    }
+    item {
+        IchorText(
+            modifier = modifier,
+            style = IchorTypography.body2,
+            stringResourceId = string.about_description
+        )
     }
 }
 
