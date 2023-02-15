@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.ScalingLazyListScope
 import com.carkzis.ichor.R
 import com.carkzis.ichor.theme.IchorTypography
 import com.carkzis.ichor.ui.IchorStatefulText

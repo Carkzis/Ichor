@@ -55,7 +55,7 @@ internal fun ScalingLazyListScope.ColumnComponentsWherePermissionsDenied(
     modifier: Modifier,
     onClickAbout: () -> Unit
 ) {
-    item { PermissionsInstructions(modifier) }
+    item { PermissionsInstructionsText(modifier) }
     item { AboutButton(modifier = modifier, onClickAbout) }
 }
 
