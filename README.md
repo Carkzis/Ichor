@@ -80,8 +80,8 @@ Please note that this app cannot guarantee accuracy, and should not be used info
 Marc Jowett (carkzis.apps@gmail.com)
 
 ## Version History
-* 1.0-SNAPSHOT
-  * Pre-release.  See [commits](https://github.com/Carkzis/Ichor/commits/master).
+* 1.0
+  * Initial release.  See [commits](https://github.com/Carkzis/Ichor/commits/master).
 
 ## Acknowledgements
 * [The Android Open Source Project](https://source.android.com/) for the fantastic amount of information to help coders in an accessible way.
