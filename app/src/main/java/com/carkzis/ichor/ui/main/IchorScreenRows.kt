@@ -1,10 +1,9 @@
 package com.carkzis.ichor.ui.main
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.DirectionsBike
-import androidx.compose.material.icons.rounded.DirectionsRun
-import androidx.compose.material.icons.rounded.DirectionsWalk
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -13,7 +12,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.carkzis.ichor.R
-import com.carkzis.ichor.ui.IchorButton
+import com.carkzis.ichor.data.domain.DomainHeartRate
 import com.carkzis.ichor.ui.MainViewModel
 import com.carkzis.ichor.utils.SamplingSpeed
 
@@ -67,8 +66,6 @@ internal fun FastSamplingChoiceRow(
     }
 }
 
-
-
 @Composable
 internal fun DefaultSamplingChoiceRow(
     modifier: Modifier,
@@ -84,8 +81,6 @@ internal fun DefaultSamplingChoiceRow(
     }
 }
 
-
-
 @Composable
 internal fun SlowSamplingChoiceRow(
     modifier: Modifier,
@@ -98,5 +93,17 @@ internal fun SlowSamplingChoiceRow(
         if (currentSamplingSpeed == SamplingSpeed.SLOW.toString()) {
             TickIcon()
         }
+    }
+}
+
+@Composable
+internal fun ColumnScope.DeleteOneDialogButtonsRow(
+    viewModel: MainViewModel,
+    currentHeartRateData: DomainHeartRate,
+    deleteAlertRequired: MutableState<Boolean>
+) {
+    Row(modifier = Modifier.Companion.align(Alignment.CenterHorizontally)) {
+        DeleteOneConfirmButton(viewModel, currentHeartRateData)
+        DeleteOneRejectButton(deleteAlertRequired)
     }
 }

@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.dialog.Dialog
 import com.carkzis.ichor.R
+import com.carkzis.ichor.data.domain.DomainHeartRate
 import com.carkzis.ichor.ui.IchorButton
 import com.carkzis.ichor.ui.MainViewModel
 import com.carkzis.ichor.utils.PermissionFacade
@@ -157,5 +158,30 @@ internal fun SlowSamplingSpeedButton(
     ) {
         viewModel.changeSampleRate(SamplingSpeed.SLOW)
         samplingSpeedAlertRequired.value = false
+    }
+}
+
+@Composable
+internal fun DeleteOneRejectButton(deleteAlertRequired: MutableState<Boolean>) {
+    IchorButton(
+        iconImage = Icons.Rounded.Close,
+        modifier = Modifier.size(32.dp),
+        contentDescription = stringResource(R.string.ichor_delete_single_reject)
+    ) {
+        deleteAlertRequired.value = false
+    }
+}
+
+@Composable
+internal fun DeleteOneConfirmButton(
+    viewModel: MainViewModel,
+    currentHeartRateData: DomainHeartRate
+) {
+    IchorButton(
+        iconImage = Icons.Rounded.Done,
+        modifier = Modifier.size(32.dp),
+        contentDescription = stringResource(R.string.ichor_delete_single_confirm)
+    ) {
+        viewModel.deleteHeartRate(currentHeartRateData.pk)
     }
 }

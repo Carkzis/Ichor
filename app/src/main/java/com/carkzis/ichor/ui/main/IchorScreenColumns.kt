@@ -155,3 +155,20 @@ internal fun ColumnScope.SamplingSpeedChangeChoicesColumn(
         FastSamplingChoiceRow(modifier, viewModel, samplingSpeedAlertRequired, currentSamplingSpeed)
     }
 }
+
+@Composable
+internal fun DeleteOneDialogContentColumn(
+    currentHeartRateData: DomainHeartRate,
+    viewModel: MainViewModel,
+    deleteAlertRequired: MutableState<Boolean>
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        DeleteHeartbeatIcon()
+        DeleteOneRecordQueryText(currentHeartRateData)
+        DeleteOneDialogButtonsRow(viewModel, currentHeartRateData, deleteAlertRequired)
+    }
+}

@@ -1,9 +1,6 @@
 package com.carkzis.ichor.ui.main
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -15,7 +12,6 @@ import androidx.wear.compose.material.Text
 import com.carkzis.ichor.R
 import com.carkzis.ichor.data.domain.DomainHeartRate
 import com.carkzis.ichor.theme.IchorTypography
-import com.carkzis.ichor.ui.IchorButton
 import com.carkzis.ichor.ui.MainViewModel
 import timber.log.Timber
 
@@ -52,37 +48,5 @@ internal fun DeleteOneDialogContent(
     viewModel: MainViewModel
 ) {
     Timber.e("Dialog for deleting item raised: ${deleteAlertRequired.value}")
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        DeleteHeartbeatIcon()
-        Text(
-            style = IchorTypography.body2,
-            modifier = Modifier.padding(start = 36.dp, end = 36.dp),
-            text = "${stringResource(R.string.ichor_delete_record_part_1)}${currentHeartRateData.value}${
-                stringResource(
-                    R.string.ichor_delete_record_part_2
-                )
-            }${currentHeartRateData.date}?",
-            textAlign = TextAlign.Center
-        )
-        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            IchorButton(
-                iconImage = Icons.Rounded.Done,
-                modifier = Modifier.size(32.dp),
-                contentDescription = stringResource(R.string.ichor_delete_single_confirm)
-            ) {
-                viewModel.deleteHeartRate(currentHeartRateData.pk)
-            }
-            IchorButton(
-                iconImage = Icons.Rounded.Close,
-                modifier = Modifier.size(32.dp),
-                contentDescription = stringResource(R.string.ichor_delete_single_reject)
-            ) {
-                deleteAlertRequired.value = false
-            }
-        }
-    }
+    DeleteOneDialogContentColumn(currentHeartRateData, viewModel, deleteAlertRequired)
 }

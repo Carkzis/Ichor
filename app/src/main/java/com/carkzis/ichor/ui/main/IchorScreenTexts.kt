@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import androidx.health.services.client.data.Availability
 import androidx.wear.compose.material.Text
 import com.carkzis.ichor.R
+import com.carkzis.ichor.data.domain.DomainHeartRate
 import com.carkzis.ichor.theme.IchorTypography
 import com.carkzis.ichor.ui.IchorStatefulText
 import com.carkzis.ichor.ui.IchorText
@@ -82,5 +83,19 @@ internal fun SamplingSpeedChangeQuestionText(modifier: Modifier) {
         modifier = modifier.padding(start = 36.dp, end = 36.dp),
         textAlign = TextAlign.Center,
         text = stringResource(R.string.ichor_change_sampling_speed_question)
+    )
+}
+
+@Composable
+internal fun DeleteOneRecordQueryText(currentHeartRateData: DomainHeartRate) {
+    Text(
+        style = IchorTypography.body2,
+        modifier = Modifier.padding(start = 36.dp, end = 36.dp),
+        text = "${stringResource(R.string.ichor_delete_record_part_1)}${currentHeartRateData.value}${
+            stringResource(
+                R.string.ichor_delete_record_part_2
+            )
+        }${currentHeartRateData.date}?",
+        textAlign = TextAlign.Center
     )
 }
