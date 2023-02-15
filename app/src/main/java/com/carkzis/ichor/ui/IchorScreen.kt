@@ -91,7 +91,7 @@ private fun IchorBodyComponents(
         autoCentering = AutoCenteringParams(itemIndex = 0),
         state = listState
     ) {
-        IchorInvariantColumnComponents(modifier, viewModel)
+        InvariantColumnComponents(modifier, viewModel)
         IchorVariantColumnComponents(
             hasPermission,
             shouldInitiateDataCollection,
@@ -116,7 +116,7 @@ private fun ScalingLazyListScope.IchorVariantColumnComponents(
     heartRatePermissionProvider: PermissionFacade
 ) {
     if (hasPermission) {
-        IchorBodyColumnComponentsWherePermissionGranted(
+        ColumnComponentsWherePermissionGranted(
             shouldInitiateDataCollection,
             viewModel,
             modifier,
@@ -124,17 +124,17 @@ private fun ScalingLazyListScope.IchorVariantColumnComponents(
             heartRates
         )
     } else if (!permissionRequested) {
-        IchorBodyColumnComponentsWherePermissionsNeedRequesting(
+        ColumnComponentsWherePermissionsNeedRequesting(
             heartRatePermissionProvider,
             modifier,
             onClickAbout
         )
     } else {
-       IchorBodyColumnComponentsWherePermissionsDenied(modifier, onClickAbout)
+       ColumnComponentsWherePermissionsDenied(modifier, onClickAbout)
     }
 }
 
-private fun ScalingLazyListScope.IchorBodyColumnComponentsWherePermissionsDenied(
+private fun ScalingLazyListScope.ColumnComponentsWherePermissionsDenied(
     modifier: Modifier,
     onClickAbout: () -> Unit
 ) {
@@ -142,7 +142,7 @@ private fun ScalingLazyListScope.IchorBodyColumnComponentsWherePermissionsDenied
     item { AboutButton(modifier = modifier, onClickAbout) }
 }
 
-private fun ScalingLazyListScope.IchorBodyColumnComponentsWherePermissionsNeedRequesting(
+private fun ScalingLazyListScope.ColumnComponentsWherePermissionsNeedRequesting(
     heartRatePermissionProvider: PermissionFacade,
     modifier: Modifier,
     onClickAbout: () -> Unit
@@ -155,7 +155,7 @@ private fun ScalingLazyListScope.IchorBodyColumnComponentsWherePermissionsNeedRe
     item { AboutButton(modifier = modifier, onClickAbout) }
 }
 
-private fun ScalingLazyListScope.IchorBodyColumnComponentsWherePermissionGranted(
+private fun ScalingLazyListScope.ColumnComponentsWherePermissionGranted(
     shouldInitiateDataCollection: AtomicBoolean,
     viewModel: MainViewModel,
     modifier: Modifier,
@@ -163,15 +163,15 @@ private fun ScalingLazyListScope.IchorBodyColumnComponentsWherePermissionGranted
     heartRates: List<DomainHeartRate>
 ) {
     initiateDataCollectionOnce(shouldInitiateDataCollection, viewModel)
-    IchorSamplingSpeedRow(modifier, viewModel)
+    SamplingSpeedRow(modifier, viewModel)
     item {
         DisplayLatestHeartRate(modifier = modifier, state = viewModel.latestHeartRate)
     }
-    IchorButtonsRow(viewModel, modifier, onClickAbout)
-    IchorHeartRateHistoryList(heartRates, viewModel, modifier)
+    ButtonsRow(viewModel, modifier, onClickAbout)
+    HeartRateHistoryList(heartRates, viewModel, modifier)
 }
 
-private fun ScalingLazyListScope.IchorHeartRateHistoryList(
+private fun ScalingLazyListScope.HeartRateHistoryList(
     heartRates: List<DomainHeartRate>,
     viewModel: MainViewModel,
     modifier: Modifier
@@ -184,7 +184,7 @@ private fun ScalingLazyListScope.IchorHeartRateHistoryList(
     }
 }
 
-private fun ScalingLazyListScope.IchorButtonsRow(
+private fun ScalingLazyListScope.ButtonsRow(
     viewModel: MainViewModel,
     modifier: Modifier,
     onClickAbout: () -> Unit
@@ -200,7 +200,7 @@ private fun ScalingLazyListScope.IchorButtonsRow(
     }
 }
 
-private fun ScalingLazyListScope.IchorSamplingSpeedRow(
+private fun ScalingLazyListScope.SamplingSpeedRow(
     modifier: Modifier,
     viewModel: MainViewModel
 ) {
@@ -216,7 +216,7 @@ private fun ScalingLazyListScope.IchorSamplingSpeedRow(
     }
 }
 
-private fun ScalingLazyListScope.IchorInvariantColumnComponents(
+private fun ScalingLazyListScope.InvariantColumnComponents(
     modifier: Modifier,
     viewModel: MainViewModel
 ) {
@@ -302,82 +302,97 @@ private fun IchorDeleteAllDialogContent(
 
 @Composable
 fun SamplingSpeedChangeButton(viewModel: MainViewModel, modifier: Modifier) {
-    var samplingSpeedAlertRequired by remember { mutableStateOf(false) }
+    val samplingSpeedAlertRequired = remember { mutableStateOf(false) }
     val currentSamplingSpeed by viewModel.currentSamplingSpeed.collectAsState()
 
     IchorButton(
         modifier = modifier
             .size(24.dp)
             .padding(all = 0.dp),
-        onClick = { samplingSpeedAlertRequired = true },
+        onClick = { samplingSpeedAlertRequired.value = true },
         iconImage = Icons.Rounded.Speed,
         contentDescription = stringResource(string.ichor_sampling_speed_change)
     )
 
     Dialog(
-        showDialog = samplingSpeedAlertRequired,
+        showDialog = samplingSpeedAlertRequired.value,
         onDismissRequest = {
-            samplingSpeedAlertRequired = false
+            samplingSpeedAlertRequired.value = false
         },
         content = {
-            Timber.e("Dialog for changing sampling speed: $samplingSpeedAlertRequired")
-            Column(
-                modifier = modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                ChangeSamplingSpeedIcon()
-                Text(
-                    style = IchorTypography.body2,
-                    modifier = modifier.padding(start = 36.dp, end = 36.dp),
-                    textAlign = TextAlign.Center,
-                    text = stringResource(string.ichor_change_sampling_speed_question)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    Row(modifier = modifier.testTag(stringResource(string.ichor_slow_sampling_row_tag))) {
-                        IchorButton(
-                            iconImage = Icons.Rounded.DirectionsWalk,
-                            modifier = Modifier.size(32.dp),
-                            contentDescription = stringResource(string.ichor_slow_sampling_speed)
-                        ) {
-                            viewModel.changeSampleRate(SamplingSpeed.SLOW)
-                            samplingSpeedAlertRequired = false
-                        }
-                        if (currentSamplingSpeed == SamplingSpeed.SLOW.toString()) {
-                            TickIcon()
-                        }
-                    }
-                    Row(modifier = modifier.testTag(stringResource(string.ichor_default_sampling_row_tag))) {
-                        IchorButton(
-                            iconImage = Icons.Rounded.DirectionsRun,
-                            modifier = Modifier.size(32.dp),
-                            contentDescription = stringResource(string.ichor_default_sampling_speed)
-                        ) {
-                            viewModel.changeSampleRate(SamplingSpeed.DEFAULT)
-                            samplingSpeedAlertRequired = false
-                        }
-                        if (currentSamplingSpeed == SamplingSpeed.DEFAULT.toString()) {
-                            TickIcon()
-                        }
-                    }
-                    Row(modifier = modifier.testTag(stringResource(string.ichor_fast_sampling_row_tag))) {
-                        IchorButton(
-                            iconImage = Icons.Rounded.DirectionsBike,
-                            modifier = Modifier.size(32.dp),
-                            contentDescription = stringResource(string.ichor_fast_sampling_speed)
-                        ) {
-                            viewModel.changeSampleRate(SamplingSpeed.FAST)
-                            samplingSpeedAlertRequired = false
-                        }
-                        if (currentSamplingSpeed == SamplingSpeed.FAST.toString()) {
-                            TickIcon()
-                        }
-                    }
+            SamplingSpeedChangeDialogContent(
+                samplingSpeedAlertRequired,
+                modifier,
+                viewModel,
+                currentSamplingSpeed
+            )
+        }
+    )
+}
+
+@Composable
+private fun SamplingSpeedChangeDialogContent(
+    samplingSpeedAlertRequired: MutableState<Boolean>,
+    modifier: Modifier,
+    viewModel: MainViewModel,
+    currentSamplingSpeed: String
+) {
+    Timber.e("Dialog for changing sampling speed: $samplingSpeedAlertRequired")
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ChangeSamplingSpeedIcon()
+        Text(
+            style = IchorTypography.body2,
+            modifier = modifier.padding(start = 36.dp, end = 36.dp),
+            textAlign = TextAlign.Center,
+            text = stringResource(string.ichor_change_sampling_speed_question)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Row(modifier = modifier.testTag(stringResource(string.ichor_slow_sampling_row_tag))) {
+                IchorButton(
+                    iconImage = Icons.Rounded.DirectionsWalk,
+                    modifier = Modifier.size(32.dp),
+                    contentDescription = stringResource(string.ichor_slow_sampling_speed)
+                ) {
+                    viewModel.changeSampleRate(SamplingSpeed.SLOW)
+                    samplingSpeedAlertRequired.value = false
+                }
+                if (currentSamplingSpeed == SamplingSpeed.SLOW.toString()) {
+                    TickIcon()
+                }
+            }
+            Row(modifier = modifier.testTag(stringResource(string.ichor_default_sampling_row_tag))) {
+                IchorButton(
+                    iconImage = Icons.Rounded.DirectionsRun,
+                    modifier = Modifier.size(32.dp),
+                    contentDescription = stringResource(string.ichor_default_sampling_speed)
+                ) {
+                    viewModel.changeSampleRate(SamplingSpeed.DEFAULT)
+                    samplingSpeedAlertRequired.value = false
+                }
+                if (currentSamplingSpeed == SamplingSpeed.DEFAULT.toString()) {
+                    TickIcon()
+                }
+            }
+            Row(modifier = modifier.testTag(stringResource(string.ichor_fast_sampling_row_tag))) {
+                IchorButton(
+                    iconImage = Icons.Rounded.DirectionsBike,
+                    modifier = Modifier.size(32.dp),
+                    contentDescription = stringResource(string.ichor_fast_sampling_speed)
+                ) {
+                    viewModel.changeSampleRate(SamplingSpeed.FAST)
+                    samplingSpeedAlertRequired.value = false
+                }
+                if (currentSamplingSpeed == SamplingSpeed.FAST.toString()) {
+                    TickIcon()
                 }
             }
         }
-    )
+    }
 }
 
 @Composable
@@ -411,7 +426,6 @@ private fun HeartRateItem(
         }
     }
 
-    Timber.e("Delete item raised?: $deleteAlertRequired")
     Dialog(
         showDialog = deleteAlertRequired,
         onDismissRequest = {
