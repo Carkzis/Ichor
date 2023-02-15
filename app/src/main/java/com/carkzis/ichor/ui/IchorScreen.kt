@@ -7,12 +7,9 @@ package com.carkzis.ichor.ui
 
 import android.Manifest
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.DismissValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.SwipeToDismiss
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
-import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.health.services.client.data.Availability
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.*
+import androidx.wear.compose.material.Icon
+import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.dialog.Dialog
 import com.carkzis.ichor.*
 import com.carkzis.ichor.R.*
@@ -48,7 +47,6 @@ fun IchorScreen(
     ),
     onClickAbout: () -> Unit = {}
 ) {
-    // TODO: Look into constant recomposing when opening dialog.
     // TODO: Refactor Compose.
 
     val listState = rememberScalingLazyListState()
@@ -413,58 +411,42 @@ private fun HeartRateItem(
     currentHeartRateData: DomainHeartRate,
     modifier: Modifier
 ) {
-    var deleteAlertRequired by remember { mutableStateOf(false) }
-    val dismissState = rememberDismissState {
-        if (it == DismissValue.DismissedToEnd || it == DismissValue.DismissedToStart) {
-            deleteAlertRequired = true
-        }
-        true
-    }
-    if (!deleteAlertRequired) {
+    val deleteAlertRequired = remember { mutableStateOf(false) }
+    val dismissState = swipingDismissStateForHeartRateItem(deleteAlertRequired)
+    if (!deleteAlertRequired.value) {
         LaunchedEffect(Unit) {
             dismissState.reset()
         }
     }
 
+    DismissableHeartRateItemCard(dismissState, modifier, currentHeartRateData)
+
     Dialog(
-        showDialog = deleteAlertRequired,
+        showDialog = deleteAlertRequired.value,
         onDismissRequest = {
-            deleteAlertRequired = false
+            deleteAlertRequired.value = false
         },
         content = {
-            Timber.e("Dialog for deleting item raised: $deleteAlertRequired")
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                DeleteHeartbeatIcon()
-                Text(
-                    style = IchorTypography.body2,
-                    modifier = Modifier.padding(start = 36.dp, end = 36.dp),
-                    text = "${stringResource(string.ichor_delete_record_part_1)}${currentHeartRateData.value}${stringResource(string.ichor_delete_record_part_2)}${currentHeartRateData.date}?",
-                    textAlign = TextAlign.Center
-                )
-                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    IchorButton(
-                        iconImage = Icons.Rounded.Done,
-                        modifier = Modifier.size(32.dp),
-                        contentDescription = stringResource(string.ichor_delete_single_confirm)
-                    ) {
-                        viewModel.deleteHeartRate(currentHeartRateData.pk)
-                    }
-                    IchorButton(
-                        iconImage = Icons.Rounded.Close,
-                        modifier = Modifier.size(32.dp),
-                        contentDescription = stringResource(string.ichor_delete_single_reject)
-                    ) {
-                        deleteAlertRequired = false
-                    }
-                }
-            }
+            DeleteOneDialogContent(deleteAlertRequired, currentHeartRateData, viewModel)
         }
     )
+}
 
+@Composable
+private fun swipingDismissStateForHeartRateItem(deleteAlertRequired: MutableState<Boolean>) =
+    rememberDismissState {
+        if (it == DismissValue.DismissedToEnd || it == DismissValue.DismissedToStart) {
+            deleteAlertRequired.value = true
+        }
+        true
+    }
+
+@Composable
+private fun DismissableHeartRateItemCard(
+    dismissState: DismissState,
+    modifier: Modifier,
+    currentHeartRateData: DomainHeartRate
+) {
     SwipeToDismiss(
         state = dismissState,
         background = { Box(modifier = modifier.fillMaxSize()) },
@@ -478,7 +460,50 @@ private fun HeartRateItem(
                     )
                 }
             )
-        })
+        }
+    )
+}
+
+@Composable
+private fun DeleteOneDialogContent(
+    deleteAlertRequired: MutableState<Boolean>,
+    currentHeartRateData: DomainHeartRate,
+    viewModel: MainViewModel
+) {
+    Timber.e("Dialog for deleting item raised: ${deleteAlertRequired.value}")
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        DeleteHeartbeatIcon()
+        Text(
+            style = IchorTypography.body2,
+            modifier = Modifier.padding(start = 36.dp, end = 36.dp),
+            text = "${stringResource(string.ichor_delete_record_part_1)}${currentHeartRateData.value}${
+                stringResource(
+                    string.ichor_delete_record_part_2
+                )
+            }${currentHeartRateData.date}?",
+            textAlign = TextAlign.Center
+        )
+        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            IchorButton(
+                iconImage = Icons.Rounded.Done,
+                modifier = Modifier.size(32.dp),
+                contentDescription = stringResource(string.ichor_delete_single_confirm)
+            ) {
+                viewModel.deleteHeartRate(currentHeartRateData.pk)
+            }
+            IchorButton(
+                iconImage = Icons.Rounded.Close,
+                modifier = Modifier.size(32.dp),
+                contentDescription = stringResource(string.ichor_delete_single_reject)
+            ) {
+                deleteAlertRequired.value = false
+            }
+        }
+    }
 }
 
 private fun initiateDataCollectionOnce(
