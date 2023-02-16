@@ -13,11 +13,11 @@ import com.carkzis.ichor.R
 import com.carkzis.ichor.data.domain.DomainHeartRate
 import com.carkzis.ichor.ui.IchorButton
 import com.carkzis.ichor.ui.MainViewModel
-import com.carkzis.ichor.utils.PermissionFacade
+import com.carkzis.ichor.utils.NarrowedPermissionStateAdapter
 import com.carkzis.ichor.utils.SamplingSpeed
 
 @Composable
-internal fun PermissionButton(heartRatePermissionProvider: PermissionFacade) {
+internal fun PermissionButton(heartRatePermissionProvider: NarrowedPermissionStateAdapter) {
     IchorButton(
         contentDescription = stringResource(R.string.ichor_permission_button),
         onClick = { heartRatePermissionProvider.launchPermissionRequest() })

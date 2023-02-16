@@ -1,13 +1,13 @@
 package com.carkzis.ichor.testdoubles
 
-import com.carkzis.ichor.utils.PermissionFacade
+import com.carkzis.ichor.utils.NarrowedPermissionStateAdapter
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class DummyPermissionFacade(
+class DummyNarrowedPermissionStateAdapter(
     hasPermissionAlready: Boolean = false,
     private var willGivePermission: Boolean = false,
     private var permissionPreviouslyDenied: Boolean = false
-) : PermissionFacade {
+) : NarrowedPermissionStateAdapter {
     private var dummyHasPermission = MutableStateFlow(hasPermissionAlready)
     private var dummyPermissionRequested = MutableStateFlow(permissionPreviouslyDenied)
 

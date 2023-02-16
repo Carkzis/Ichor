@@ -7,10 +7,10 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.navigation.NavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
-import com.carkzis.ichor.testdoubles.DummyPermissionFacade
+import com.carkzis.ichor.testdoubles.DummyNarrowedPermissionStateAdapter
 import com.carkzis.ichor.testdoubles.DummyViewModel
 import com.carkzis.ichor.ui.main.IchorScreen
-import com.carkzis.ichor.utils.PermissionFacade
+import com.carkzis.ichor.utils.NarrowedPermissionStateAdapter
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import com.carkzis.ichor.R
@@ -28,7 +28,7 @@ class IchorScreenPermissionGrantedTest {
 
     @get:Rule(order = 1)
     val composeTestRule = createComposeRule()
-    private lateinit var dummyHeartRatePermissionFacade: PermissionFacade
+    private lateinit var dummyHeartRatePermissionStateAdapter: NarrowedPermissionStateAdapter
     private lateinit var navController: NavHostController
 
     @Before
@@ -36,10 +36,10 @@ class IchorScreenPermissionGrantedTest {
         hiltRule.inject()
         composeTestRule.apply {
             setContent {
-                dummyHeartRatePermissionFacade = DummyPermissionFacade(hasPermissionAlready = true)
+                dummyHeartRatePermissionStateAdapter = DummyNarrowedPermissionStateAdapter(hasPermissionAlready = true)
                 navController = rememberSwipeDismissableNavController()
                 obtainStringResourcesForIchorScreenWithPermissionsGranted()
-                IchorScreen(viewModel = DummyViewModel(), heartRatePermissionFacade = dummyHeartRatePermissionFacade)
+                IchorScreen(viewModel = DummyViewModel(), heartRatePermissionStateAdapter = dummyHeartRatePermissionStateAdapter)
             }
         }
     }

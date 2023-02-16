@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.carkzis.ichor.R
-import com.carkzis.ichor.testdoubles.DummyPermissionFacade
+import com.carkzis.ichor.testdoubles.DummyNarrowedPermissionStateAdapter
 import com.carkzis.ichor.testdoubles.DummyViewModel
 import com.carkzis.ichor.ui.main.IchorScreen
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -27,7 +27,7 @@ class IchorScreenPermissionRequiredTest {
 
     @get:Rule(order = 1)
     val composeTestRule = createComposeRule()
-    private lateinit var dummyHeartRatePermissionFacade: DummyPermissionFacade
+    private lateinit var dummyHeartRatePermissionStateAdapter: DummyNarrowedPermissionStateAdapter
     private lateinit var navController: NavHostController
     private lateinit var _delayedSetUp: () -> Unit
     var delayedSetUp: () -> Unit
@@ -44,7 +44,7 @@ class IchorScreenPermissionRequiredTest {
                 setContent {
                     navController = rememberSwipeDismissableNavController()
                     obtainStringResourcesForIchorScreenWithoutPermissions()
-                    IchorScreen(viewModel = DummyViewModel(), heartRatePermissionFacade = dummyHeartRatePermissionFacade)
+                    IchorScreen(viewModel = DummyViewModel(), heartRatePermissionStateAdapter = dummyHeartRatePermissionStateAdapter)
                 }
             }
         }
@@ -52,7 +52,7 @@ class IchorScreenPermissionRequiredTest {
 
     @Test
     fun `when no permission previously requested can get permission dialogue which after denial message provided on screen`() {
-        dummyHeartRatePermissionFacade = DummyPermissionFacade(willGivePermission = false, permissionPreviouslyDenied = false)
+        dummyHeartRatePermissionStateAdapter = DummyNarrowedPermissionStateAdapter(willGivePermission = false, permissionPreviouslyDenied = false)
         delayedSetUp()
 
         // Assert on the initial screen.
@@ -69,7 +69,7 @@ class IchorScreenPermissionRequiredTest {
 
     @Test
     fun `when no permission previously requested can get permission dialogue which after acceptance heart rate data screen visible`() {
-        dummyHeartRatePermissionFacade = DummyPermissionFacade(willGivePermission = true, permissionPreviouslyDenied = false)
+        dummyHeartRatePermissionStateAdapter = DummyNarrowedPermissionStateAdapter(willGivePermission = true, permissionPreviouslyDenied = false)
         delayedSetUp()
 
         // Assert on the initial screen.
@@ -86,7 +86,7 @@ class IchorScreenPermissionRequiredTest {
 
     @Test
     fun `when permission previously granted automatically go to heart rate data screen visible`() {
-        dummyHeartRatePermissionFacade = DummyPermissionFacade(hasPermissionAlready = true)
+        dummyHeartRatePermissionStateAdapter = DummyNarrowedPermissionStateAdapter(hasPermissionAlready = true)
         delayedSetUp()
 
         // Assert that we automatically go to the main screen.
@@ -95,7 +95,7 @@ class IchorScreenPermissionRequiredTest {
 
     @Test
     fun `when permission previously denied message provided on screen and permission cannot be requested again within app`() {
-        dummyHeartRatePermissionFacade = DummyPermissionFacade(willGivePermission = true, permissionPreviouslyDenied = true)
+        dummyHeartRatePermissionStateAdapter = DummyNarrowedPermissionStateAdapter(willGivePermission = true, permissionPreviouslyDenied = true)
         delayedSetUp()
 
         // Assert that we automatically get a message advised permission previously denied.

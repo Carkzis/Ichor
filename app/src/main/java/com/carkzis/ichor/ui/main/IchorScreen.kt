@@ -17,8 +17,8 @@ import androidx.wear.compose.material.*
 import com.carkzis.ichor.*
 import com.carkzis.ichor.data.domain.DomainHeartRate
 import com.carkzis.ichor.ui.MainViewModel
-import com.carkzis.ichor.utils.DefaultPermissionFacade
-import com.carkzis.ichor.utils.PermissionFacade
+import com.carkzis.ichor.utils.NarrowedPermissionStateAdapterImpl
+import com.carkzis.ichor.utils.NarrowedPermissionStateAdapter
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import java.util.concurrent.atomic.AtomicBoolean
@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 fun IchorScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel,
-    heartRatePermissionFacade: PermissionFacade = DefaultPermissionFacade(
+    heartRatePermissionStateAdapter: NarrowedPermissionStateAdapter = NarrowedPermissionStateAdapterImpl(
         rememberPermissionState(Manifest.permission.BODY_SENSORS)
     ),
     onClickAbout: () -> Unit = {}
@@ -45,7 +45,7 @@ fun IchorScreen(
             modifier,
             listState,
             viewModel,
-            heartRatePermissionFacade,
+            heartRatePermissionStateAdapter,
             shouldInitiateDataCollection,
             heartRates,
             onClickAbout
@@ -58,7 +58,7 @@ private fun IchorBodyComponents(
     modifier: Modifier,
     listState: ScalingLazyListState,
     viewModel: MainViewModel,
-    heartRatePermissionProvider: PermissionFacade,
+    heartRatePermissionProvider: NarrowedPermissionStateAdapter,
     shouldInitiateDataCollection: AtomicBoolean,
     heartRates: List<DomainHeartRate>,
     onClickAbout: () -> Unit

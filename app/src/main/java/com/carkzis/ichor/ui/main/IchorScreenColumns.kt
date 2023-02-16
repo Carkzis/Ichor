@@ -10,7 +10,7 @@ import androidx.wear.compose.material.ScalingLazyListScope
 import androidx.wear.compose.material.items
 import com.carkzis.ichor.data.domain.DomainHeartRate
 import com.carkzis.ichor.ui.MainViewModel
-import com.carkzis.ichor.utils.PermissionFacade
+import com.carkzis.ichor.utils.NarrowedPermissionStateAdapter
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal fun ScalingLazyListScope.InvariantColumnComponents(
@@ -32,7 +32,7 @@ internal fun ScalingLazyListScope.IchorVariantColumnComponents(
     onClickAbout: () -> Unit,
     heartRates: List<DomainHeartRate>,
     permissionRequested: Boolean,
-    heartRatePermissionProvider: PermissionFacade
+    heartRatePermissionProvider: NarrowedPermissionStateAdapter
 ) {
     if (hasPermission) {
         ColumnComponentsWherePermissionGranted(
@@ -62,7 +62,7 @@ internal fun ScalingLazyListScope.ColumnComponentsWherePermissionsDenied(
 }
 
 internal fun ScalingLazyListScope.ColumnComponentsWherePermissionsNeedRequesting(
-    heartRatePermissionProvider: PermissionFacade,
+    heartRatePermissionProvider: NarrowedPermissionStateAdapter,
     modifier: Modifier,
     onClickAbout: () -> Unit
 ) {

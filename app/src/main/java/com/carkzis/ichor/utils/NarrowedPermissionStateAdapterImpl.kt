@@ -6,7 +6,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class DefaultPermissionFacade(private val permissionState: PermissionState) : PermissionFacade {
+class NarrowedPermissionStateAdapterImpl(private val permissionState: PermissionState) : NarrowedPermissionStateAdapter {
 
     private var hasPermission = MutableStateFlow(false)
     private var permissionRequested = MutableStateFlow(false)
